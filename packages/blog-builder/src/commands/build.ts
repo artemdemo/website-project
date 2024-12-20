@@ -1,7 +1,10 @@
 import process from 'node:process';
+import { writeFile, mkdir } from 'node:fs/promises'
+import { join, dirname } from 'node:path';
 import { globby } from 'globby';
 import { renderBlogPage } from 'html-generator';
 import { $context } from '../context';
+import { BUILD_DIR } from '../constants';
 
 export const build = async () => {
   const cwd = process.cwd();
@@ -18,8 +21,8 @@ export const build = async () => {
       appContent: '<react>Content</react>',
     });
 
-    console.log(content);
+    const postDir = dirname(join('./', BUILD_DIR, fileName));
+    await mkdir(postDir, { recursive: true });
+    await writeFile(join(postDir, 'index.html'), content, { encoding: 'utf-8' });
   }
-
-  console.log('This is build command');
 };
