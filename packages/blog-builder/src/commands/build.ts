@@ -11,7 +11,15 @@ export const build = async () => {
     cwd,
   });
 
-  console.log(mdFiles);
+  for (const fileName of mdFiles) {
+    const content = await renderBlogPage({
+      pageTitle: 'Blog',
+      pageDescription: 'Blog Description',
+      appContent: '<react>Content</react>',
+    });
+
+    console.log(content);
+  }
 
   console.log('This is build command');
 };
