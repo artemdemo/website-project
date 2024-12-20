@@ -1,5 +1,6 @@
 import process from 'node:process';
-import {globby} from 'globby';
+import { globby } from 'globby';
+import { renderBlogPage } from 'html-generator';
 import { $context } from '../context';
 
 export const build = async () => {
@@ -7,7 +8,7 @@ export const build = async () => {
   $context.setKey('cwd', cwd);
 
   const mdFiles = await globby('posts/*/index.md', {
-    cwd
+    cwd,
   });
 
   console.log(mdFiles);

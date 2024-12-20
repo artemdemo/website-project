@@ -25,5 +25,3 @@ export const getContext = (): InitializedContext => {
     cwd,
   };
 };
-
-
