@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-import('../build/builder.js');
+import('../dist/index.cjs');
