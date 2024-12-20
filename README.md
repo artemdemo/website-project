@@ -11,6 +11,8 @@
   * Contact form
   * Games or any other dynamic content
 * Export static site to a separate folder, that has separate git repository
+* Markdown
+  * https://mdxjs.com/docs/getting-started/
 
 
 ## Inspiration
