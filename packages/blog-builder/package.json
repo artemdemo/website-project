@@ -14,13 +14,10 @@
   },
   "dependencies": {
     "lodash": "^4.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "markdown-it": "^14.1.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
     "tsup": "^8.3.5",
     "typescript": "^5.0.0"
   }
