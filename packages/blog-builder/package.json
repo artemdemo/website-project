@@ -1,0 +1,23 @@
+{
+  "name": "blog-builder",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": ":",
+    "build": ":",
+    "test": ":",
+    "test:watch": "VITEST_SEGFAULT_RETRY=3 run -T vitest watch"
+  },
+  "dependencies": {
+    "lodash": "^4.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "website-project",
+  "version": "0.0.0",
+  "description": "Website Project",
+  "scripts": {
+    "build:all": "turbo run build",
+    "test": "turbo run test",
+    "lint": "yarn lint:prettier; yarn lint:versions",
+    "lint:prettier": "prettier --write .",
+    "lint:versions": "syncpack list-mismatches"
+  },
+  "author": "Artem Demo",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "prettier": "^3.0.0",
+    "puppeteer": "^21.0.0",
+    "syncpack": "^13.0.0",
+    "turbo": "^2.0.0",
+    "vitest": "^2.0.0"
+  },
+  "packageManager": "yarn@4.5.3"
+}

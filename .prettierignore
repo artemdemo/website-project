@@ -1,0 +1,12 @@
+build
+out
+node_modules
+.next
+.vscode
+.idea
+.yarn
+documentation
+coverage
+styles
+public
+packages/pixi-tween/docs/scripts/
