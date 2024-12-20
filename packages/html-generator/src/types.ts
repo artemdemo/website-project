@@ -1,7 +1,7 @@
 export interface HtmlData {
   pageTitle: string;
-  pageDescription: string;
-  appContent: string;
+  metaDescription: string;
+  content: string;
 }
 
 export interface BlogPageData extends HtmlData {}

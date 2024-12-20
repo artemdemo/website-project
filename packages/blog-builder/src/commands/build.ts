@@ -17,8 +17,8 @@ export const build = async () => {
   for (const fileName of mdFiles) {
     const content = await renderBlogPage({
       pageTitle: 'Blog',
-      pageDescription: 'Blog Description',
-      appContent: '<react>Content</react>',
+      metaDescription: 'Blog Description',
+      content: '<react>Content</react>',
     });
 
     const postDir = dirname(join('./', BUILD_DIR, fileName));
