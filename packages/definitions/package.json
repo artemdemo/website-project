@@ -1,0 +1,12 @@
+{
+  "name": "definitions",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "zod": "^3.24.1"
+  }
+}
