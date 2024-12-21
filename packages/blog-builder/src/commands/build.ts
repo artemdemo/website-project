@@ -1,6 +1,6 @@
+import React from 'react';
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
-import React from 'react';
 import { rm } from 'node:fs/promises';
 import * as runtime from 'react/jsx-runtime';
 import { createAppContext, getAppContext } from '../services/context';
