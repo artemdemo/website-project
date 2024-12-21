@@ -35,5 +35,12 @@ export const build = async () => {
         join(buildPostDir, imgName),
       );
     }
+
+    for (const videoName of deps.videos) {
+      await copyFile(
+        join(dirname(post.path), videoName),
+        join(buildPostDir, videoName),
+      );
+    }
   }
 };
