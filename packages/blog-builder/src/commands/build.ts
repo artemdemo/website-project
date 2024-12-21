@@ -1,16 +1,16 @@
 import process from 'node:process';
-import { writeFile, mkdir } from 'node:fs/promises'
-import { join, dirname } from 'node:path';
+import { writeFile, mkdir } from 'node:fs/promises';
+import { join, dirname, sep } from 'node:path';
 import { globby } from 'globby';
 import { renderBlogPage } from 'html-generator';
 import { $context } from '../context';
-import { BUILD_DIR } from '../constants';
+import { BUILD_DIR, POSTS_DIR } from '../constants';
 
 export const build = async () => {
   const cwd = process.cwd();
   $context.setKey('cwd', cwd);
 
-  const mdFiles = await globby('posts/*/index.md', {
+  const mdFiles = await globby(`${POSTS_DIR}/*/index.md`, {
     cwd,
   });
 
@@ -21,8 +21,18 @@ export const build = async () => {
       content: '<react>Content</react>',
     });
 
-    const postDir = dirname(join('./', BUILD_DIR, fileName));
+    // I want blog posts to be flat in the `build/` folder
+    // Thisway I'll need only to copy them as is in `blog/` folder,
+    // when I'll be ready to publish
+    const fileNameNorm = fileName.replace(
+      new RegExp(`^${POSTS_DIR}${sep}`),
+      '',
+    );
+    const postDir = dirname(join('./', BUILD_DIR, fileNameNorm));
+
     await mkdir(postDir, { recursive: true });
-    await writeFile(join(postDir, 'index.html'), content, { encoding: 'utf-8' });
+    await writeFile(join(postDir, 'index.html'), content, {
+      encoding: 'utf-8',
+    });
   }
 };
