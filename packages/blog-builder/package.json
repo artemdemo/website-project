@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "globby": "^14.0.2",
-    "html-generator": "workspace:*",
     "tsup": "^8.3.5",
+    "html-generator": "workspace:*",
     "typescript": "^5.0.0"
   },
   "devDependencies": {
