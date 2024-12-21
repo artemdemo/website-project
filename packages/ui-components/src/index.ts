@@ -1,1 +1,1 @@
-export * from './renderBlogPage.js';
+export * from './blogPost.js';

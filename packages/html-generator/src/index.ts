@@ -1,1 +1,1 @@
-export * from './wrapBlogPage.js';
+export * from './renderHtml.js';

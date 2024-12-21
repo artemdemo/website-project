@@ -3,7 +3,7 @@ import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { rm } from 'node:fs/promises';
 import * as runtime from 'react/jsx-runtime';
-import { renderBlogPost } from 'ui-components';
+import { evaluateBlogPost } from 'ui-components';
 import { createAppContext, getAppContext } from '../services/context';
 import { writePost } from '../services/writePost';
 import { readFullPostContent } from '../services/readPost';
@@ -21,7 +21,7 @@ export const build = async () => {
 
     const evaluated = await mdx.evaluate(fullPostContent, runtime);
 
-    renderBlogPost();
+    evaluateBlogPost();
 
     const postContent = renderToStaticMarkup(
       React.createElement(evaluated.default),
