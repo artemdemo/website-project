@@ -20,7 +20,10 @@ export interface Post {
 }
 
 const loadPostConfig = async (postPath: string) => {
-  const rawConfig = await readFile(join(dirname(postPath), POST_CONFIG_FILE), 'utf8');
+  const rawConfig = await readFile(
+    join(dirname(postPath), POST_CONFIG_FILE),
+    'utf8',
+  );
   return postConfigSchema.parse(JSON.parse(rawConfig));
 };
 
@@ -40,10 +43,7 @@ export const loadPosts = async (cwd: string): Promise<Array<Post>> => {
     // I want blog posts to be flat in the `build/` folder
     // Thisway I'll need only to copy them as is in `blog/` folder,
     // when I'll be ready to publish
-    const relativePath = path.replace(
-      new RegExp(`^${POSTS_DIR}${sep}`),
-      '',
-    );
+    const relativePath = path.replace(new RegExp(`^${POSTS_DIR}${sep}`), '');
     posts.push({
       path,
       relativePath,
