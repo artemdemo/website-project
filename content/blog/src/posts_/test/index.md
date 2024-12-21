@@ -4,7 +4,7 @@ Lately I finished the "Designing Games", by Tynan Sylvester, lead developer of R
 Highly recommend to everyone who is interested in game design.
 This book is not about the code, but about experience that your game will create.
 
-$-- end --$
+<!-- end -->
 
 Not sure if I have something to add to this short statement.
 But I have some nice examples of author ideas he used in his games:

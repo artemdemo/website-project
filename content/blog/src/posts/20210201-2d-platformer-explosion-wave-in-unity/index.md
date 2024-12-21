@@ -1,10 +1,3 @@
----
-title: 2D explosion wave in unity
-date: '2021-02-04T19:03:00.000Z'
-featuredImage: explosion-wave-thumbnail.png
-tags: ['unity']
----
-
 One of the challenging issues with in-game explosions - is to decide how you'll deal damage to the player.
 First, it should be an area damage and regardless of the player's position he should receive damage (if he stays close enough).
 
@@ -13,7 +6,7 @@ First, it should be an area damage and regardless of the player's position he sh
 Without the damage - explosion is only a cool visual effect, but there aren't many emotions attached to it.
 It looks interesting, but it's not frightening:
 
-<video autoplay loop data-test="foo">
+<video autoPlay loop data-test="foo">
   <source src="explosion-without-damage.mp4" type="video/mp4" />
 </video>
 
@@ -98,6 +91,6 @@ private void DrawExplosionWave() {
 
 The final result:
 
-<video autoplay loop>
+<video autoPlay loop>
   <source src="explosion-with-damage-wave.mp4" type="video/mp4" />
 </video>
