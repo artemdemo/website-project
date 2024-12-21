@@ -1,6 +1,6 @@
+import { Post } from 'definitions';
 import { copyFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { Post } from './model/loadPosts';
 
 const imgRegex = /!\[[^\[\]]+\]\(([^()]+)\)/gm;
 const videoRegex = /src="(\S+\.mp4)"/gm;

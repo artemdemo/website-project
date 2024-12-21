@@ -1,23 +1,8 @@
-import { z } from 'zod';
 import { readFile } from 'node:fs/promises';
 import { dirname, join, sep } from 'node:path';
 import { globby } from 'globby';
+import { postConfigSchema, type Post } from 'definitions';
 import { POST_CONFIG_FILE, POSTS_DIR } from '../../constants';
-
-const postConfigSchema = z.object({
-  title: z.string(),
-  date: z.string(),
-  featuredImage: z.string(),
-  tags: z.array(z.string()),
-});
-
-type PostConfig = z.infer<typeof postConfigSchema>;
-
-export interface Post {
-  path: string;
-  relativePath: string;
-  config: PostConfig;
-}
 
 const loadPostConfig = async (postPath: string) => {
   const rawConfig = await readFile(

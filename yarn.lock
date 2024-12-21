@@ -1088,6 +1088,7 @@ __metadata:
     "@types/lodash": "npm:^4.0.0"
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
+    definitions: "workspace:*"
     globby: "npm:^14.0.2"
     html-generator: "workspace:*"
     lodash: "npm:^4.0.0"
@@ -1546,6 +1547,14 @@ __metadata:
   checksum: 10/a529b81e2ef8821621d20a36959a0328873a3e49d393ad11f8efe8559f31239494c2eb889b80342808674c475802ba95b9d6c4c27641b9a029405104c1b59fcf
   languageName: node
   linkType: hard
+
+"definitions@workspace:*, definitions@workspace:packages/definitions":
+  version: 0.0.0-use.local
+  resolution: "definitions@workspace:packages/definitions"
+  dependencies:
+    zod: "npm:^3.24.1"
+  languageName: unknown
+  linkType: soft
 
 "degenerator@npm:^5.0.0":
   version: 5.0.1

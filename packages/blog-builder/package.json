@@ -25,6 +25,7 @@
     "@types/lodash": "^4.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "definitions": "workspace:*",
     "lodash": "^4.0.0",
     "nanostores": "^0.11.3",
     "ui-components": "workspace:*",

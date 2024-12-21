@@ -1,7 +1,7 @@
 import { join, dirname } from 'node:path';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { wrapBlogPage } from 'html-generator';
-import { Post } from './model/loadPosts';
+import type { Post } from 'definitions';
 import { BUILD_DIR } from '../constants';
 import { BlogConfig } from './model/loadBlogConfig';
 
