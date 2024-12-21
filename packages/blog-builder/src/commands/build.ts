@@ -3,7 +3,10 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname, sep } from 'node:path';
 import { globby } from 'globby';
 import { wrapBlogPage } from 'html-generator';
-import { compile } from '@mdx-js/mdx';
+import * as mdx from '@mdx-js/mdx';
+import {renderToStaticMarkup} from 'react-dom/server'
+import React from 'react';
+import * as runtime from 'react/jsx-runtime'
 import { $context } from '../context';
 import { BUILD_DIR, POSTS_DIR } from '../constants';
 
@@ -16,13 +19,15 @@ export const build = async () => {
   });
 
   for (const fileName of mdFiles) {
-    const compiled = await compile(await readFile(fileName));
-    console.log(compiled);
+    const evaluated = await mdx.evaluate(await readFile(fileName), runtime);
+    const postContent = renderToStaticMarkup(
+      React.createElement(evaluated.default),
+    );
 
     const content = await wrapBlogPage({
       pageTitle: 'Blog',
       metaDescription: 'Blog Description',
-      content: '<react>Content</react>',
+      content: postContent,
     });
 
     // I want blog posts to be flat in the `build/` folder
