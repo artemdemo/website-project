@@ -1,0 +1,12 @@
+{
+  "name": "preview",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "http-server ../../content/blog/build"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

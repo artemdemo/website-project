@@ -5,6 +5,7 @@
   "scripts": {
     "build:all": "turbo run build",
     "test": "turbo run test",
+    "preview": "yarn workspace preview start",
     "lint": "yarn lint:prettier; yarn lint:versions",
     "lint:prettier": "prettier --write .",
     "lint:versions": "syncpack list-mismatches"

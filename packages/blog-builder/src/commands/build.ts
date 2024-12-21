@@ -15,6 +15,7 @@ export const build = async () => {
       await readFile(post.path, 'utf8'),
       runtime,
     );
+    
     const postContent = renderToStaticMarkup(
       React.createElement(evaluated.default),
     );
