@@ -22,7 +22,7 @@ export const build = async () => {
     );
 
     const content = await wrapBlogPage({
-      pageTitle: model.config.titlePrefix,
+      pageTitle: `${model.config.titlePrefix} | ${post.config.title}`,
       metaDescription: model.config.metaDescription,
       content: postContent,
     });
