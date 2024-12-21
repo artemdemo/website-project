@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { readFile } from 'node:fs/promises';
-import path, { dirname, join, sep } from 'node:path';
+import { dirname, join, sep } from 'node:path';
 import { globby } from 'globby';
-import { CONTENT_DIR, POST_CONFIG_FILE, POSTS_DIR } from '../../constants';
+import { POST_CONFIG_FILE, POSTS_DIR } from '../../constants';
 
 const postConfigSchema = z.object({
   title: z.string(),
@@ -25,7 +25,7 @@ const loadPostConfig = async (postPath: string) => {
 };
 
 export const loadPosts = async (cwd: string): Promise<Array<Post>> => {
-  const pathPattern = `${CONTENT_DIR}/${POSTS_DIR}/*/index.md`;
+  const pathPattern = `${POSTS_DIR}/*/index.md`;
   const mdFiles = await globby(pathPattern, {
     cwd,
   });
@@ -41,7 +41,7 @@ export const loadPosts = async (cwd: string): Promise<Array<Post>> => {
     // Thisway I'll need only to copy them as is in `blog/` folder,
     // when I'll be ready to publish
     const relativePath = path.replace(
-      new RegExp(`^${CONTENT_DIR}${sep}${POSTS_DIR}${sep}`),
+      new RegExp(`^${POSTS_DIR}${sep}`),
       '',
     );
     posts.push({
