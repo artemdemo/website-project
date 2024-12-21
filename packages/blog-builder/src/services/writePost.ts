@@ -16,10 +16,14 @@ export const writePost = async (
     content: postContent,
   });
 
-  const postDir = dirname(join('./', BUILD_DIR, post.relativePath));
+  const buildPostDir = dirname(join('./', BUILD_DIR, post.relativePath));
 
-  await mkdir(postDir, { recursive: true });
-  await writeFile(join(postDir, 'index.html'), htmlContent, {
+  await mkdir(buildPostDir, { recursive: true });
+  await writeFile(join(buildPostDir, 'index.html'), htmlContent, {
     encoding: 'utf-8',
   });
+
+  return {
+    buildPostDir,
+  };
 };
