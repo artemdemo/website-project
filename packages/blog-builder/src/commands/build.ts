@@ -1,13 +1,12 @@
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import React from 'react';
-import { rm, copyFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { rm } from 'node:fs/promises';
 import * as runtime from 'react/jsx-runtime';
 import { createAppContext, getAppContext } from '../services/context';
 import { writePost } from '../services/writePost';
 import { readFullPostContent } from '../services/readPost';
-import { parsePostDependencies } from '../services/postDependencies';
+import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
 
 export const build = async () => {
@@ -27,20 +26,6 @@ export const build = async () => {
 
     const { buildPostDir } = await writePost(post, model.config, postContent);
 
-    const deps = parsePostDependencies(fullPostContent);
-
-    for (const imgName of deps.images) {
-      await copyFile(
-        join(dirname(post.path), imgName),
-        join(buildPostDir, imgName),
-      );
-    }
-
-    for (const videoName of deps.videos) {
-      await copyFile(
-        join(dirname(post.path), videoName),
-        join(buildPostDir, videoName),
-      );
-    }
+    await processPostAssets(post, buildPostDir, fullPostContent);
   }
 };
