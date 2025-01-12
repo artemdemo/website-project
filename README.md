@@ -1,7 +1,7 @@
 # Website Project
 
 - Static website generator
-  - Allow content is written in markdown
+  - Allow content to be written in markdown
   - Allow custom js content
 - Static content
   - Blog
@@ -13,6 +13,10 @@
 - Export static site to a separate folder, that has separate git repository
 - Markdown
   - https://mdxjs.com/docs/getting-started/
+
+## ToDo
+
+ - Why is it "blog" maybe it should be "site" and "blog" will be only one feature?
 
 ## Inspiration
 

@@ -26,8 +26,7 @@ export const loadPosts = async (cwd: string): Promise<Array<Post>> => {
 
   for (const path of mdFiles) {
     // I want blog posts to be flat in the `build/` folder
-    // Thisway I'll need only to copy them as is in `blog/` folder,
-    // when I'll be ready to publish
+    // This is way I'll need only to copy them as is in `blog/` folder
     const relativePath = path.replace(new RegExp(`^${POSTS_DIR}${sep}`), '');
     posts.push({
       path,
