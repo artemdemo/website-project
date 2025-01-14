@@ -1104,14 +1104,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"blog-content@workspace:content/blog":
-  version: 0.0.0-use.local
-  resolution: "blog-content@workspace:content/blog"
-  dependencies:
-    blog-builder: "workspace:*"
-  languageName: unknown
-  linkType: soft
-
 "brace-expansion@npm:^1.1.7":
   version: 1.1.11
   resolution: "brace-expansion@npm:1.1.11"
@@ -5378,6 +5370,14 @@ __metadata:
   checksum: 10/594187c36f2d7898f89c0ed3b9248a095fa549ecc1befb10a97bc884b5680dc96677f58df5579334d8e0d1018e5ef075689cfa2a6c459f45a61a9deb512cb59e
   languageName: node
   linkType: hard
+
+"website-content@workspace:content":
+  version: 0.0.0-use.local
+  resolution: "website-content@workspace:content"
+  dependencies:
+    blog-builder: "workspace:*"
+  languageName: unknown
+  linkType: soft
 
 "website-project@workspace:.":
   version: 0.0.0-use.local

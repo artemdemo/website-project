@@ -16,7 +16,10 @@
 
 ## ToDo
 
- - Why is it "blog" maybe it should be "site" and "blog" will be only one feature?
+- Why is it "blog" maybe it should be "site" and "blog" will be only one feature?
+- Error stack links to js files in the `dist`. It will be cooler if I could link to `ts` files instead.
+  - Most likely I will need to proveid source maps for that to happen.
+  - How to reproduce - throw an error in the builder.
 
 ## Inspiration
 

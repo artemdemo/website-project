@@ -3,8 +3,8 @@ import { join } from 'node:path';
 export const BUILD_DIR = 'build';
 
 const CONTENT_DIR = 'src';
-export const POSTS_DIR = join(CONTENT_DIR, 'posts');
+export const PAGES_DIR = join(CONTENT_DIR, 'pages');
 
-export const BLOG_CONFIG_FILE = 'blog.config.json';
+export const SITE_CONFIG_FILE = 'site.config.json';
 
-export const POST_CONFIG_FILE = 'index.json';
+export const PAGE_CONFIG_FILE = 'index.json';
