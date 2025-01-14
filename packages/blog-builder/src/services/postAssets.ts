@@ -2,6 +2,8 @@ import { Post } from 'definitions';
 import { copyFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
+// Regex for an image format in `md` file.
+// For example: `![Image title](some-image.png)`
 const imgRegex = /!\[[^\[\]]+\]\(([^()]+)\)/gm;
 const videoRegex = /src="(\S+\.mp4)"/gm;
 
