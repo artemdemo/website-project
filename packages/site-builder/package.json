@@ -1,8 +1,8 @@
 {
-  "name": "blog-builder",
+  "name": "site-builder",
   "private": true,
   "version": "1.0.0",
-  "bin": "./bin/blog-builder.cjs",
+  "bin": "./bin/site-builder.cjs",
   "type": "module",
   "scripts": {
     "build": "tsup",

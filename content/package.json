@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "blog-builder build"
+    "build": "site-builder build"
   },
   "devDependencies": {
-    "blog-builder": "workspace:*"
+    "site-builder": "workspace:*"
   }
 }
