@@ -10,6 +10,7 @@
     "test:watch": "VITEST_SEGFAULT_RETRY=3 run -T vitest watch"
   },
   "exports": {
+    "./types": "./dist/exports/types.d.ts",
     "./package.json": "./package.json"
   },
   "dependencies": {
