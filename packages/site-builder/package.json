@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsup",
     "test": ":",
-    "test:watch": "VITEST_SEGFAULT_RETRY=3 run -T vitest watch"
+    "test:watch": "VITEST_SEGFAULT_RETRY=3 run -T vitest watch",
+    "types": "tsc --noEmit"
   },
   "exports": {
     "./types": "./dist/exports/types.d.ts",

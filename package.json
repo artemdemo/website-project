@@ -4,6 +4,7 @@
   "description": "Website Project",
   "scripts": {
     "build:all": "turbo run build",
+    "types:all": "turbo run types",
     "test": "turbo run test",
     "preview": "yarn workspace preview start",
     "lint": "yarn lint:prettier; yarn lint:versions",
