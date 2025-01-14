@@ -4,6 +4,7 @@
   "description": "Website Project",
   "scripts": {
     "build:all": "turbo run build",
+    "types:all": "turbo run types",
     "test": "turbo run test",
     "preview": "yarn workspace preview start",
     "lint": "yarn lint:prettier; yarn lint:versions",
@@ -14,7 +15,7 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "content/*",
+      "content",
       "packages/*"
     ]
   },
@@ -26,5 +27,5 @@
     "turbo": "^2.0.0",
     "vitest": "^2.0.0"
   },
-  "packageManager": "yarn@4.5.3"
+  "packageManager": "yarn@4.6.0"
 }

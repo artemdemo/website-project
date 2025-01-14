@@ -1,15 +1,17 @@
 {
-  "name": "blog-builder",
+  "name": "site-builder",
   "private": true,
   "version": "1.0.0",
-  "bin": "./bin/blog-builder.cjs",
+  "bin": "./bin/site-builder.cjs",
   "type": "module",
   "scripts": {
     "build": "tsup",
     "test": ":",
-    "test:watch": "VITEST_SEGFAULT_RETRY=3 run -T vitest watch"
+    "test:watch": "VITEST_SEGFAULT_RETRY=3 run -T vitest watch",
+    "types": "tsc --noEmit"
   },
   "exports": {
+    "./types": "./dist/exports/types.d.ts",
     "./package.json": "./package.json"
   },
   "dependencies": {
