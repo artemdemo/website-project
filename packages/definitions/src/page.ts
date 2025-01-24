@@ -1,3 +1,4 @@
+import { VariantOf, variant, fields } from 'variant';
 import { z } from 'zod';
 
 export const pageConfigSchema = z.object({
@@ -9,9 +10,14 @@ export const pageConfigSchema = z.object({
 
 export type PageConfig = z.infer<typeof pageConfigSchema>;
 
-export interface Page {
-  type: 'md' | 'tsx';
+interface PageFields {
   path: string;
   relativePath: string;
   config: PageConfig;
 }
+
+export const Page = variant({
+  tsx: fields<PageFields>(),
+  md: fields<PageFields>(),
+});
+export type Page = VariantOf<typeof Page>;

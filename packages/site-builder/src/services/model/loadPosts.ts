@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join, sep, extname } from 'node:path';
 import { globby } from 'globby';
-import { pageConfigSchema, type Page } from 'definitions';
+import { pageConfigSchema, Page } from 'definitions';
 import { PAGE_CONFIG_FILE, PAGES_DIR } from '../../constants';
 
 const loadPageConfig = async (postPath: string) => {
@@ -32,17 +32,31 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
     // This is way I'll need only to copy them as is in `blog/` folder
     const relativePath = path.replace(new RegExp(`^${PAGES_DIR}${sep}`), '');
     const ext = extname(relativePath).replace('.', '');
-    if (ext !== 'md' && ext !== 'tsx') {
-      throw new Error(
-        `Not supported file extension "${ext}" in "${relativePath}"`,
-      );
+
+    switch (ext) {
+      case 'md':
+        posts.push(
+          Page.md({
+            path,
+            relativePath,
+            config: await loadPageConfig(path),
+          }),
+        );
+        break;
+      case 'tsx':
+        posts.push(
+          Page.tsx({
+            path,
+            relativePath,
+            config: await loadPageConfig(path),
+          }),
+        );
+        break;
+      default:
+        throw new Error(
+          `Not supported file extension "${ext}" in "${relativePath}"`,
+        );
     }
-    posts.push({
-      type: ext,
-      path,
-      relativePath,
-      config: await loadPageConfig(path),
-    });
   }
 
   return posts;

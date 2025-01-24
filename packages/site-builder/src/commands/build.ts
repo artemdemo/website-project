@@ -1,4 +1,5 @@
 import React from 'react';
+import { match } from 'variant';
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { rm } from 'node:fs/promises';
@@ -35,29 +36,35 @@ export const build = async () => {
   const siteRender = sireRenderFn();
 
   for (const page of model?.pages) {
-    if (page.type === 'md') {
-      const fullPostContent = await readFullPostContent(page);
-      const evaluated = await mdx.evaluate(fullPostContent, runtime);
+    await match(page, {
+      md: async () => {
+        const fullPostContent = await readFullPostContent(page);
+        const evaluated = await mdx.evaluate(fullPostContent, runtime);
 
-      const postContent = renderToStaticMarkup(
-        siteRender.pageRender({
-          content: React.createElement(evaluated.default),
-        }),
-      );
-
-      const { buildPostDir } = await writePost(page, model.config, postContent);
-      await processPostAssets(page, buildPostDir, fullPostContent);
-    } else {
-      const transpiledPagePath = page.path
-        .replace('src/', 'target/')
-        .replace('.tsx', '.js');
-      const Page = await import(`${cwd}/${transpiledPagePath}`);
-      const postContent = renderToStaticMarkup(
-        siteRender.pageRender({
-          content: React.createElement(Page.default),
-        }),
-      );
-      await writePost(page, model.config, postContent);
-    }
+        const postContent = renderToStaticMarkup(
+          siteRender.pageRender({
+            content: React.createElement(evaluated.default),
+          }),
+        );
+        const { buildPostDir } = await writePost(
+          page,
+          model.config,
+          postContent,
+        );
+        await processPostAssets(page, buildPostDir, fullPostContent);
+      },
+      tsx: async () => {
+        const transpiledPagePath = page.path
+          .replace('src/', 'target/')
+          .replace('.tsx', '.js');
+        const Page = await import(`${cwd}/${transpiledPagePath}`);
+        const postContent = renderToStaticMarkup(
+          siteRender.pageRender({
+            content: React.createElement(Page.default),
+          }),
+        );
+        await writePost(page, model.config, postContent);
+      },
+    });
   }
 };
