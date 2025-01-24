@@ -6,8 +6,6 @@
   "type": "module",
   "scripts": {
     "build": "tsup",
-    "test": ":",
-    "test:watch": "VITEST_SEGFAULT_RETRY=3 run -T vitest watch",
     "types": "tsc --noEmit"
   },
   "exports": {
