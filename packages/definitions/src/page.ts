@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
-export const postConfigSchema = z.object({
+export const pageConfigSchema = z.object({
   title: z.string(),
   date: z.string(),
   featuredImage: z.string(),
   tags: z.array(z.string()),
 });
 
-export type PostConfig = z.infer<typeof postConfigSchema>;
+export type PageConfig = z.infer<typeof pageConfigSchema>;
 
-export interface Post {
+export interface Page {
   path: string;
   relativePath: string;
-  config: PostConfig;
+  config: PageConfig;
 }

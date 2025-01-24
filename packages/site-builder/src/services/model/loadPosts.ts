@@ -1,18 +1,18 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join, sep } from 'node:path';
 import { globby } from 'globby';
-import { postConfigSchema, type Post } from 'definitions';
+import { pageConfigSchema, type Page } from 'definitions';
 import { PAGE_CONFIG_FILE, PAGES_DIR } from '../../constants';
 
-const loadPostConfig = async (postPath: string) => {
+const loadPageConfig = async (postPath: string) => {
   const rawConfig = await readFile(
     join(dirname(postPath), PAGE_CONFIG_FILE),
     'utf8',
   );
-  return postConfigSchema.parse(JSON.parse(rawConfig));
+  return pageConfigSchema.parse(JSON.parse(rawConfig));
 };
 
-export const loadPosts = async (cwd: string): Promise<Array<Post>> => {
+export const loadPages = async (cwd: string): Promise<Array<Page>> => {
   const pathPattern = `${PAGES_DIR}/*/index.md`;
   const mdFiles = await globby(pathPattern, {
     cwd,
@@ -22,7 +22,7 @@ export const loadPosts = async (cwd: string): Promise<Array<Post>> => {
     throw new Error(`There are no pages for pattern "${pathPattern}"`);
   }
 
-  const posts: Array<Post> = [];
+  const posts: Array<Page> = [];
 
   for (const path of mdFiles) {
     // I want blog posts to be flat in the `build/` folder
@@ -31,7 +31,7 @@ export const loadPosts = async (cwd: string): Promise<Array<Post>> => {
     posts.push({
       path,
       relativePath,
-      config: await loadPostConfig(path),
+      config: await loadPageConfig(path),
     });
   }
 

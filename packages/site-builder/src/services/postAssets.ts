@@ -1,4 +1,4 @@
-import { Post } from 'definitions';
+import { Page } from 'definitions';
 import { copyFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
@@ -34,7 +34,7 @@ const copyDeps = async (
 };
 
 export const processPostAssets = async (
-  post: Post,
+  post: Page,
   buildPostDir: string,
   fullPostContent: string,
 ) => {

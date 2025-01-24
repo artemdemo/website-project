@@ -1,2 +1,2 @@
-export * from './post.js';
+export * from './page.js';
 export * from './render.js';

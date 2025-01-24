@@ -29,7 +29,7 @@ export const build = async () => {
 
   const siteRender = sireRenderFn();
 
-  for (const post of model?.posts) {
+  for (const post of model?.pages) {
     const fullPostContent = await readFullPostContent(post);
 
     const evaluated = await mdx.evaluate(fullPostContent, runtime);
