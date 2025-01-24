@@ -4,12 +4,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { rm } from 'node:fs/promises';
 import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
+import { SiteRendererFn } from 'definitions';
 import { createAppContext, getAppContext } from '../services/context';
 import { writePost } from '../services/writePost';
 import { readFullPostContent } from '../services/readPost';
 import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
-import { SiteRendererFn } from 'definitions';
 
 export const build = async () => {
   await createAppContext();
@@ -18,7 +18,12 @@ export const build = async () => {
   await rm(BUILD_DIR, { recursive: true, force: true });
 
   await tsup.build({
-    entry: ['src/site.render.ts'],
+    entry: [
+      'src/site.render.ts',
+      ...model?.pages
+        .filter((page) => page.type === 'tsx')
+        .map((page) => page.path),
+    ],
     format: ['esm'],
     outDir: 'target',
   });
@@ -29,19 +34,23 @@ export const build = async () => {
 
   const siteRender = sireRenderFn();
 
-  for (const post of model?.pages) {
-    const fullPostContent = await readFullPostContent(post);
+  for (const page of model?.pages) {
+    if (page.type === 'md') {
+      const fullPostContent = await readFullPostContent(page);
 
-    const evaluated = await mdx.evaluate(fullPostContent, runtime);
+      const evaluated = await mdx.evaluate(fullPostContent, runtime);
 
-    const postContent = renderToStaticMarkup(
-      siteRender.pageRender({
-        content: React.createElement(evaluated.default),
-      }),
-    );
+      const postContent = renderToStaticMarkup(
+        siteRender.pageRender({
+          content: React.createElement(evaluated.default),
+        }),
+      );
 
-    const { buildPostDir } = await writePost(post, model.config, postContent);
+      const { buildPostDir } = await writePost(page, model.config, postContent);
 
-    await processPostAssets(post, buildPostDir, fullPostContent);
+      await processPostAssets(page, buildPostDir, fullPostContent);
+    } else {
+      console.log(page);
+    }
   }
 };
