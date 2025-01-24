@@ -3,6 +3,7 @@ import { match, isType } from 'variant';
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { rm } from 'node:fs/promises';
+import { join } from 'node:path';
 import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
 import { SiteRendererFn } from 'definitions';
@@ -29,7 +30,7 @@ export const build = async () => {
       .filter((page) => isType(page, 'tsx'))
       .map((page) => page.path),
     format: ['esm'],
-    outDir: 'target/pages',
+    outDir: join('target', 'pages'),
   });
 
   const sireRenderFn: SiteRendererFn = (
@@ -57,9 +58,11 @@ export const build = async () => {
         await processPostAssets(page, buildPostDir, fullPostContent);
       },
       tsx: async () => {
-        const transpiledPagePath = page.path
-          .replace('src/', 'target/')
-          .replace('.tsx', '.js');
+        const transpiledPagePath = join(
+          'target',
+          'pages',
+          page.relativePath.replace('.tsx', '.js'),
+        );
         const Page = await import(`${cwd}/${transpiledPagePath}`);
         const postContent = renderToStaticMarkup(
           siteRender.pageRender({
