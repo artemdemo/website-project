@@ -37,7 +37,6 @@ export const build = async () => {
   for (const page of model?.pages) {
     if (page.type === 'md') {
       const fullPostContent = await readFullPostContent(page);
-
       const evaluated = await mdx.evaluate(fullPostContent, runtime);
 
       const postContent = renderToStaticMarkup(
@@ -47,10 +46,16 @@ export const build = async () => {
       );
 
       const { buildPostDir } = await writePost(page, model.config, postContent);
-
       await processPostAssets(page, buildPostDir, fullPostContent);
     } else {
-      console.log(page);
+      const transpiledPagePath = page.path.replace('src/', 'target/').replace('.tsx', '.js');
+      const Page = await import(`${cwd}/${transpiledPagePath}`);
+      const postContent = renderToStaticMarkup(
+        siteRender.pageRender({
+          content: React.createElement(Page.default),
+        }),
+      );
+      await writePost(page, model.config, postContent);
     }
   }
 };
