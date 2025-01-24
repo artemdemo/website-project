@@ -48,7 +48,9 @@ export const build = async () => {
       const { buildPostDir } = await writePost(page, model.config, postContent);
       await processPostAssets(page, buildPostDir, fullPostContent);
     } else {
-      const transpiledPagePath = page.path.replace('src/', 'target/').replace('.tsx', '.js');
+      const transpiledPagePath = page.path
+        .replace('src/', 'target/')
+        .replace('.tsx', '.js');
       const Page = await import(`${cwd}/${transpiledPagePath}`);
       const postContent = renderToStaticMarkup(
         siteRender.pageRender({
