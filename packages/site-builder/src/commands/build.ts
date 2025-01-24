@@ -1,5 +1,5 @@
 import React from 'react';
-import { match } from 'variant';
+import { match, isType } from 'variant';
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { rm } from 'node:fs/promises';
@@ -19,14 +19,17 @@ export const build = async () => {
   await rm(BUILD_DIR, { recursive: true, force: true });
 
   await tsup.build({
-    entry: [
-      'src/site.render.ts',
-      ...model?.pages
-        .filter((page) => page.type === 'tsx')
-        .map((page) => page.path),
-    ],
+    entry: ['src/site.render.ts'],
     format: ['esm'],
     outDir: 'target',
+  });
+
+  await tsup.build({
+    entry: model?.pages
+      .filter((page) => isType(page, 'tsx'))
+      .map((page) => page.path),
+    format: ['esm'],
+    outDir: 'target/pages',
   });
 
   const sireRenderFn: SiteRendererFn = (
