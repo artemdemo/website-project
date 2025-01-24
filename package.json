@@ -20,9 +20,8 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^9.0.0",
+    "@types/node": "^20.0.0",
     "prettier": "^3.0.0",
-    "puppeteer": "^21.0.0",
     "syncpack": "^13.0.0",
     "turbo": "^2.0.0",
     "vitest": "^2.0.0"
