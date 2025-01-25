@@ -2,11 +2,13 @@ import tsup from 'tsup';
 import { getAppContext } from './context';
 import { isType } from 'variant';
 import { join, format, parse } from 'node:path';
+import { existsSync } from 'node:fs';
 import { readFullPostContent } from './readPost';
 
 type Import = {
   importPath: string;
   targetImportPath: string;
+  cssPath?: string;
   statement: string;
   positionIdx: number;
   mdFilePath: string;
@@ -52,6 +54,18 @@ export const buildMdxImports = async (): Promise<Import[]> => {
     outDir: join('target', 'md'),
     external: ['react', 'react-dom'],
   });
+
+  for (const importItem of imports) {
+    const cssPath = format({
+      ...parse(importItem.targetImportPath),
+      base: '',
+      ext: '.css',
+    });
+
+    if (existsSync(cssPath)) {
+      importItem.cssPath = cssPath;
+    }
+  }
 
   return imports;
 };

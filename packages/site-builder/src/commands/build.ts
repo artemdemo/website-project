@@ -6,9 +6,9 @@ import { rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
-import { PageProps, SiteRendererFn } from 'definitions';
+import { PageAsset, PageProps, SiteRendererFn } from 'definitions';
 import { createAppContext, getAppContext } from '../services/context';
-import { writePost } from '../services/writePost';
+import { writePage } from '../services/writePost';
 import { readFullPostContent } from '../services/readPost';
 import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
@@ -45,6 +45,8 @@ export const build = async () => {
 
   const mdImports = await buildMdxImports();
 
+  console.log(mdImports);
+
   const pageProps: PageProps = {
     queryPages,
   };
@@ -53,6 +55,7 @@ export const build = async () => {
     await match(page, {
       md: async () => {
         let fullPostContent = await readFullPostContent(page);
+        const pageAssets: Array<PageAsset> = [];
 
         for (const importItem of mdImports) {
           if (importItem.mdFilePath == page.path) {
@@ -60,6 +63,13 @@ export const build = async () => {
               importItem.importPath,
               `./${importItem.targetImportPath}`,
             );
+            if (importItem.cssPath) {
+              pageAssets.push(
+                PageAsset.css({
+                  path: importItem.cssPath,
+                }),
+              );
+            }
           }
         }
 
@@ -73,10 +83,11 @@ export const build = async () => {
             content: React.createElement(evaluated.default, pageProps),
           }),
         );
-        const { buildPostDir } = await writePost(
+        const { buildPostDir } = await writePage(
           page,
           model.config,
           postContent,
+          pageAssets,
         );
         await processPostAssets(page, buildPostDir, fullPostContent);
       },
@@ -92,7 +103,7 @@ export const build = async () => {
             content: React.createElement(Page.default, pageProps),
           }),
         );
-        await writePost(page, model.config, postContent);
+        await writePage(page, model.config, postContent, []);
       },
     });
   }
