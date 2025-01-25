@@ -12,6 +12,7 @@ import { writePost } from '../services/writePost';
 import { readFullPostContent } from '../services/readPost';
 import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
+import { queryPages } from '../services/queryPages';
 
 export const build = async () => {
   await createAppContext();
@@ -67,7 +68,7 @@ export const build = async () => {
         );
         const Page = await import(`${cwd}/${transpiledPagePath}`);
         const pageProps: PageProps = {
-          queryPages: () => [page],
+          queryPages,
         };
         const postContent = renderToStaticMarkup(
           siteRender.pageRender({
