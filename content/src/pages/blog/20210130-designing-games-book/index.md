@@ -1,8 +1,6 @@
 import { TopMenu } from './components/menu/TopMenu.tsx';
-import { Test } from './components/TopMenu.tsx';
 
-<TopMenu />
-<Test />
+<TopMenu queryPages={props.queryPages} />
 
 ![Designing Games, by Tynan Sylvester](designing-games.jpg)
 

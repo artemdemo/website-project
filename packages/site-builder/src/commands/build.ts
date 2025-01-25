@@ -45,6 +45,10 @@ export const build = async () => {
 
   const mdImports = await buildMdxImports();
 
+  const pageProps: PageProps = {
+    queryPages,
+  };
+
   for (const page of model?.pages) {
     await match(page, {
       md: async () => {
@@ -66,7 +70,7 @@ export const build = async () => {
 
         const postContent = renderToStaticMarkup(
           siteRender.pageRender({
-            content: React.createElement(evaluated.default),
+            content: React.createElement(evaluated.default, pageProps),
           }),
         );
         const { buildPostDir } = await writePost(
@@ -83,9 +87,6 @@ export const build = async () => {
           page.relativePath.replace('.tsx', '.js'),
         );
         const Page = await import(`${cwd}/${transpiledPagePath}`);
-        const pageProps: PageProps = {
-          queryPages,
-        };
         const postContent = renderToStaticMarkup(
           siteRender.pageRender({
             content: React.createElement(Page.default, pageProps),

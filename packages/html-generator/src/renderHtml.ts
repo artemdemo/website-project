@@ -7,7 +7,7 @@ export const renderHtmlOfBlogPage = async (
   data: BlogPageData,
 ): Promise<string> => {
   const template = await readFile(
-    join(import.meta.dirname, '../templates/blog-page.ejs'),
+    join(import.meta.dirname, '../templates/page.ejs'),
     {
       encoding: 'utf8',
     },
