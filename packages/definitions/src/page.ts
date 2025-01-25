@@ -12,8 +12,7 @@ export const pageConfigSchema = z.object({
 export type PageConfig = z.infer<typeof pageConfigSchema>;
 
 interface PageFields {
-  // ToDo: I will need to define route per page
-  // route: string;
+  route: string;
   path: string;
   relativePath: string;
   config: PageConfig;

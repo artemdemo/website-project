@@ -33,11 +33,14 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
     const relativePath = path.replace(new RegExp(`^${PAGES_DIR}${sep}`), '');
     const ext = extname(relativePath).replace('.', '');
 
+    const route = '/' + relativePath.split(sep).slice(0, -1).join('/');
+
     switch (ext) {
       case 'md':
         posts.push(
           Page.md({
             path,
+            route,
             relativePath,
             config: await loadPageConfig(path),
           }),
@@ -47,6 +50,7 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
         posts.push(
           Page.tsx({
             path,
+            route,
             relativePath,
             config: await loadPageConfig(path),
           }),
