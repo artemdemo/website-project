@@ -9,7 +9,7 @@ type Import = {
   targetImportPath: string;
   statement: string;
   positionIdx: number;
-  mdFilePath: string
+  mdFilePath: string;
 };
 
 const importRegex = /import.+from\s+['"]([^'";]+)['"];?/gm;
@@ -29,7 +29,8 @@ export const buildMdxImports = async (): Promise<Import[]> => {
           importPath,
           targetImportPath: format({
             ...parse(join('target', 'md', 'src', importPath)),
-            base: '', ext: '.js'
+            base: '',
+            ext: '.js',
           }),
           positionIdx: m.index,
           mdFilePath: page.path,
@@ -45,7 +46,7 @@ export const buildMdxImports = async (): Promise<Import[]> => {
     }),
     esbuildOptions(options) {
       // the directory structure will be the same as the source
-      options.outbase = "./";
+      options.outbase = './';
     },
     format: ['esm'],
     outDir: join('target', 'md'),

@@ -54,7 +54,7 @@ export const build = async () => {
           if (importItem.mdFilePath == page.path) {
             fullPostContent = fullPostContent.replace(
               importItem.importPath,
-              `./${importItem.targetImportPath}`
+              `./${importItem.targetImportPath}`,
             );
           }
         }

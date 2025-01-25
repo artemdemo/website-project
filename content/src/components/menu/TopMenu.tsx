@@ -8,5 +8,5 @@ export const TopMenu: React.FC = () => {
       <div>three</div>
       <div>four</div>
     </div>
-  )
+  );
 };
