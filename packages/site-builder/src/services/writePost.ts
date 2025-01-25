@@ -1,12 +1,12 @@
 import { join, dirname } from 'node:path';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { renderHtmlOfBlogPage } from 'html-generator';
-import type { Post } from 'definitions';
+import type { Page } from 'definitions';
 import { BUILD_DIR } from '../constants';
 import { BlogConfig } from './model/loadBlogConfig';
 
 export const writePost = async (
-  post: Post,
+  post: Page,
   blogConfig: BlogConfig,
   postContent: string,
 ) => {

@@ -1,34 +1,82 @@
 import React from 'react';
+import { match, isType } from 'variant';
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { rm } from 'node:fs/promises';
+import { join } from 'node:path';
+import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
-// import { evaluateBlogPost } from 'ui-components';
+import { PageProps, SiteRendererFn } from 'definitions';
 import { createAppContext, getAppContext } from '../services/context';
 import { writePost } from '../services/writePost';
 import { readFullPostContent } from '../services/readPost';
 import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
+import { queryPages } from '../services/queryPages';
 
 export const build = async () => {
   await createAppContext();
-  const { model } = getAppContext();
+  const { model, cwd } = getAppContext();
 
   await rm(BUILD_DIR, { recursive: true, force: true });
 
-  for (const post of model?.posts) {
-    const fullPostContent = await readFullPostContent(post);
+  await tsup.build({
+    entry: ['src/site.render.ts'],
+    format: ['esm'],
+    outDir: 'target',
+    external: ['react', 'react-dom'],
+  });
 
-    const evaluated = await mdx.evaluate(fullPostContent, runtime);
+  await tsup.build({
+    entry: model?.pages
+      .filter((page) => isType(page, 'tsx'))
+      .map((page) => page.path),
+    format: ['esm'],
+    outDir: join('target', 'pages'),
+    external: ['react', 'react-dom'],
+  });
 
-    // evaluateBlogPost();
+  const sireRenderFn: SiteRendererFn = (
+    await import(`${cwd}/target/site.render.js`)
+  ).default;
 
-    const postContent = renderToStaticMarkup(
-      React.createElement(evaluated.default),
-    );
+  const siteRender = sireRenderFn();
 
-    const { buildPostDir } = await writePost(post, model.config, postContent);
+  for (const page of model?.pages) {
+    await match(page, {
+      md: async () => {
+        const fullPostContent = await readFullPostContent(page);
+        const evaluated = await mdx.evaluate(fullPostContent, runtime);
 
-    await processPostAssets(post, buildPostDir, fullPostContent);
+        const postContent = renderToStaticMarkup(
+          siteRender.pageRender({
+            content: React.createElement(evaluated.default),
+          }),
+        );
+        const { buildPostDir } = await writePost(
+          page,
+          model.config,
+          postContent,
+        );
+        await processPostAssets(page, buildPostDir, fullPostContent);
+      },
+      tsx: async () => {
+        const transpiledPagePath = join(
+          'target',
+          'pages',
+          page.relativePath.replace('.tsx', '.js'),
+        );
+        const Page = await import(`${cwd}/${transpiledPagePath}`);
+        const pageProps: PageProps = {
+          queryPages,
+        };
+        const postContent = renderToStaticMarkup(
+          siteRender.pageRender({
+            content: React.createElement(Page.default, pageProps),
+          }),
+        );
+        await writePost(page, model.config, postContent);
+      },
+    });
   }
 };

@@ -1,15 +1,15 @@
-import type { Post } from 'definitions';
+import type { Page } from 'definitions';
 import { BlogConfig, loadBlogConfig } from './loadBlogConfig';
-import { loadPosts } from './loadPosts';
+import { loadPages } from './loadPages';
 
 export interface Model {
-  posts: Array<Post>;
+  pages: Array<Page>;
   config: BlogConfig;
 }
 
 export const loadModel = async (cwd: string): Promise<Model> => {
   return {
-    posts: await loadPosts(cwd),
+    pages: await loadPages(cwd),
     config: await loadBlogConfig(cwd),
   };
 };
