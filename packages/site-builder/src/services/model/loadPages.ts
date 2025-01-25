@@ -15,7 +15,7 @@ const loadPageConfig = async (postPath: string) => {
 export const loadPages = async (cwd: string): Promise<Array<Page>> => {
   const pathPattern = [
     `${PAGES_DIR}/index.(md|tsx)`,
-    `${PAGES_DIR}/*/index.(md|tsx)`,
+    `${PAGES_DIR}/**/index.(md|tsx)`,
   ];
   const files = await globby(pathPattern, {
     cwd,
