@@ -11,7 +11,9 @@ const Posts: PageComponent = ({ queryPages }) => {
       <div>
         {queryPages().map((page) => (
           <div key={page.path}>
-            "{page.config.title}" - {page.relativePath}
+            <a href={page.route}>
+              "{page.config.title}" - {page.relativePath}
+            </a>
           </div>
         ))}
       </div>
