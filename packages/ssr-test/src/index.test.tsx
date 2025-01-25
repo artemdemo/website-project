@@ -1,21 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { renderToString } from 'react-dom/server';
 import { describe, it } from 'vitest';
+import { TestContext, TestProvider } from './TestProvider';
 
 const TestApp = () => {
-  useEffect(() => {
-    console.log(111);
-  }, []);
-  console.log(222);
-  return <h1>Header</h1>;
+  // useEffect(() => {
+  //   console.log(111);
+  // }, []);
+  // console.log(222);
+  const testContext = useContext(TestContext);
+  console.log(testContext);
+  return <h1>Header, {testContext.someValue}</h1>;
 };
 
 describe('Index', () => {
   it('Rendering to string', () => {
+    // console.log(
+    //   renderToString(React.createElement(TestApp)),
+    // );
     console.log(
-      // renderToString(<TestApp />)
-      renderToString(React.createElement(TestApp)),
+      renderToString(
+        <TestProvider>
+          <TestApp />
+        </TestProvider>,
+      ),
     );
-    console.log(renderToString(<TestApp />));
   });
 });
