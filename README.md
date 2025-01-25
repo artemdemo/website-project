@@ -16,9 +16,6 @@
 
 ## ToDo
 
-- Site Renderer (`site.render.ts`). This file should be used by the renderer.
-  - It exposes methods for content manipulation, such as `pageRender()`.
-  - These methods allow the user to customize their desired design.
 - Blog Posts Preview
   - Consider allowing the combination of pages under "meta categories" to create preview pages for these categories.
   - "Meta categories" would not be visible to site visitors and would only be used during development.
@@ -37,6 +34,8 @@
 - Site Reload in Development Mode
   - Initially, a full site reload upon changes in user code should suffice.
   - Eventually, maybe implement HMR for faster feedback during development.
+- Tests for the `site-builder`
+  - Site builder should be tested, ate least sanity tests
 - Error Stack Links to Source Files
   - Currently, error stacks link to JavaScript files in the `dist` directory. It would be better if they linked to the original TypeScript files.
   - To achieve this, source maps will likely need to be provided.
