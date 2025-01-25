@@ -23,6 +23,7 @@ export const build = async () => {
     entry: ['src/site.render.ts'],
     format: ['esm'],
     outDir: 'target',
+    external: ['react', 'react-dom'],
   });
 
   await tsup.build({
@@ -31,6 +32,7 @@ export const build = async () => {
       .map((page) => page.path),
     format: ['esm'],
     outDir: join('target', 'pages'),
+    external: ['react', 'react-dom'],
   });
 
   const sireRenderFn: SiteRendererFn = (
