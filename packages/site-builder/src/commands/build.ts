@@ -13,6 +13,7 @@ import { readFullPostContent } from '../services/readPost';
 import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
 import { queryPages } from '../services/queryPages';
+import { buildMdxImports } from '../services/buildMdxImports';
 
 export const build = async () => {
   await createAppContext();
@@ -42,11 +43,26 @@ export const build = async () => {
 
   const siteRender = sireRenderFn();
 
+  const mdImports = await buildMdxImports();
+
   for (const page of model?.pages) {
     await match(page, {
       md: async () => {
-        const fullPostContent = await readFullPostContent(page);
-        const evaluated = await mdx.evaluate(fullPostContent, runtime);
+        let fullPostContent = await readFullPostContent(page);
+
+        for (const importItem of mdImports) {
+          if (importItem.mdFilePath == page.path) {
+            fullPostContent = fullPostContent.replace(
+              importItem.importPath,
+              `./${importItem.targetImportPath}`
+            );
+          }
+        }
+
+        const evaluated = await mdx.evaluate(fullPostContent, {
+          ...runtime,
+          baseUrl: `file://${cwd}/index`,
+        });
 
         const postContent = renderToStaticMarkup(
           siteRender.pageRender({
