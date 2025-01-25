@@ -6,7 +6,7 @@ import { rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
-import { SiteRendererFn } from 'definitions';
+import { PageProps, SiteRendererFn } from 'definitions';
 import { createAppContext, getAppContext } from '../services/context';
 import { writePost } from '../services/writePost';
 import { readFullPostContent } from '../services/readPost';
@@ -66,9 +66,12 @@ export const build = async () => {
           page.relativePath.replace('.tsx', '.js'),
         );
         const Page = await import(`${cwd}/${transpiledPagePath}`);
+        const pageProps: PageProps = {
+          queryPages: () => [page],
+        };
         const postContent = renderToStaticMarkup(
           siteRender.pageRender({
-            content: React.createElement(Page.default),
+            content: React.createElement(Page.default, pageProps),
           }),
         );
         await writePost(page, model.config, postContent);

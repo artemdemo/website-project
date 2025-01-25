@@ -1,3 +1,4 @@
+import React from 'react';
 import { VariantOf, variant, fields } from 'variant';
 import { z } from 'zod';
 
@@ -11,6 +12,8 @@ export const pageConfigSchema = z.object({
 export type PageConfig = z.infer<typeof pageConfigSchema>;
 
 interface PageFields {
+  // ToDo: I will need to define route per page
+  // route: string;
   path: string;
   relativePath: string;
   config: PageConfig;
@@ -21,3 +24,11 @@ export const Page = variant({
   md: fields<PageFields>(),
 });
 export type Page = VariantOf<typeof Page>;
+
+export type QueryPagesFn = () => Array<PageFields>;
+
+export type PageProps = {
+  queryPages: QueryPagesFn;
+};
+
+export type PageComponent = React.FC<PageProps>;

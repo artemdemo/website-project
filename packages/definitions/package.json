@@ -13,6 +13,7 @@
     "typescript": "^5.0.0"
   },
   "devDependencies": {
+    "react": "^19.0.0",
     "variant": "3.0.0-dev.27",
     "zod": "^3.24.1"
   }
