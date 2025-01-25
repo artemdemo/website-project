@@ -1,6 +1,6 @@
 import type { Page } from 'definitions';
 import { BlogConfig, loadBlogConfig } from './loadBlogConfig';
-import { loadPages } from './loadPosts';
+import { loadPages } from './loadPages';
 
 export interface Model {
   pages: Array<Page>;
