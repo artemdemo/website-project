@@ -45,8 +45,6 @@ export const build = async () => {
 
   const mdImports = await buildMdxImports();
 
-  console.log(mdImports);
-
   const pageProps: PageProps = {
     queryPages,
   };
