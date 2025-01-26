@@ -1,6 +1,6 @@
 import { join, dirname, parse } from 'node:path';
 import { writeFile, mkdir, copyFile } from 'node:fs/promises';
-import { renderHtmlOfPage } from 'html-generator';
+import { HtmlAsset, renderHtmlOfPage } from 'html-generator';
 import { Page, PageAsset } from 'definitions';
 import { BUILD_DIR } from '../constants';
 import { BlogConfig } from './model/loadBlogConfig';
@@ -14,19 +14,17 @@ export const writePage = async (
 ) => {
   const buildPostDir = dirname(join('./', BUILD_DIR, post.relativePath));
   const copyMap = new Map<string, string>();
-  const assets: Array<PageAsset> = [];
+  const assets: Array<HtmlAsset> = [];
   for (const asset of pageAssets) {
     assets.push(
       match(asset, {
         css: () => {
           const fileParts = parse(asset.path);
-          const buildAssetPath = join(
-            buildPostDir,
-            `${fileParts.name}.${fileParts.ext}`,
-          );
+          const fileName = `${fileParts.name}${fileParts.ext}`;
+          const buildAssetPath = join(buildPostDir, fileName);
           copyMap.set(asset.path, buildAssetPath);
-          return PageAsset.css({
-            path: buildAssetPath,
+          return HtmlAsset.css({
+            linkHref: fileName,
           });
         },
       }),

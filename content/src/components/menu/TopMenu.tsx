@@ -7,7 +7,7 @@ export const TopMenu: React.FC<{ queryPages: QueryPagesFn }> = ({
   queryPages,
 }) => {
   return (
-    <div>
+    <div className='TopMenu'>
       <h2>Menu</h2>
       <div>
         {queryPages().map((page) => (

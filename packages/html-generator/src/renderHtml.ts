@@ -1,13 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import ejs from 'ejs';
-import type { PageAsset } from 'definitions';
+import { HtmlAsset } from './types';
 
 export interface PageData {
   pageTitle: string;
   metaDescription: string;
   content: string;
-  assets: Array<PageAsset>;
+  assets: Array<HtmlAsset>;
 }
 
 export const renderHtmlOfPage = async (data: PageData): Promise<string> => {
