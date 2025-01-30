@@ -1,1 +1,6 @@
-export type { SiteRendererFn, PageRenderFn, PageComponent } from 'definitions';
+export type {
+  SiteRendererFn,
+  PageRenderFn,
+  PageComponent,
+  QueryPagesFn,
+} from 'definitions';

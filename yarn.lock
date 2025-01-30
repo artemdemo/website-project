@@ -2144,6 +2144,7 @@ __metadata:
   resolution: "html-generator@workspace:packages/html-generator"
   dependencies:
     "@types/ejs": "npm:^3.1.5"
+    definitions: "workspace:*"
     ejs: "npm:^3.1.10"
     tsup: "npm:^8.3.5"
     typescript: "npm:^5.0.0"

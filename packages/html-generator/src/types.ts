@@ -1,7 +1,8 @@
-export interface HtmlData {
-  pageTitle: string;
-  metaDescription: string;
-  content: string;
-}
+import { VariantOf, variant, fields } from 'variant';
 
-export interface BlogPageData extends HtmlData {}
+export const HtmlAsset = variant({
+  css: fields<{
+    linkHref: string;
+  }>(),
+});
+export type HtmlAsset = VariantOf<typeof HtmlAsset>;

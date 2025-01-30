@@ -31,3 +31,10 @@ export type PageProps = {
 };
 
 export type PageComponent = React.FC<PageProps>;
+
+export const PageAsset = variant({
+  css: fields<{
+    path: string;
+  }>(),
+});
+export type PageAsset = VariantOf<typeof PageAsset>;
