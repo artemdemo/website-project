@@ -1,24 +1,16 @@
 import tsup from 'tsup';
-import { getAppContext } from './context';
+import { getAppContext } from '../context';
 import { isType } from 'variant';
 import { join, format, parse } from 'node:path';
 import { existsSync } from 'node:fs';
-import { readFullPostContent } from './readPost';
-
-type Import = {
-  importPath: string;
-  targetImportPath: string;
-  cssPath?: string;
-  statement: string;
-  positionIdx: number;
-  mdFilePath: string;
-};
+import { readFullPostContent } from '../readPost';
+import { MdImport } from './mdTypes';
 
 const importRegex = /import.+from\s+['"]([^'";]+)['"];?/gm;
 
-export const buildMdxImports = async (): Promise<Import[]> => {
+export const buildMdxImports = async (): Promise<MdImport[]> => {
   const { model } = getAppContext();
-  const imports: Import[] = [];
+  const imports: MdImport[] = [];
 
   for (const page of model?.pages) {
     if (isType(page, 'md')) {

@@ -13,7 +13,8 @@ import { readFullPostContent } from '../services/readPost';
 import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
 import { queryPages } from '../services/queryPages';
-import { buildMdxImports } from '../services/buildMdxImports';
+import { buildMdxImports } from '../services/md/buildMdxImports';
+import { processMdImports } from '../services/md/processMdImports';
 
 export const build = async () => {
   await createAppContext();
@@ -52,24 +53,11 @@ export const build = async () => {
   for (const page of model?.pages) {
     await match(page, {
       md: async () => {
-        let fullPostContent = await readFullPostContent(page);
-        const pageAssets: Array<PageAsset> = [];
-
-        for (const importItem of mdImports) {
-          if (importItem.mdFilePath == page.path) {
-            fullPostContent = fullPostContent.replace(
-              importItem.importPath,
-              `./${importItem.targetImportPath}`,
-            );
-            if (importItem.cssPath) {
-              pageAssets.push(
-                PageAsset.css({
-                  path: importItem.cssPath,
-                }),
-              );
-            }
-          }
-        }
+        const { fullPostContent, pageAssets } = processMdImports(
+          page,
+          mdImports,
+          await readFullPostContent(page),
+        );
 
         const evaluated = await mdx.evaluate(fullPostContent, {
           ...runtime,
