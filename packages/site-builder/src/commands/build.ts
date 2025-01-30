@@ -44,7 +44,7 @@ export const build = async () => {
 
   const siteRender = sireRenderFn();
 
-  const mdImports = await buildMdxImports();
+  const mdImports = await buildMdxImports(model);
 
   const pageProps: PageProps = {
     queryPages,

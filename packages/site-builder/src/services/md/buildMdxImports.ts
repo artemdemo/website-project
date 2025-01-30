@@ -1,15 +1,14 @@
 import tsup from 'tsup';
-import { getAppContext } from '../context';
 import { isType } from 'variant';
 import { join, format, parse } from 'node:path';
 import { existsSync } from 'node:fs';
 import { readFullPostContent } from '../readPost';
 import { MdImport } from './mdTypes';
+import { Model } from '../model/loadModel';
 
 const importRegex = /import.+from\s+['"]([^'";]+)['"];?/gm;
 
-export const buildMdxImports = async (): Promise<MdImport[]> => {
-  const { model } = getAppContext();
+export const buildMdxImports = async (model: Model): Promise<MdImport[]> => {
   const imports: MdImport[] = [];
 
   for (const page of model?.pages) {
