@@ -52,6 +52,13 @@ export const build = async () => {
     queryPages,
   };
 
+  // MD files:
+  // * process raw md
+  //     - get all the tsx imports
+  // * target build
+  //     - here you need transpile files into target folder
+  // * post evaluation
+  //    - rendering markup (React)
   for (const page of model?.pages) {
     await match(page, {
       md: async () => {
