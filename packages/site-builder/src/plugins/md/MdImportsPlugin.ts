@@ -76,7 +76,7 @@ export class MdImportsPlugin implements IPlugin {
     return undefined;
   }
 
-  async postEval(page: Page, buildPostDir: string): Promise<HtmlAsset[]> {
+  async postEval(page: Page, buildPostDir: string) {
     const copyMap = new Map<string, string>();
     const assets = this.pageAssets.get(page.relativePath) || [];
     const htmlAssets: Array<HtmlAsset> = [];
@@ -108,6 +108,8 @@ export class MdImportsPlugin implements IPlugin {
         },
       });
     }
-    return htmlAssets;
+    return {
+      htmlAssets,
+    };
   }
 }

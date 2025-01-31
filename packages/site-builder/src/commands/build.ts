@@ -14,7 +14,7 @@ import { BUILD_DIR } from '../constants';
 import { queryPages } from '../services/queryPages';
 // import { buildMdxImports } from '../services/md/buildMdxImports';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
-import { IPlugin } from '../plugins/IPlugin';
+import { IPlugin, PostEvalResult } from '../plugins/IPlugin';
 import { HtmlAsset, renderHtmlOfPage } from 'html-generator';
 
 export const build = async () => {
@@ -106,11 +106,19 @@ export const build = async () => {
       },
     });
 
-    const htmlAssets: Array<HtmlAsset> = [];
+    const postEvalResult: PostEvalResult = {
+      htmlAssets: [],
+    };
 
     // Processing evaluated content
     for (const plugin of plugins) {
-      htmlAssets.push(...(await plugin.postEval(page, buildPostDir)));
+      const result = await plugin.postEval(page, buildPostDir);
+      if (result.htmlAssets) {
+        postEvalResult.htmlAssets = [
+          ...postEvalResult.htmlAssets,
+          ...result.htmlAssets,
+        ];
+      }
     }
 
     if (evaluatedContent) {
@@ -119,7 +127,7 @@ export const build = async () => {
         pageTitle: `${model.config.titlePrefix} | ${page.config.title}`,
         metaDescription: model.config.metaDescription,
         content: evaluatedContent,
-        assets: htmlAssets,
+        assets: postEvalResult.htmlAssets,
       });
 
       await writeFile(join(buildPostDir, 'index.html'), htmlContent, {
