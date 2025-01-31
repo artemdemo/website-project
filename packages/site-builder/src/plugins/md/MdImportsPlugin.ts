@@ -62,7 +62,6 @@ export class MdImportsPlugin implements IPlugin {
         });
 
         if (existsSync(cssPath)) {
-          // importItem.cssPath = cssPath;
           this.pageAssets.set(page.relativePath, [
             ...(this.pageAssets.get(page.relativePath) || []),
             PageAsset.css({
@@ -77,10 +76,7 @@ export class MdImportsPlugin implements IPlugin {
     return undefined;
   }
 
-  async postEval(
-    page: Page,
-    buildPostDir: string,
-  ): Promise<HtmlAsset[]> {
+  async postEval(page: Page, buildPostDir: string): Promise<HtmlAsset[]> {
     const copyMap = new Map<string, string>();
     const assets = this.pageAssets.get(page.relativePath) || [];
     const htmlAssets: Array<HtmlAsset> = [];
@@ -99,6 +95,8 @@ export class MdImportsPlugin implements IPlugin {
         }),
       );
     }
+    // ToDo: Why this loop exist outside of the previous one?
+    //    They look very nuch the same.
     for (const asset of assets) {
       match(asset, {
         css: () => {
@@ -112,5 +110,4 @@ export class MdImportsPlugin implements IPlugin {
     }
     return htmlAssets;
   }
-
 }

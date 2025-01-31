@@ -3,18 +3,16 @@ import { match, isType } from 'variant';
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
+import { join, dirname, format, parse } from 'node:path';
 import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
 import { PageProps, SiteRendererFn } from 'definitions';
 import { createAppContext, getAppContext } from '../services/context';
-// import { writePage } from '../services/writePost';
 import { readFullPostContent } from '../services/readPost';
 import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
 import { queryPages } from '../services/queryPages';
 // import { buildMdxImports } from '../services/md/buildMdxImports';
-// import { processMdImports } from '../services/md/processMdImports';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin } from '../plugins/IPlugin';
 import { HtmlAsset, renderHtmlOfPage } from 'html-generator';
@@ -47,10 +45,6 @@ export const build = async () => {
 
   const siteRender = sireRenderFn();
 
-  // const mdImports = await buildMdxImports(model);
-
-  // console.log(mdImports);
-
   const pageProps: PageProps = {
     queryPages,
   };
@@ -65,9 +59,10 @@ export const build = async () => {
 
   const plugins: IPlugin[] = [new MdImportsPlugin()];
 
-  // Process RAW
   for (const page of model?.pages) {
     let content: string = await readFullPostContent(page);
+
+    // Process RAW
     for (const plugin of plugins) {
       const contentResult = await plugin.processRaw(page, content);
       if (contentResult) {
@@ -78,6 +73,7 @@ export const build = async () => {
     const buildPostDir = dirname(join('./', BUILD_DIR, page.relativePath));
     await mkdir(buildPostDir, { recursive: true });
 
+    // Evaluating
     const evaluatedContent = await match(page, {
       md: async () => {
         const evaluated = await mdx.evaluate(content, {
@@ -92,17 +88,33 @@ export const build = async () => {
         );
       },
       tsx: async () => {
-        return undefined;
+        const transpiledPagePath = join(
+          'target',
+          'pages',
+          format({
+            ...parse(page.relativePath),
+            base: '',
+            ext: '.js',
+          }),
+        );
+        const Page = await import(`${cwd}/${transpiledPagePath}`);
+        return renderToStaticMarkup(
+          siteRender.pageRender({
+            content: React.createElement(Page.default, pageProps),
+          }),
+        );
       },
     });
 
     const htmlAssets: Array<HtmlAsset> = [];
 
+    // Processing evaluated content
     for (const plugin of plugins) {
       htmlAssets.push(...(await plugin.postEval(page, buildPostDir)));
     }
 
     if (evaluatedContent) {
+      // ToDo: Dedicated plugin for rendering HTML?
       const htmlContent = await renderHtmlOfPage({
         pageTitle: `${model.config.titlePrefix} | ${page.config.title}`,
         metaDescription: model.config.metaDescription,
@@ -114,55 +126,9 @@ export const build = async () => {
         encoding: 'utf-8',
       });
 
+      // ToDo: Isn't it only for MD files??
+      //   Move it inside dedicated plugin?
       await processPostAssets(page, buildPostDir, content);
     }
   }
-
-  // for (const page of model?.pages) {
-  //   await match(page, {
-  //     md: async () => {
-  //       const { fullPostContent, pageAssets } = processMdImports(
-  //         page,
-  //         mdImports,
-  //         await readFullPostContent(page),
-  //       );
-
-  //       const evaluated = await mdx.evaluate(fullPostContent, {
-  //         ...runtime,
-  //         baseUrl: `file://${cwd}/index`,
-  //       });
-
-  //       const postContent = renderToStaticMarkup(
-  //         siteRender.pageRender({
-  //           content: React.createElement(evaluated.default, pageProps),
-  //         }),
-  //       );
-  //       const { buildPostDir } = await writePage(
-  //         page,
-  //         model.config,
-  //         postContent,
-  //         pageAssets,
-  //       );
-  //       await processPostAssets(page, buildPostDir, fullPostContent);
-  //     },
-  //     tsx: async () => {
-  //       const transpiledPagePath = join(
-  //         'target',
-  //         'pages',
-  //         format({
-  //           ...parse(page.relativePath),
-  //           base: '',
-  //           ext: '.js',
-  //         }),
-  //       );
-  //       const Page = await import(`${cwd}/${transpiledPagePath}`);
-  //       const postContent = renderToStaticMarkup(
-  //         siteRender.pageRender({
-  //           content: React.createElement(Page.default, pageProps),
-  //         }),
-  //       );
-  //       await writePage(page, model.config, postContent, []);
-  //     },
-  //   });
-  // }
 };
