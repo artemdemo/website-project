@@ -3,7 +3,7 @@ import { match, isType } from 'variant';
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { rm } from 'node:fs/promises';
-import { join } from 'node:path';
+import { join, format, parse } from 'node:path';
 import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
 import { PageAsset, PageProps, SiteRendererFn } from 'definitions';
@@ -83,7 +83,11 @@ export const build = async () => {
         const transpiledPagePath = join(
           'target',
           'pages',
-          page.relativePath.replace('.tsx', '.js'),
+          format({
+            ...parse(page.relativePath),
+            base: '',
+            ext: '.js',
+          }),
         );
         const Page = await import(`${cwd}/${transpiledPagePath}`);
         const postContent = renderToStaticMarkup(
