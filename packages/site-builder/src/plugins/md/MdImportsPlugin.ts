@@ -11,17 +11,17 @@ import { HtmlAsset } from 'html-generator';
 const importRegex = /import.+from\s+['"]([^'";]+)['"];?/gm;
 
 export class MdImportsPlugin implements IPlugin {
-  private imports: MdImport[] = [];
   private pageAssets: Map<string, PageAsset[]> = new Map();
 
   constructor() {}
 
   async processRaw(page: Page, content: string): Promise<string | undefined> {
     if (isType(page, 'md')) {
+      const imports: MdImport[] = [];
       let m = importRegex.exec(content);
       while (m != null) {
         const importPath = m[1];
-        this.imports.push({
+        imports.push({
           statement: m[0],
           importPath,
           targetImportPath: format({
@@ -35,9 +35,9 @@ export class MdImportsPlugin implements IPlugin {
         m = importRegex.exec(content);
       }
 
-      if (this.imports.length > 0) {
+      if (imports.length > 0) {
         await tsup.build({
-          entry: this.imports.map((item) => {
+          entry: imports.map((item) => {
             return join('src', item.importPath);
           }),
           esbuildOptions(options) {
@@ -50,7 +50,7 @@ export class MdImportsPlugin implements IPlugin {
         });
       }
 
-      for (const importItem of this.imports) {
+      for (const importItem of imports) {
         content = content.replace(
           importItem.importPath,
           `./${importItem.targetImportPath}`,
