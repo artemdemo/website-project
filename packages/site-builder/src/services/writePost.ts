@@ -10,26 +10,25 @@ export const writePage = async (
   post: Page,
   blogConfig: BlogConfig,
   postContent: string,
-  pageAssets: Array<PageAsset>,
 ) => {
   const buildPostDir = dirname(join('./', BUILD_DIR, post.relativePath));
   const copyMap = new Map<string, string>();
-  const assets: Array<HtmlAsset> = [];
-  for (const asset of pageAssets) {
-    assets.push(
-      match(asset, {
-        css: () => {
-          const fileParts = parse(asset.path);
-          const fileName = `${fileParts.name}${fileParts.ext}`;
-          const buildAssetPath = join(buildPostDir, fileName);
-          copyMap.set(asset.path, buildAssetPath);
-          return HtmlAsset.css({
-            linkHref: fileName,
-          });
-        },
-      }),
-    );
-  }
+  // const assets: Array<HtmlAsset> = [];
+  // for (const asset of pageAssets) {
+  //   assets.push(
+  //     match(asset, {
+  //       css: () => {
+  //         const fileParts = parse(asset.path);
+  //         const fileName = `${fileParts.name}${fileParts.ext}`;
+  //         const buildAssetPath = join(buildPostDir, fileName);
+  //         copyMap.set(asset.path, buildAssetPath);
+  //         return HtmlAsset.css({
+  //           linkHref: fileName,
+  //         });
+  //       },
+  //     }),
+  //   );
+  // }
   const htmlContent = await renderHtmlOfPage({
     pageTitle: `${blogConfig.titlePrefix} | ${post.config.title}`,
     metaDescription: blogConfig.metaDescription,
@@ -37,19 +36,19 @@ export const writePage = async (
     assets,
   });
 
-  await mkdir(buildPostDir, { recursive: true });
+  // await mkdir(buildPostDir, { recursive: true });
 
-  for (const asset of pageAssets) {
-    match(asset, {
-      css: () => {
-        const copyTo = copyMap.get(asset.path);
-        if (!copyTo) {
-          throw new Error(`CopyTo path is not defined for "${asset.path}"`);
-        }
-        copyFile(join('./', asset.path), copyTo);
-      },
-    });
-  }
+  // for (const asset of pageAssets) {
+  //   match(asset, {
+  //     css: () => {
+  //       const copyTo = copyMap.get(asset.path);
+  //       if (!copyTo) {
+  //         throw new Error(`CopyTo path is not defined for "${asset.path}"`);
+  //       }
+  //       copyFile(join('./', asset.path), copyTo);
+  //     },
+  //   });
+  // }
 
   await writeFile(join(buildPostDir, 'index.html'), htmlContent, {
     encoding: 'utf-8',

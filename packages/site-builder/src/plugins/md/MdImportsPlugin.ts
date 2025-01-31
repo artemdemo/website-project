@@ -1,0 +1,116 @@
+import { Page, PageAsset } from 'definitions';
+import tsup from 'tsup';
+import { join, format, parse } from 'node:path';
+import { IPlugin } from '../IPlugin';
+import { isType, match } from 'variant';
+import { MdImport } from '../../services/md/mdTypes';
+import { existsSync } from 'node:fs';
+import { copyFile } from 'node:fs/promises';
+import { HtmlAsset } from 'html-generator';
+
+const importRegex = /import.+from\s+['"]([^'";]+)['"];?/gm;
+
+export class MdImportsPlugin implements IPlugin {
+  private imports: MdImport[] = [];
+  private pageAssets: Map<string, PageAsset[]> = new Map();
+
+  constructor() {}
+
+  async processRaw(page: Page, content: string): Promise<string | undefined> {
+    if (isType(page, 'md')) {
+      let m = importRegex.exec(content);
+      while (m != null) {
+        const importPath = m[1];
+        this.imports.push({
+          statement: m[0],
+          importPath,
+          targetImportPath: format({
+            ...parse(join('target', 'md', 'src', importPath)),
+            base: '',
+            ext: '.js',
+          }),
+          positionIdx: m.index,
+          mdFilePath: page.path,
+        });
+        m = importRegex.exec(content);
+      }
+
+      if (this.imports.length > 0) {
+        await tsup.build({
+          entry: this.imports.map((item) => {
+            return join('src', item.importPath);
+          }),
+          esbuildOptions(options) {
+            // the directory structure will be the same as the source
+            options.outbase = './';
+          },
+          format: ['esm'],
+          outDir: join('target', 'md'),
+          external: ['react', 'react-dom'],
+        });
+      }
+
+      for (const importItem of this.imports) {
+        content = content.replace(
+          importItem.importPath,
+          `./${importItem.targetImportPath}`,
+        );
+        const cssPath = format({
+          ...parse(importItem.targetImportPath),
+          base: '',
+          ext: '.css',
+        });
+
+        if (existsSync(cssPath)) {
+          // importItem.cssPath = cssPath;
+          this.pageAssets.set(page.relativePath, [
+            ...(this.pageAssets.get(page.relativePath) || []),
+            PageAsset.css({
+              path: cssPath,
+            }),
+          ]);
+        }
+      }
+
+      return content;
+    }
+    return undefined;
+  }
+
+  async postEval(
+    page: Page,
+    buildPostDir: string,
+  ): Promise<HtmlAsset[]> {
+    const copyMap = new Map<string, string>();
+    const assets = this.pageAssets.get(page.relativePath) || [];
+    const htmlAssets: Array<HtmlAsset> = [];
+    for (const asset of assets) {
+      htmlAssets.push(
+        match(asset, {
+          css: () => {
+            const fileParts = parse(asset.path);
+            const fileName = `${fileParts.name}${fileParts.ext}`;
+            const buildAssetPath = join(buildPostDir, fileName);
+            copyMap.set(asset.path, buildAssetPath);
+            return HtmlAsset.css({
+              linkHref: fileName,
+            });
+          },
+        }),
+      );
+    }
+    for (const asset of assets) {
+      match(asset, {
+        css: () => {
+          const copyTo = copyMap.get(asset.path);
+          if (!copyTo) {
+            throw new Error(`CopyTo path is not defined for "${asset.path}"`);
+          }
+          copyFile(join('./', asset.path), copyTo);
+        },
+      });
+    }
+    return htmlAssets;
+  }
+
+}
