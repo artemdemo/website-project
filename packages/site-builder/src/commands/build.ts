@@ -16,6 +16,7 @@ import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin, PostEvalResult } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
+import { replaceExt } from '../services/fs';
 
 const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 
@@ -79,7 +80,9 @@ export const build = async () => {
     const buildPageDir = dirname(join('./', BUILD_DIR, page.relativePath));
     await mkdir(buildPageDir, { recursive: true });
 
-    const targetPageDir = dirname(join('./', TARGET_PAGES_DIR, page.relativePath));
+    const targetPageDir = dirname(
+      join('./', TARGET_PAGES_DIR, page.relativePath),
+    );
 
     // Evaluating
     const evaluatedContent = await match(page, {
@@ -98,11 +101,7 @@ export const build = async () => {
       tsx: async () => {
         const transpiledPagePath = join(
           targetPageDir,
-          format({
-            ...parse(basename(page.relativePath)),
-            base: '',
-            ext: '.js',
-          }),
+          replaceExt(basename(page.relativePath), '.js'),
         );
         const Page = await import(`${cwd}/${transpiledPagePath}`);
         return renderToStaticMarkup(

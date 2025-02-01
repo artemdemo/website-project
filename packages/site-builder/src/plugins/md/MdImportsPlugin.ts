@@ -7,6 +7,7 @@ import { existsSync } from 'node:fs';
 import { copyFile } from 'node:fs/promises';
 import { HtmlAsset } from 'html-generator';
 import { TARGET_DIR } from '../../constants';
+import { replaceExt } from '../../services/fs';
 
 type MdImport = {
   importPath: string;
@@ -24,11 +25,7 @@ export class MdImportsPlugin implements IPlugin {
   constructor() {}
 
   private _processAdjacentCss(page: Page, importItem: MdImport) {
-    const cssPath = format({
-      ...parse(importItem.targetImportPath),
-      base: '',
-      ext: '.css',
-    });
+    const cssPath = replaceExt(importItem.targetImportPath, '.css');
 
     if (existsSync(cssPath)) {
       this.pageAssets.set(page.relativePath, [
@@ -49,11 +46,10 @@ export class MdImportsPlugin implements IPlugin {
         imports.push({
           statement: m[0],
           importPath,
-          targetImportPath: format({
-            ...parse(join(TARGET_DIR, 'md', 'src', importPath)),
-            base: '',
-            ext: '.js',
-          }),
+          targetImportPath: replaceExt(
+            join(TARGET_DIR, 'md', 'src', importPath),
+            '.js',
+          ),
           positionIdx: m.index,
           mdFilePath: page.path,
         });
