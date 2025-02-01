@@ -1,13 +1,12 @@
-import { Page, PageAsset } from 'definitions';
+import { Page } from 'definitions';
 import tsup from 'tsup';
-import { join, format, parse } from 'node:path';
+import { join, basename } from 'node:path';
 import { IPlugin, RawProcessData } from '../IPlugin';
-import { isType, match } from 'variant';
+import { isType } from 'variant';
 import { existsSync } from 'node:fs';
-import { copyFile } from 'node:fs/promises';
-import { HtmlAsset } from 'html-generator';
 import { TARGET_DIR } from '../../constants';
 import { replaceExt } from '../../services/fs';
+import { CssProcessor } from '../../services/CssProcessor';
 
 type MdImport = {
   importPath: string;
@@ -20,7 +19,7 @@ type MdImport = {
 const importRegex = /import.+from\s+['"]([^'";]+)['"];?/gm;
 
 export class MdImportsPlugin implements IPlugin {
-  private pageAssets: Map<string, PageAsset[]> = new Map();
+  private _cssProcessor = new CssProcessor();
 
   async processRaw(page: Page, { content }: RawProcessData) {
     if (isType(page, 'md')) {
@@ -56,54 +55,28 @@ export class MdImportsPlugin implements IPlugin {
         });
       }
 
-      const targetCssPathList: string[] = []
-
       for (const importItem of imports) {
         content = content.replace(
           importItem.importPath,
           `./${importItem.targetImportPath}`,
         );
         const cssPath = replaceExt(importItem.targetImportPath, '.css');
-        targetCssPathList.push(cssPath);
 
+        // ToDo: This part is problematic,
+        // CssProcessor doesn't know how to run multiple times for the same `page`.
         if (existsSync(cssPath)) {
-          this.pageAssets.set(page.relativePath, [
-            ...(this.pageAssets.get(page.relativePath) || []),
-            PageAsset.css({
-              path: cssPath,
-            }),
-          ]);
+          await this._cssProcessor.process(page, basename(cssPath), cssPath);
         }
       }
 
       return {
         content,
-        targetCssPathList,
       };
     }
     return {};
   }
 
   async postEval(page: Page, buildPageDir: string) {
-    const assets = this.pageAssets.get(page.relativePath) || [];
-    const htmlAssets: Array<HtmlAsset> = [];
-    for (const asset of assets) {
-      htmlAssets.push(
-        await match(asset, {
-          css: async () => {
-            const fileParts = parse(asset.path);
-            const fileName = `${fileParts.name}${fileParts.ext}`;
-            const buildAssetPath = join(buildPageDir, fileName);
-            await copyFile(join('./', asset.path), buildAssetPath);
-            return HtmlAsset.css({
-              linkHref: fileName,
-            });
-          },
-        }),
-      );
-    }
-    return {
-      htmlAssets,
-    };
+    return await this._cssProcessor.postEval(page, buildPageDir);
   }
 }

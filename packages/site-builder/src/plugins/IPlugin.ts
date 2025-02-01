@@ -7,7 +7,6 @@ export type PostEvalResult = {
 
 export type RawProcessData = {
   content: string;
-  targetCssPathList: string[];
 };
 
 export interface IPlugin {

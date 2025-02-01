@@ -81,7 +81,6 @@ export const build = async () => {
 
     let rawProcessData: RawProcessData = {
       content: await readFullPostContent(page),
-      targetCssPathList: [],
     };
 
     // Process RAW
@@ -93,12 +92,6 @@ export const build = async () => {
       );
       if (modifiedData.content) {
         rawProcessData.content = modifiedData.content;
-      }
-      if (modifiedData.targetCssPathList) {
-        rawProcessData.targetCssPathList = [
-          ...rawProcessData.targetCssPathList,
-          ...modifiedData.targetCssPathList,
-        ]
       }
     }
 
