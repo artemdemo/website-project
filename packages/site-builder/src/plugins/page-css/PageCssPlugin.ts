@@ -43,7 +43,7 @@ export class PageCssPlugin implements IPlugin {
           match = bgUrlRegex.exec(cssContent);
         }
         this._cssMap.set(page, {
-          fileName: fileName,
+          fileName,
           targetPath: cssTargetPath,
           urlPathList: urlList.map((relativePath) => {
             return join(
