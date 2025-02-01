@@ -15,6 +15,23 @@ export class MdImportsPlugin implements IPlugin {
 
   constructor() {}
 
+  private _processAdjacentCss(page: Page, importItem: MdImport) {
+    const cssPath = format({
+      ...parse(importItem.targetImportPath),
+      base: '',
+      ext: '.css',
+    });
+
+    if (existsSync(cssPath)) {
+      this.pageAssets.set(page.relativePath, [
+        ...(this.pageAssets.get(page.relativePath) || []),
+        PageAsset.css({
+          path: cssPath,
+        }),
+      ]);
+    }
+  }
+
   async processRaw(page: Page, content: string): Promise<string | undefined> {
     if (isType(page, 'md')) {
       const imports: MdImport[] = [];
@@ -55,20 +72,7 @@ export class MdImportsPlugin implements IPlugin {
           importItem.importPath,
           `./${importItem.targetImportPath}`,
         );
-        const cssPath = format({
-          ...parse(importItem.targetImportPath),
-          base: '',
-          ext: '.css',
-        });
-
-        if (existsSync(cssPath)) {
-          this.pageAssets.set(page.relativePath, [
-            ...(this.pageAssets.get(page.relativePath) || []),
-            PageAsset.css({
-              path: cssPath,
-            }),
-          ]);
-        }
+        this._processAdjacentCss(page, importItem);
       }
 
       return content;
