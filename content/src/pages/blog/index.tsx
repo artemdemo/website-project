@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { PageComponent } from 'site-builder/types';
 import { TopMenu } from '../../components/menu/TopMenu';
 
-const Blog: PageComponent = () => {
+const Blog: PageComponent = ({ queryPages }) => {
   return (
     <>
       <TopMenu />
