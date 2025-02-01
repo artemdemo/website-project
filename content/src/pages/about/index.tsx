@@ -8,6 +8,7 @@ const About: PageComponent = ({ queryPages }) => {
     <>
       <TopMenu queryPages={queryPages} />
       <h1 className="Title">About Page</h1>
+      <img src="ab-bg.png" />
     </>
   );
 };
