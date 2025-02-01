@@ -34,6 +34,12 @@ export const build = async () => {
   });
 
   await tsup.build({
+    // Images can be inlined using Custom Loader
+    // https://tsup.egoist.dev/#custom-loader
+    // loader: {
+    //   '.png': 'base64',
+    //   '.webp': 'file',
+    // },
     entry: model?.pages
       .filter((page) => isType(page, 'tsx'))
       .map((page) => page.path),
