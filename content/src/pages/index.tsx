@@ -8,8 +8,8 @@ const Posts: PageComponent = ({ queryPages }) => {
   }, []);
   return (
     <>
-      <h1>Posts List</h1>
       <TopMenu queryPages={queryPages} />
+      <h1>Posts List</h1>
     </>
   );
 };
