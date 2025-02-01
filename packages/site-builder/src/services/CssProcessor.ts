@@ -13,7 +13,7 @@ export class CssProcessor {
       fileName: string;
       targetPath: string;
       urlPathList: string[];
-    }
+    }[]
   > = new WeakMap();
 
   async process(page: Page, fileName: string, cssTargetPath: string) {
@@ -29,16 +29,19 @@ export class CssProcessor {
       urlList.push(match[1]);
       match = bgUrlRegex.exec(cssContent);
     }
-    this._cssMap.set(page, {
-      fileName,
-      targetPath: cssTargetPath,
-      urlPathList: urlList.map((relativePath) => {
-        return join(
-          cssTargetPath.split('/').slice(0, -1).join('/'),
-          relativePath,
-        );
-      }),
-    });
+    this._cssMap.set(page, [
+      ...(this._cssMap.get(page) || []),
+      {
+        fileName,
+        targetPath: cssTargetPath,
+        urlPathList: urlList.map((relativePath) => {
+          return join(
+            cssTargetPath.split('/').slice(0, -1).join('/'),
+            relativePath,
+          );
+        }),
+      }
+    ]);
     if (urlList.length > 0) {
       let updatedCssContent: string = cssContent;
       for (const urlPath of urlList) {
@@ -55,20 +58,22 @@ export class CssProcessor {
 
   async postEval(page: Page, buildPageDir: string) {
     const htmlAssets: Array<HtmlAsset> = [];
-    const cssData = this._cssMap.get(page);
-    if (cssData) {
-      const cssBuildPath = join(buildPageDir, cssData.fileName);
-      await copyFile(cssData.targetPath, cssBuildPath);
+    const cssDataList = this._cssMap.get(page) || [];
+    for (const cssData of cssDataList) {
+      if (cssData) {
+        const cssBuildPath = join(buildPageDir, cssData.fileName);
+        await copyFile(cssData.targetPath, cssBuildPath);
 
-      for (const urlPath of cssData.urlPathList) {
-        await copyFile(urlPath, join(BUILD_ASSETS_DIR, basename(urlPath)));
+        for (const urlPath of cssData.urlPathList) {
+          await copyFile(urlPath, join(BUILD_ASSETS_DIR, basename(urlPath)));
+        }
+
+        htmlAssets.push(
+          HtmlAsset.css({
+            linkHref: cssData.fileName,
+          }),
+        );
       }
-
-      htmlAssets.push(
-        HtmlAsset.css({
-          linkHref: cssData.fileName,
-        }),
-      );
     }
     return {
       htmlAssets,

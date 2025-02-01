@@ -62,8 +62,6 @@ export class MdImportsPlugin implements IPlugin {
         );
         const cssPath = replaceExt(importItem.targetImportPath, '.css');
 
-        // ToDo: This part is problematic,
-        // CssProcessor doesn't know how to run multiple times for the same `page`.
         if (existsSync(cssPath)) {
           await this._cssProcessor.process(page, basename(cssPath), cssPath);
         }
