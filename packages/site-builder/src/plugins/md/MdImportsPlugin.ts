@@ -81,7 +81,6 @@ export class MdImportsPlugin implements IPlugin {
   }
 
   async postEval(page: Page, buildPostDir: string) {
-    const copyMap = new Map<string, string>();
     const assets = this.pageAssets.get(page.relativePath) || [];
     const htmlAssets: Array<HtmlAsset> = [];
     for (const asset of assets) {
@@ -91,26 +90,13 @@ export class MdImportsPlugin implements IPlugin {
             const fileParts = parse(asset.path);
             const fileName = `${fileParts.name}${fileParts.ext}`;
             const buildAssetPath = join(buildPostDir, fileName);
-            copyMap.set(asset.path, buildAssetPath);
+            copyFile(join('./', asset.path), buildAssetPath);
             return HtmlAsset.css({
               linkHref: fileName,
             });
           },
         }),
       );
-    }
-    // ToDo: Why this loop exist outside of the previous one?
-    //    They look very nuch the same.
-    for (const asset of assets) {
-      match(asset, {
-        css: () => {
-          const copyTo = copyMap.get(asset.path);
-          if (!copyTo) {
-            throw new Error(`CopyTo path is not defined for "${asset.path}"`);
-          }
-          copyFile(join('./', asset.path), copyTo);
-        },
-      });
     }
     return {
       htmlAssets,

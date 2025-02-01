@@ -12,10 +12,9 @@ import { readFullPostContent } from '../services/readPost';
 import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
 import { queryPages } from '../services/queryPages';
-// import { buildMdxImports } from '../services/md/buildMdxImports';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin, PostEvalResult } from '../plugins/IPlugin';
-import { HtmlAsset, renderHtmlOfPage } from 'html-generator';
+import { renderHtmlOfPage } from 'html-generator';
 
 export const build = async () => {
   await createAppContext();
