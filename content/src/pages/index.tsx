@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { PageComponent } from 'site-builder/types';
-import { TopMenu } from '../components/menu/TopMenu';
+import { QueryPagesMenu } from '../components/menu/QueryPagesMenu';
 
 const Posts: PageComponent = ({ queryPages }) => {
   useEffect(() => {
@@ -8,7 +8,7 @@ const Posts: PageComponent = ({ queryPages }) => {
   }, []);
   return (
     <>
-      <TopMenu queryPages={queryPages} />
+      <QueryPagesMenu queryPages={queryPages} />
       <h1>Posts List</h1>
     </>
   );

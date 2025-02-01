@@ -1,14 +1,14 @@
 import React from 'react';
 import { QueryPagesFn } from 'site-builder/types';
 import { MenuLink } from './MenuLink';
-import './TopMenu.css';
+import './QueryPagesMenu.css';
 
-export const TopMenu: React.FC<{ queryPages: QueryPagesFn }> = ({
+export const QueryPagesMenu: React.FC<{ queryPages: QueryPagesFn }> = ({
   queryPages,
 }) => {
   return (
-    <div className="TopMenu">
-      <h2>Menu</h2>
+    <div className="QueryPagesMenu">
+      <h2>Query Pages Menu</h2>
       <div>
         {queryPages().map((page) => (
           <MenuLink key={page.path}>
