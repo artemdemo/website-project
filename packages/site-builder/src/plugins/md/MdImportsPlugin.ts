@@ -84,17 +84,17 @@ export class MdImportsPlugin implements IPlugin {
     return undefined;
   }
 
-  async postEval(page: Page, buildPostDir: string) {
+  async postEval(page: Page, buildPageDir: string) {
     const assets = this.pageAssets.get(page.relativePath) || [];
     const htmlAssets: Array<HtmlAsset> = [];
     for (const asset of assets) {
       htmlAssets.push(
-        match(asset, {
-          css: () => {
+        await match(asset, {
+          css: async () => {
             const fileParts = parse(asset.path);
             const fileName = `${fileParts.name}${fileParts.ext}`;
-            const buildAssetPath = join(buildPostDir, fileName);
-            copyFile(join('./', asset.path), buildAssetPath);
+            const buildAssetPath = join(buildPageDir, fileName);
+            await copyFile(join('./', asset.path), buildAssetPath);
             return HtmlAsset.css({
               linkHref: fileName,
             });

@@ -7,5 +7,9 @@ export type PostEvalResult = {
 
 export interface IPlugin {
   processRaw(page: Page, content: string): Promise<string | undefined>;
-  postEval(page: Page, buildPostDir: string): Promise<Partial<PostEvalResult>>;
+  postEval(
+    page: Page,
+    buildPageDir: string,
+    targetPageDir: string,
+  ): Promise<Partial<PostEvalResult>>;
 }

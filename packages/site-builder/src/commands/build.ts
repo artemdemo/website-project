@@ -118,7 +118,7 @@ export const build = async () => {
 
     // Processing evaluated content
     for (const plugin of plugins) {
-      const result = await plugin.postEval(page, buildPageDir);
+      const result = await plugin.postEval(page, buildPageDir, targetPageDir);
       if (result.htmlAssets) {
         postEvalResult.htmlAssets = [
           ...postEvalResult.htmlAssets,

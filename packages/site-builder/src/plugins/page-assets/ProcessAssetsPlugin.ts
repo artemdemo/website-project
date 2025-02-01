@@ -23,13 +23,13 @@ const findStrAssets = (rgx: RegExp, postContent: string) => {
 
 const copyDeps = async (
   postPath: string,
-  buildPostDir: string,
+  buildPageDir: string,
   fileNames: Array<string>,
 ) => {
   for (const imgName of fileNames) {
     await copyFile(
       join(dirname(postPath), imgName),
-      join(buildPostDir, imgName),
+      join(buildPageDir, imgName),
     );
   }
 };
@@ -55,12 +55,12 @@ export class ProcessAssetsPlugin implements IPlugin {
 
   async postEval(
     page: Page,
-    buildPostDir: string,
+    buildPageDir: string,
   ): Promise<Partial<PostEvalResult>> {
     const deps = this._depsMap.get(page);
     if (deps) {
-      await copyDeps(page.path, buildPostDir, deps.images);
-      await copyDeps(page.path, buildPostDir, deps.videos);
+      await copyDeps(page.path, buildPageDir, deps.images);
+      await copyDeps(page.path, buildPageDir, deps.videos);
     }
     return {};
   }

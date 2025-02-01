@@ -1,7 +1,10 @@
 import { Page } from 'definitions';
 import { existsSync } from 'node:fs';
-import { join, format, parse } from 'node:path';
+import { basename, join } from 'node:path';
+import { copyFile } from 'node:fs/promises';
+import { HtmlAsset } from 'html-generator';
 import { IPlugin, PostEvalResult } from '../IPlugin';
+import { replaceExt } from '../../services/fs';
 
 export class PageCssPlugin implements IPlugin {
   async processRaw(_page: Page, _content: string): Promise<string | undefined> {
@@ -11,17 +14,23 @@ export class PageCssPlugin implements IPlugin {
   async postEval(
     page: Page,
     buildPageDir: string,
+    targetPageDir: string,
   ): Promise<Partial<PostEvalResult>> {
-    // console.log('>> buildPageDir', buildPageDir);
-    // const cssPath = join(
-    //   buildPageDir,
-    //   format({
-    //     ...parse(page.relativePath),
-    //     base: '',
-    //     ext: '.css',
-    //   }),
-    // );
-    // if (existsSync(cssPath)) {}
-    return {};
+    const htmlAssets: Array<HtmlAsset> = [];
+    const filePath = replaceExt(basename(page.relativePath), '.css');
+    const cssTargetPath = join(targetPageDir, filePath);
+    if (existsSync(cssTargetPath)) {
+      const cssBuildPath = join(buildPageDir, filePath);
+
+      await copyFile(cssTargetPath, cssBuildPath);
+      htmlAssets.push(
+        HtmlAsset.css({
+          linkHref: filePath,
+        }),
+      );
+    }
+    return {
+      htmlAssets,
+    };
   }
 }
