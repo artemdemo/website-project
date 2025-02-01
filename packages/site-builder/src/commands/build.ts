@@ -60,14 +60,6 @@ export const build = async () => {
     queryPages,
   };
 
-  // MD files:
-  // * process raw md
-  //     - get all the tsx imports
-  // * target build (core logic, not in the plugin)
-  //     - here you need transpile files into target folder
-  // * post evaluation
-  //    - rendering markup (React)
-
   const plugins: IPlugin[] = [
     new MdImportsPlugin(),
     new ProcessAssetsPlugin(),
