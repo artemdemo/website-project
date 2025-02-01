@@ -33,7 +33,9 @@ const copyDeps = async (
     if (existsSync(fileFrom)) {
       await copyFile(fileFrom, join(buildPageDir, imgName));
     } else {
-      console.warn(`[copyDeps] Trying to copy file that doesn't exist: "${fileFrom}"`);
+      console.warn(
+        `[copyDeps] Trying to copy file that doesn't exist: "${fileFrom}"`,
+      );
     }
   }
 };
