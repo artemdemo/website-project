@@ -3,7 +3,7 @@ import { match, isType } from 'variant';
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { join, dirname, format, parse, basename } from 'node:path';
+import { join, dirname, basename } from 'node:path';
 import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
 import { PageProps, SiteRendererFn } from 'definitions';
@@ -117,6 +117,7 @@ export const build = async () => {
     };
 
     // Processing evaluated content
+    // target -> build
     for (const plugin of plugins) {
       const result = await plugin.postEval(page, buildPageDir, targetPageDir);
       if (result.htmlAssets) {
@@ -127,7 +128,6 @@ export const build = async () => {
       }
     }
 
-    // ToDo: Dedicated plugin for rendering HTML?
     const htmlContent = await renderHtmlOfPage({
       pageTitle: `${model.config.titlePrefix} | ${page.config.title}`,
       metaDescription: model.config.metaDescription,
