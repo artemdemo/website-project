@@ -10,7 +10,7 @@ import { PageProps, SiteRendererFn } from 'definitions';
 import { renderHtmlOfPage } from 'html-generator';
 import { createAppContext, getAppContext } from '../services/context';
 import { readFullPostContent } from '../services/readPost';
-import { BUILD_DIR, TARGET_DIR } from '../constants';
+import { BUILD_ASSETS_DIR, BUILD_DIR, TARGET_DIR } from '../constants';
 import { queryPages } from '../services/queryPages';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin, PostEvalResult } from '../plugins/IPlugin';
@@ -48,6 +48,8 @@ export const build = async () => {
     external: ['react', 'react-dom'],
   });
 
+  await mkdir(join('./', BUILD_ASSETS_DIR), { recursive: true });
+
   const sireRenderFn: SiteRendererFn = (
     await import(`${cwd}/target/site.render.js`)
   ).default;
@@ -75,9 +77,17 @@ export const build = async () => {
   for (const page of model?.pages) {
     let content: string = await readFullPostContent(page);
 
+    const targetPageDir = dirname(
+      join('./', TARGET_PAGES_DIR, page.relativePath),
+    );
+
     // Process RAW
     for (const plugin of plugins) {
-      const contentResult = await plugin.processRaw(page, content);
+      const contentResult = await plugin.processRaw(
+        page,
+        content,
+        targetPageDir,
+      );
       if (contentResult) {
         content = contentResult;
       }
@@ -85,10 +95,6 @@ export const build = async () => {
 
     const buildPageDir = dirname(join('./', BUILD_DIR, page.relativePath));
     await mkdir(buildPageDir, { recursive: true });
-
-    const targetPageDir = dirname(
-      join('./', TARGET_PAGES_DIR, page.relativePath),
-    );
 
     // Evaluating
     const evaluatedContent = await match(page, {
@@ -125,7 +131,7 @@ export const build = async () => {
     // Processing evaluated content
     // target -> build
     for (const plugin of plugins) {
-      const result = await plugin.postEval(page, buildPageDir, targetPageDir);
+      const result = await plugin.postEval(page, buildPageDir);
       if (result.htmlAssets) {
         postEvalResult.htmlAssets = [
           ...postEvalResult.htmlAssets,
