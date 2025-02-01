@@ -1,6 +1,7 @@
 import { join } from 'node:path';
 
 export const BUILD_DIR = 'build';
+export const TARGET_DIR = 'target';
 
 const CONTENT_DIR = 'src';
 export const PAGES_DIR = join(CONTENT_DIR, 'pages');

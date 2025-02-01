@@ -3,18 +3,21 @@ import { match, isType } from 'variant';
 import * as mdx from '@mdx-js/mdx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { join, dirname, format, parse } from 'node:path';
+import { join, dirname, format, parse, basename } from 'node:path';
 import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
 import { PageProps, SiteRendererFn } from 'definitions';
 import { renderHtmlOfPage } from 'html-generator';
 import { createAppContext, getAppContext } from '../services/context';
 import { readFullPostContent } from '../services/readPost';
-import { BUILD_DIR } from '../constants';
+import { BUILD_DIR, TARGET_DIR } from '../constants';
 import { queryPages } from '../services/queryPages';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin, PostEvalResult } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
+import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
+
+const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 
 export const build = async () => {
   await createAppContext();
@@ -25,7 +28,7 @@ export const build = async () => {
   await tsup.build({
     entry: ['src/site.render.ts'],
     format: ['esm'],
-    outDir: 'target',
+    outDir: TARGET_DIR,
     external: ['react', 'react-dom'],
   });
 
@@ -34,7 +37,7 @@ export const build = async () => {
       .filter((page) => isType(page, 'tsx'))
       .map((page) => page.path),
     format: ['esm'],
-    outDir: join('target', 'pages'),
+    outDir: TARGET_PAGES_DIR,
     external: ['react', 'react-dom'],
   });
 
@@ -56,7 +59,11 @@ export const build = async () => {
   // * post evaluation
   //    - rendering markup (React)
 
-  const plugins: IPlugin[] = [new MdImportsPlugin(), new ProcessAssetsPlugin()];
+  const plugins: IPlugin[] = [
+    new MdImportsPlugin(),
+    new ProcessAssetsPlugin(),
+    new PageCssPlugin(),
+  ];
 
   for (const page of model?.pages) {
     let content: string = await readFullPostContent(page);
@@ -69,8 +76,10 @@ export const build = async () => {
       }
     }
 
-    const buildPostDir = dirname(join('./', BUILD_DIR, page.relativePath));
-    await mkdir(buildPostDir, { recursive: true });
+    const buildPageDir = dirname(join('./', BUILD_DIR, page.relativePath));
+    await mkdir(buildPageDir, { recursive: true });
+
+    const targetPageDir = dirname(join('./', TARGET_PAGES_DIR, page.relativePath));
 
     // Evaluating
     const evaluatedContent = await match(page, {
@@ -88,10 +97,9 @@ export const build = async () => {
       },
       tsx: async () => {
         const transpiledPagePath = join(
-          'target',
-          'pages',
+          targetPageDir,
           format({
-            ...parse(page.relativePath),
+            ...parse(basename(page.relativePath)),
             base: '',
             ext: '.js',
           }),
@@ -111,7 +119,7 @@ export const build = async () => {
 
     // Processing evaluated content
     for (const plugin of plugins) {
-      const result = await plugin.postEval(page, buildPostDir);
+      const result = await plugin.postEval(page, buildPageDir);
       if (result.htmlAssets) {
         postEvalResult.htmlAssets = [
           ...postEvalResult.htmlAssets,
@@ -128,7 +136,7 @@ export const build = async () => {
       assets: postEvalResult.htmlAssets,
     });
 
-    await writeFile(join(buildPostDir, 'index.html'), htmlContent, {
+    await writeFile(join(buildPageDir, 'index.html'), htmlContent, {
       encoding: 'utf-8',
     });
   }

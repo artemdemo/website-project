@@ -3,10 +3,18 @@ import tsup from 'tsup';
 import { join, format, parse } from 'node:path';
 import { IPlugin } from '../IPlugin';
 import { isType, match } from 'variant';
-import { MdImport } from '../../services/md/mdTypes';
 import { existsSync } from 'node:fs';
 import { copyFile } from 'node:fs/promises';
 import { HtmlAsset } from 'html-generator';
+import { TARGET_DIR } from '../../constants';
+
+type MdImport = {
+  importPath: string;
+  targetImportPath: string;
+  statement: string;
+  positionIdx: number;
+  mdFilePath: string;
+};
 
 const importRegex = /import.+from\s+['"]([^'";]+)['"];?/gm;
 
@@ -42,7 +50,7 @@ export class MdImportsPlugin implements IPlugin {
           statement: m[0],
           importPath,
           targetImportPath: format({
-            ...parse(join('target', 'md', 'src', importPath)),
+            ...parse(join(TARGET_DIR, 'md', 'src', importPath)),
             base: '',
             ext: '.js',
           }),
@@ -62,7 +70,7 @@ export class MdImportsPlugin implements IPlugin {
             options.outbase = './';
           },
           format: ['esm'],
-          outDir: join('target', 'md'),
+          outDir: join(TARGET_DIR, 'md'),
           external: ['react', 'react-dom'],
         });
       }
