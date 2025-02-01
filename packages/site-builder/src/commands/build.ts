@@ -121,22 +121,20 @@ export const build = async () => {
       }
     }
 
-    if (evaluatedContent) {
-      // ToDo: Dedicated plugin for rendering HTML?
-      const htmlContent = await renderHtmlOfPage({
-        pageTitle: `${model.config.titlePrefix} | ${page.config.title}`,
-        metaDescription: model.config.metaDescription,
-        content: evaluatedContent,
-        assets: postEvalResult.htmlAssets,
-      });
+    // ToDo: Dedicated plugin for rendering HTML?
+    const htmlContent = await renderHtmlOfPage({
+      pageTitle: `${model.config.titlePrefix} | ${page.config.title}`,
+      metaDescription: model.config.metaDescription,
+      content: evaluatedContent,
+      assets: postEvalResult.htmlAssets,
+    });
 
-      await writeFile(join(buildPostDir, 'index.html'), htmlContent, {
-        encoding: 'utf-8',
-      });
+    await writeFile(join(buildPostDir, 'index.html'), htmlContent, {
+      encoding: 'utf-8',
+    });
 
-      // ToDo: Isn't it only for MD files??
-      //   Move it inside dedicated plugin?
-      await processPostAssets(page, buildPostDir, content);
-    }
+    // ToDo: Isn't it only for MD files??
+    //   Move it inside dedicated plugin?
+    await processPostAssets(page, buildPostDir, content);
   }
 };
