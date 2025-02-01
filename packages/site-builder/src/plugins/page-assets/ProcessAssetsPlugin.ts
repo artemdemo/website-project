@@ -1,7 +1,7 @@
 import { Page } from 'definitions';
 import { copyFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { IPlugin, PostEvalResult } from '../IPlugin';
+import { IPlugin, PostEvalResult, RawProcessData } from '../IPlugin';
 
 // Regex for an image format in `md` file.
 // For example: `![Image title](some-image.png)`
@@ -45,12 +45,12 @@ export class ProcessAssetsPlugin implements IPlugin {
 
   constructor() {}
 
-  async processRaw(page: Page, content: string): Promise<string | undefined> {
+  async processRaw(page: Page, { content }: RawProcessData) {
     this._depsMap.set(page, {
       images: findStrAssets(imgRegex, content),
       videos: findStrAssets(videoRegex, content),
     });
-    return undefined;
+    return {};
   }
 
   async postEval(

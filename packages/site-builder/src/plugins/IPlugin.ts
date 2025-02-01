@@ -5,11 +5,16 @@ export type PostEvalResult = {
   htmlAssets: Array<HtmlAsset>;
 };
 
+export type RawProcessData = {
+  content: string;
+  targetCssPathList: string[];
+};
+
 export interface IPlugin {
   processRaw(
     page: Page,
-    content: string,
+    rawProcessData: RawProcessData,
     targetPageDir: string,
-  ): Promise<string | undefined>;
+  ): Promise<Partial<RawProcessData>>;
   postEval(page: Page, buildPageDir: string): Promise<Partial<PostEvalResult>>;
 }

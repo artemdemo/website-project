@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import { HtmlAsset } from 'html-generator';
-import { IPlugin, PostEvalResult } from '../IPlugin';
+import { IPlugin, PostEvalResult, RawProcessData } from '../IPlugin';
 import { replaceExt } from '../../services/fs';
 import { isType } from 'variant';
 import { ASSETS_DIR, BUILD_ASSETS_DIR } from '../../constants';
@@ -22,9 +22,9 @@ export class PageCssPlugin implements IPlugin {
 
   async processRaw(
     page: Page,
-    _content: string,
+    _rawProcessData: RawProcessData,
     targetPageDir: string,
-  ): Promise<string | undefined> {
+  ) {
     if (isType(page, 'tsx')) {
       const fileName = replaceExt(basename(page.relativePath), '.css');
       const cssTargetPath = join(targetPageDir, fileName);
@@ -65,7 +65,7 @@ export class PageCssPlugin implements IPlugin {
         }
       }
     }
-    return undefined;
+    return {};
   }
 
   async postEval(

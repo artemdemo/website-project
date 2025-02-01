@@ -13,7 +13,7 @@ import { readFullPostContent } from '../services/readPost';
 import { BUILD_ASSETS_DIR, BUILD_DIR, TARGET_DIR } from '../constants';
 import { queryPages } from '../services/queryPages';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
-import { IPlugin, PostEvalResult } from '../plugins/IPlugin';
+import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { replaceExt } from '../services/fs';
@@ -75,22 +75,26 @@ export const build = async () => {
   ];
 
   for (const page of model?.pages) {
-    let content: string = await readFullPostContent(page);
-
     const targetPageDir = dirname(
       join('./', TARGET_PAGES_DIR, page.relativePath),
     );
 
+    let rawProcessData: RawProcessData = {
+      content: await readFullPostContent(page),
+      targetCssPathList: [],
+    };
+
     // Process RAW
     for (const plugin of plugins) {
-      const contentResult = await plugin.processRaw(
+      const modifiedData = await plugin.processRaw(
         page,
-        content,
+        rawProcessData,
         targetPageDir,
       );
-      if (contentResult) {
-        content = contentResult;
-      }
+      rawProcessData = {
+        ...rawProcessData,
+        ...modifiedData,
+      };
     }
 
     const buildPageDir = dirname(join('./', BUILD_DIR, page.relativePath));
@@ -99,7 +103,7 @@ export const build = async () => {
     // Evaluating
     const evaluatedContent = await match(page, {
       md: async () => {
-        const evaluated = await mdx.evaluate(content, {
+        const evaluated = await mdx.evaluate(rawProcessData.content, {
           ...runtime,
           baseUrl: `file://${cwd}/index`,
         });

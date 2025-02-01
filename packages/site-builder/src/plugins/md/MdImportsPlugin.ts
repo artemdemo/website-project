@@ -1,7 +1,7 @@
 import { Page, PageAsset } from 'definitions';
 import tsup from 'tsup';
 import { join, format, parse } from 'node:path';
-import { IPlugin } from '../IPlugin';
+import { IPlugin, RawProcessData } from '../IPlugin';
 import { isType, match } from 'variant';
 import { existsSync } from 'node:fs';
 import { copyFile } from 'node:fs/promises';
@@ -37,7 +37,7 @@ export class MdImportsPlugin implements IPlugin {
     }
   }
 
-  async processRaw(page: Page, content: string): Promise<string | undefined> {
+  async processRaw(page: Page, { content }: RawProcessData) {
     if (isType(page, 'md')) {
       const imports: MdImport[] = [];
       let m = importRegex.exec(content);
@@ -79,9 +79,11 @@ export class MdImportsPlugin implements IPlugin {
         this._processAdjacentCss(page, importItem);
       }
 
-      return content;
+      return {
+        content,
+      };
     }
-    return undefined;
+    return {};
   }
 
   async postEval(page: Page, buildPageDir: string) {
