@@ -1,6 +1,7 @@
 import { Page } from 'definitions';
 import { copyFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
+import { IPlugin, PostEvalResult } from '../IPlugin';
 
 // Regex for an image format in `md` file.
 // For example: `![Image title](some-image.png)`
@@ -33,16 +34,34 @@ const copyDeps = async (
   }
 };
 
-export const processPostAssets = async (
-  post: Page,
-  buildPostDir: string,
-  fullPostContent: string,
-) => {
-  const deps = {
-    images: findStrAssets(imgRegex, fullPostContent),
-    videos: findStrAssets(videoRegex, fullPostContent),
-  };
+export class ProcessAssetsPlugin implements IPlugin {
+  private _depsMap: WeakMap<
+    Page,
+    {
+      images: string[];
+      videos: string[];
+    }
+  > = new WeakMap();
 
-  await copyDeps(post.path, buildPostDir, deps.images);
-  await copyDeps(post.path, buildPostDir, deps.videos);
-};
+  constructor() {}
+
+  async processRaw(page: Page, content: string): Promise<string | undefined> {
+    this._depsMap.set(page, {
+      images: findStrAssets(imgRegex, content),
+      videos: findStrAssets(videoRegex, content),
+    });
+    return undefined;
+  }
+
+  async postEval(
+    page: Page,
+    buildPostDir: string,
+  ): Promise<Partial<PostEvalResult>> {
+    const deps = this._depsMap.get(page);
+    if (deps) {
+      await copyDeps(page.path, buildPostDir, deps.images);
+      await copyDeps(page.path, buildPostDir, deps.videos);
+    }
+    return {};
+  }
+}

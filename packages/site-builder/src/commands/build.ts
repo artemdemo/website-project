@@ -7,14 +7,14 @@ import { join, dirname, format, parse } from 'node:path';
 import tsup from 'tsup';
 import * as runtime from 'react/jsx-runtime';
 import { PageProps, SiteRendererFn } from 'definitions';
+import { renderHtmlOfPage } from 'html-generator';
 import { createAppContext, getAppContext } from '../services/context';
 import { readFullPostContent } from '../services/readPost';
-import { processPostAssets } from '../services/postAssets';
 import { BUILD_DIR } from '../constants';
 import { queryPages } from '../services/queryPages';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin, PostEvalResult } from '../plugins/IPlugin';
-import { renderHtmlOfPage } from 'html-generator';
+import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
 
 export const build = async () => {
   await createAppContext();
@@ -56,7 +56,7 @@ export const build = async () => {
   // * post evaluation
   //    - rendering markup (React)
 
-  const plugins: IPlugin[] = [new MdImportsPlugin()];
+  const plugins: IPlugin[] = [new MdImportsPlugin(), new ProcessAssetsPlugin()];
 
   for (const page of model?.pages) {
     let content: string = await readFullPostContent(page);
@@ -131,9 +131,5 @@ export const build = async () => {
     await writeFile(join(buildPostDir, 'index.html'), htmlContent, {
       encoding: 'utf-8',
     });
-
-    // ToDo: Isn't it only for MD files??
-    //   Move it inside dedicated plugin?
-    await processPostAssets(page, buildPostDir, content);
   }
 };
