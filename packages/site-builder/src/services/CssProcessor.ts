@@ -40,7 +40,7 @@ export class CssProcessor {
             relativePath,
           );
         }),
-      }
+      },
     ]);
     if (urlList.length > 0) {
       let updatedCssContent: string = cssContent;

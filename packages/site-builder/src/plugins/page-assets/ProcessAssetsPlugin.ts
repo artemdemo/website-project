@@ -2,10 +2,12 @@ import { Page } from 'definitions';
 import { copyFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { IPlugin, PostEvalResult, RawProcessData } from '../IPlugin';
+import { existsSync } from 'node:fs';
 
 // Regex for an image format in `md` file.
 // For example: `![Image title](some-image.png)`
-const imgRegex = /!\[[^\[\]]+\]\(([^()]+)\)/gm;
+const mdImgRegex = /!\[[^\[\]]+\]\(([^()]+)\)/gm;
+const imgRegex = /src="(\S+\.(png|jpg|jpeg))"/gm;
 const videoRegex = /src="(\S+\.mp4)"/gm;
 
 const findStrAssets = (rgx: RegExp, postContent: string) => {
@@ -27,10 +29,12 @@ const copyDeps = async (
   fileNames: Array<string>,
 ) => {
   for (const imgName of fileNames) {
-    await copyFile(
-      join(dirname(postPath), imgName),
-      join(buildPageDir, imgName),
-    );
+    const fileFrom = join(dirname(postPath), imgName);
+    if (existsSync(fileFrom)) {
+      await copyFile(fileFrom, join(buildPageDir, imgName));
+    } else {
+      console.warn(`[copyDeps] Trying to copy file that doesn't exist: "${fileFrom}"`);
+    }
   }
 };
 
@@ -47,7 +51,10 @@ export class ProcessAssetsPlugin implements IPlugin {
 
   async processRaw(page: Page, { content }: RawProcessData) {
     this._depsMap.set(page, {
-      images: findStrAssets(imgRegex, content),
+      images: [
+        ...findStrAssets(mdImgRegex, content),
+        ...findStrAssets(imgRegex, content),
+      ],
       videos: findStrAssets(videoRegex, content),
     });
     return {};
