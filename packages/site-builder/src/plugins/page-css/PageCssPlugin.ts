@@ -28,6 +28,7 @@ export class PageCssPlugin implements IPlugin {
     if (isType(page, 'tsx')) {
       const fileName = replaceExt(basename(page.relativePath), '.css');
       const cssTargetPath = join(targetPageDir, fileName);
+
       if (existsSync(cssTargetPath)) {
         const cssContent = await readFile(cssTargetPath, {
           encoding: 'utf8',

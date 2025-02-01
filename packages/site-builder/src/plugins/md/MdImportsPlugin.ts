@@ -22,21 +22,6 @@ const importRegex = /import.+from\s+['"]([^'";]+)['"];?/gm;
 export class MdImportsPlugin implements IPlugin {
   private pageAssets: Map<string, PageAsset[]> = new Map();
 
-  constructor() {}
-
-  private _processAdjacentCss(page: Page, importItem: MdImport) {
-    const cssPath = replaceExt(importItem.targetImportPath, '.css');
-
-    if (existsSync(cssPath)) {
-      this.pageAssets.set(page.relativePath, [
-        ...(this.pageAssets.get(page.relativePath) || []),
-        PageAsset.css({
-          path: cssPath,
-        }),
-      ]);
-    }
-  }
-
   async processRaw(page: Page, { content }: RawProcessData) {
     if (isType(page, 'md')) {
       const imports: MdImport[] = [];
@@ -71,16 +56,29 @@ export class MdImportsPlugin implements IPlugin {
         });
       }
 
+      const targetCssPathList: string[] = []
+
       for (const importItem of imports) {
         content = content.replace(
           importItem.importPath,
           `./${importItem.targetImportPath}`,
         );
-        this._processAdjacentCss(page, importItem);
+        const cssPath = replaceExt(importItem.targetImportPath, '.css');
+        targetCssPathList.push(cssPath);
+
+        if (existsSync(cssPath)) {
+          this.pageAssets.set(page.relativePath, [
+            ...(this.pageAssets.get(page.relativePath) || []),
+            PageAsset.css({
+              path: cssPath,
+            }),
+          ]);
+        }
       }
 
       return {
         content,
+        targetCssPathList,
       };
     }
     return {};

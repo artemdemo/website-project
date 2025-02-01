@@ -91,10 +91,15 @@ export const build = async () => {
         rawProcessData,
         targetPageDir,
       );
-      rawProcessData = {
-        ...rawProcessData,
-        ...modifiedData,
-      };
+      if (modifiedData.content) {
+        rawProcessData.content = modifiedData.content;
+      }
+      if (modifiedData.targetCssPathList) {
+        rawProcessData.targetCssPathList = [
+          ...rawProcessData.targetCssPathList,
+          ...modifiedData.targetCssPathList,
+        ]
+      }
     }
 
     const buildPageDir = dirname(join('./', BUILD_DIR, page.relativePath));
