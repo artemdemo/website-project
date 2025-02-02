@@ -16,6 +16,7 @@ import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { replaceExt } from '../services/fs';
+import { queryPages } from '../query/queryPages';
 
 const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 
@@ -110,6 +111,9 @@ export const build = async () => {
         );
         const userPage = await import(`${cwd}/${transpiledPagePath}`);
         const PageComponent = userPage.default;
+        if (userPage.query) {
+          pageProps.queriedPages = await queryPages(userPage.query());
+        }
         return renderToStaticMarkup(
           siteRender.pageRender({
             content: React.createElement(PageComponent, pageProps),

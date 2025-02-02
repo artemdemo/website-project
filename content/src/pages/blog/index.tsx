@@ -5,6 +5,14 @@ import { TopMenu } from '../../components/menu/TopMenu';
 export const query: PageQuery = () => `{
   pages(limit: 10, filter: { categories: ["blog"] }) {
     route
+    path
+    config {
+      title
+      date
+      featuredImage
+      tags
+      categories
+    }
   }
 }`;
 

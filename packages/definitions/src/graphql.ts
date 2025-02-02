@@ -40,6 +40,7 @@ export const schema = buildSchema(`
   type PageConfig {
     title: String!
     date: String
+    featuredImage: String
     tags: [String]
     categories: [String]
   }

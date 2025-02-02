@@ -10,7 +10,12 @@ export const queryPages = async (source: string) => {
     rootValue: new RootGraphql(),
   });
 
-  console.log(result);
+  if (result.errors) {
+    for (const err of result.errors) {
+      console.log(err.stack);
+      console.log(err.locations);
+    }
+  }
 
   return (result.data?.pages as PageFields[]) ?? [];
 };
