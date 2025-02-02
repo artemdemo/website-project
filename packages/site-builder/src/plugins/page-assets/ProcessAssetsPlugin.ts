@@ -6,9 +6,9 @@ import { existsSync } from 'node:fs';
 
 // Regex for an image format in `md` file.
 // For example: `![Image title](some-image.png)`
-const mdImgRegex = /!\[[^\[\]]+\]\(([^()]+)\)/gm;
-const imgRegex = /src="(\S+\.(png|jpg|jpeg))"/gm;
-const videoRegex = /src="(\S+\.mp4)"/gm;
+const mdImgRegex = /!\[[^\[\]]+\]\(((?!https?:)[^()]+)\)/gm;
+const imgRegex = /src="((?!https?:)\S+\.(png|jpg|jpeg))"/gm;
+const videoRegex = /src="((?!https?:)\S+\.mp4)"/gm;
 
 const findStrAssets = (rgx: RegExp, postContent: string) => {
   const results: Array<string> = [];

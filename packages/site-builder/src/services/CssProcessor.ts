@@ -4,7 +4,7 @@ import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import { ASSETS_DIR, BUILD_ASSETS_DIR } from '../constants';
 import { HtmlAsset } from 'html-generator';
 
-const bgUrlRegex = /url\("?([^"'\s]+)"?\);/gm;
+const bgUrlRegex = /url\("?(?!https?:)([^"'\s]+)"?\);/gm;
 
 export class CssProcessor {
   private _cssMap: WeakMap<
@@ -65,6 +65,9 @@ export class CssProcessor {
         await copyFile(cssData.targetPath, cssBuildPath);
 
         for (const urlPath of cssData.urlPathList) {
+          // This copy could potentially overwrite file that was copied previously.
+          // It should be ok, since I'm assuming that only same files will have same names.
+          // It's possible since tsup will add content hash to file name.
           await copyFile(urlPath, join(BUILD_ASSETS_DIR, basename(urlPath)));
         }
 
