@@ -108,10 +108,11 @@ export const build = async () => {
           targetPageDir,
           replaceExt(basename(page.relativePath), '.js'),
         );
-        const Page = await import(`${cwd}/${transpiledPagePath}`);
+        const userPage = await import(`${cwd}/${transpiledPagePath}`);
+        const PageComponent = userPage.default;
         return renderToStaticMarkup(
           siteRender.pageRender({
-            content: React.createElement(Page.default, pageProps),
+            content: React.createElement(PageComponent, pageProps),
           }),
         );
       },
