@@ -11,12 +11,12 @@ import { renderHtmlOfPage } from 'html-generator';
 import { createAppContext, getAppContext } from '../services/context';
 import { readFullPostContent } from '../services/readPost';
 import { BUILD_ASSETS_DIR, BUILD_DIR, TARGET_DIR } from '../constants';
-import { queryPages } from '../services/queryPages';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { replaceExt } from '../services/fs';
+import { queryPages } from '../query/queryPages';
 
 const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { PageComponent } from 'site-builder/types';
-import { QueryPagesMenu } from '../components/menu/QueryPagesMenu';
 import { TopMenu } from '../components/menu/TopMenu';
 
 const Posts: PageComponent = () => {
