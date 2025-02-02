@@ -12,7 +12,7 @@ export const pageConfigSchema = z.object({
 
 export type PageConfig = z.infer<typeof pageConfigSchema>;
 
-interface PageFields {
+export interface PageFields {
   route: string;
   path: string;
   relativePath: string;
@@ -25,11 +25,11 @@ export const Page = variant({
 });
 export type Page = VariantOf<typeof Page>;
 
-export type QueryPagesFn = () => Array<PageFields>;
-
 export type PageProps = {
-  queryPages: QueryPagesFn;
+  queriedPages: PageFields[];
 };
+
+export type PageQuery = () => string;
 
 export type PageComponent = React.FC<PageProps>;
 

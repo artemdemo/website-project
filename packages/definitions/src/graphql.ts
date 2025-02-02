@@ -1,35 +1,20 @@
 import { buildSchema } from 'graphql';
+import { PageFields } from './page';
 
 /**
  * Schema filter suggestions: https://dgraph.io/docs/v21.03/graphql/schema/search/
  *
  */
 
-// type ExactQueryOperatorInput = {
-//   lt?: number;
-//   le?: number;
-//   eq?: number;
-//   in?: number;
-//   between?: { min: number; max: number };
-//   ge?: number;
-//   gt?: number;
-// };
-
-// type TermQueryOperatorInput = {
-//   allofterms?: string;
-//   anyofterms?: string;
-// };
-
-type FulltextQueryOperatorInput = {
-  alloftext?: string;
-  anyoftext?: string;
+type PageFilterInput = {
+  tags?: string[];
+  categories?: string[];
 };
 
-export type Limit = number;
-
-export type PageFilterInput = {
-  comment?: FulltextQueryOperatorInput;
-};
+export type PagesFn = (props: {
+  limit: number;
+  filter: PageFilterInput;
+}) => PageFields[];
 
 /**
  * There is a specific type in GraphQL for ids - `ID`.
@@ -39,10 +24,11 @@ export type PageFilterInput = {
 
 export const schema = buildSchema(`
   type Query {
-    pages(limit: Int, filter: PageFilterInput): [Page]
+    pages(limit: Int, filter: PageFilterInput): [Page]!
   }
   input PageFilterInput {
     tags: [String!]
+    categories: [String!]
   }
 
   type Page {

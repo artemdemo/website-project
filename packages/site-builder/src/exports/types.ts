@@ -2,5 +2,5 @@ export type {
   SiteRendererFn,
   PageRenderFn,
   PageComponent,
-  QueryPagesFn,
+  PageQuery,
 } from 'definitions';

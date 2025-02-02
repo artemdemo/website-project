@@ -1,8 +1,15 @@
 import React from 'react';
-import { PageComponent } from 'site-builder/types';
+import type { PageComponent, PageQuery } from 'site-builder/types';
 import { TopMenu } from '../../components/menu/TopMenu';
 
-const Blog: PageComponent = ({ queryPages }) => {
+export const query: PageQuery = () => `{
+  pages(limit: 10, filter: { categories: ["blog"] }) {
+    route
+  }
+}`;
+
+const Blog: PageComponent = ({ queriedPages }) => {
+  console.log('Blog >', queriedPages);
   return (
     <>
       <TopMenu />

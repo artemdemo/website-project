@@ -16,7 +16,6 @@ import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { replaceExt } from '../services/fs';
-import { queryPages } from '../query/queryPages';
 
 const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 
@@ -57,7 +56,7 @@ export const build = async () => {
   const siteRender = sireRenderFn();
 
   const pageProps: PageProps = {
-    queryPages,
+    queriedPages: [],
   };
 
   const plugins: IPlugin[] = [
