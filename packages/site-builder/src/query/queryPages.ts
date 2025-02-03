@@ -3,7 +3,7 @@ import type { PageFields } from 'definitions';
 import { schema } from 'definitions/graphql';
 import { RootGraphql } from './RootGraphql';
 
-export const queryPages = async (source: string) => {
+export const queryPages = async (source: string): Promise<Partial<PageFields>[]> => {
   const result = await graphql({
     schema,
     source,
@@ -17,5 +17,5 @@ export const queryPages = async (source: string) => {
     }
   }
 
-  return (result.data?.pages as PageFields[]) ?? [];
+  return (result.data?.pages as Partial<PageFields>[]) ?? [];
 };
