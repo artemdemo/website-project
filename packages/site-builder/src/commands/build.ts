@@ -1,6 +1,7 @@
 import React from 'react';
 import { match, isType } from 'variant';
 import * as mdx from '@mdx-js/mdx';
+import _isFunction from 'lodash/isFunction'
 import { renderToStaticMarkup } from 'react-dom/server';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { join, dirname, basename } from 'node:path';
@@ -112,6 +113,9 @@ export const build = async () => {
         const userPage = await import(`${cwd}/${transpiledPagePath}`);
         const PageComponent = userPage.default;
         if (userPage.query) {
+          if (!_isFunction(userPage.query)) {
+            throw new Error(`"query" should be a function. See "${page.relativePath}"`);
+          }
           pageProps.queriedPages = await queryPages(userPage.query());
         }
         return renderToStaticMarkup(
