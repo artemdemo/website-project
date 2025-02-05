@@ -26,7 +26,7 @@ export const Page = variant({
 export type Page = VariantOf<typeof Page>;
 
 export type PageProps = {
-  queriedPages: PageFields[];
+  queriedPages: Partial<PageFields>[];
 };
 
 export type PageQuery = () => string;

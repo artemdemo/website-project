@@ -19,9 +19,7 @@
 - Blog Posts Preview
   - Consider allowing the combination of pages under "meta categories" to create preview pages for these categories.
   - "Meta categories" would not be visible to site visitors and would only be used during development.
-- Server Components
-  - React has a way to destinguish between SSR code and CSR code.
-  - I need to see how to take adventage of it.
+  - https://www.gatsbyjs.com/docs/adding-pagination/
 - Navigation
   - Users should be able to create a menu.
   - Perhaps "menu" can be defined as a special config file located in the `/navigation` directory.
