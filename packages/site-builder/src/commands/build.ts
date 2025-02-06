@@ -18,6 +18,7 @@ import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin'
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { replaceExt } from '../services/fs';
 import { queryPages } from '../query/queryPages';
+import { BuildError } from 'error-reporter';
 
 const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 
@@ -114,7 +115,7 @@ export const build = async () => {
         const PageComponent = userPage.default;
         if (userPage.query) {
           if (!_isFunction(userPage.query)) {
-            throw new Error(`"query" should be a function. See "${page.relativePath}"`);
+            throw new BuildError(`"query" should be a function. See "${page.relativePath}"`);
           }
           pageProps.queriedPages = await queryPages(userPage.query());
         }

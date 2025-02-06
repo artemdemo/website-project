@@ -3,6 +3,7 @@ import { dirname, join, sep, extname } from 'node:path';
 import { globby } from 'globby';
 import { pageConfigSchema, Page } from 'definitions';
 import { PAGE_CONFIG_FILE, PAGES_DIR } from '../../constants';
+import { BuildError } from 'error-reporter';
 
 const loadPageConfig = async (postPath: string) => {
   const rawConfig = await readFile(
@@ -22,7 +23,7 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
   });
 
   if (files.length === 0) {
-    throw new Error(`There are no pages for pattern "${pathPattern}"`);
+    throw new BuildError(`There are no pages for pattern "${pathPattern}"`);
   }
 
   const posts: Array<Page> = [];
@@ -57,7 +58,7 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
         );
         break;
       default:
-        throw new Error(
+        throw new BuildError(
           `Not supported file extension "${ext}" in "${relativePath}"`,
         );
     }

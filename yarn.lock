@@ -1442,6 +1442,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"error-reporter@workspace:*, error-reporter@workspace:packages/error-reporter":
+  version: 0.0.0-use.local
+  resolution: "error-reporter@workspace:packages/error-reporter"
+  dependencies:
+    definitions: "workspace:*"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
 "es-define-property@npm:^1.0.1":
   version: 1.0.1
   resolution: "es-define-property@npm:1.0.1"
@@ -3961,6 +3970,7 @@ __metadata:
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
     definitions: "workspace:*"
+    error-reporter: "workspace:*"
     globby: "npm:^14.0.2"
     graphql: "npm:^16.10.0"
     html-generator: "workspace:*"

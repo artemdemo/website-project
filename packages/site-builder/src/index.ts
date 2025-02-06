@@ -1,3 +1,4 @@
+import { BuildError } from 'error-reporter';
 import { build } from './commands/build.js';
 
 const commands: { [key: string]: (args: string[]) => void } = {
@@ -21,7 +22,7 @@ process.argv.forEach((arg) => {
 });
 
 if (!commands[commandKey]) {
-  throw new Error(`Unknown command: ${commandKey}`);
+  throw new BuildError(`Unknown command: ${commandKey}`);
 }
 
 commands[commandKey](args);
