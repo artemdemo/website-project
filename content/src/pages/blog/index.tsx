@@ -9,7 +9,6 @@ export const query: PageQuery = () => `{
     config {
       title
       date
-      featuredImage
       tags
       categories
     }

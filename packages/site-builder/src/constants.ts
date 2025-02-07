@@ -15,3 +15,6 @@ export const PAGES_DIR = join(CONTENT_DIR, 'pages');
 export const SITE_CONFIG_FILE = 'site.config.json';
 
 export const PAGE_CONFIG_FILE = 'index.json';
+
+export const EXCERPT_FILE = 'excerpt.md';
+export const THUMBNAIL_FILE_PATTERN = 'thumbnail.(jpg|jpeg|png|webp|svg)';

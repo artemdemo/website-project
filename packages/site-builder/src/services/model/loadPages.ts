@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 import { dirname, join, sep, extname } from 'node:path';
 import { globby } from 'globby';
 import { pageConfigSchema, Page } from 'definitions';
-import { PAGE_CONFIG_FILE, PAGES_DIR } from '../../constants';
+import { EXCERPT_FILE, PAGE_CONFIG_FILE, PAGES_DIR, THUMBNAIL_FILE_PATTERN } from '../../constants';
 import { BuildError } from 'error-reporter';
 
 const loadPageConfig = async (postPath: string) => {
@@ -13,6 +13,26 @@ const loadPageConfig = async (postPath: string) => {
   );
   return pageConfigSchema.parse(JSON.parse(rawConfig));
 };
+
+const getExcerptPath = (pagePath: string) => {
+  const excerptPathDraft = join(dirname(pagePath), EXCERPT_FILE);
+  return existsSync(excerptPathDraft)
+      ? excerptPathDraft
+      : undefined;
+};
+
+const loadThumbnailPath = async (pagePath: string) => {
+  const files = await globby(THUMBNAIL_FILE_PATTERN, {
+    cwd: dirname(pagePath),
+  });
+
+  if (files.length > 1) {
+    throw new BuildError(`You can have only one thumbnail, got ${files.length}:
+${files.join('\n')}`);
+  }
+
+  return files[0];
+}
 
 export const loadPages = async (cwd: string): Promise<Array<Page>> => {
   const pathPattern = [
@@ -37,10 +57,8 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
 
     const route = '/' + relativePath.split(sep).slice(0, -1).join('/');
 
-    const excerptPathDraft = join(dirname(path), 'excerpt.md');
-    const excerptPath = existsSync(excerptPathDraft)
-      ? excerptPathDraft
-      : undefined;
+    const excerptPath = getExcerptPath(path);
+    const thumbnailPath = await loadThumbnailPath(path);
 
     switch (ext) {
       case 'md':
@@ -50,6 +68,7 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
             route,
             relativePath,
             excerptPath,
+            thumbnailPath,
             config: await loadPageConfig(path),
           }),
         );
@@ -61,6 +80,7 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
             route,
             relativePath,
             excerptPath,
+            thumbnailPath,
             config: await loadPageConfig(path),
           }),
         );

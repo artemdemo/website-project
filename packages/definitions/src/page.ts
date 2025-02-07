@@ -8,6 +8,7 @@ export interface PageFields {
   path: string;
   relativePath: string;
   excerptPath?: string;
+  thumbnailPath?: string;
   config: PageConfig;
 }
 
