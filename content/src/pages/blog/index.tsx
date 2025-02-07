@@ -22,9 +22,9 @@ const Blog: PageComponent = ({ queriedPages }) => {
       <TopMenu />
       <h1>Recent Blog Posts</h1>
       {queriedPages.map((page) => (
-        <div>
-          <h3 key={page.route}>{page.config?.title}</h3>
-          <p></p>
+        <div key={page.route}>
+          <h3>{page.config?.title}</h3>
+          <p dangerouslySetInnerHTML={{ __html: page.excerpt || ''}}></p>
         </div>
       ))}
 

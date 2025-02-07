@@ -12,27 +12,33 @@ import { RawProcessData } from '../plugins/IPlugin';
 import { replaceExt } from './fs';
 
 export class EvalService {
-  private _siteRender: ReturnType<SiteRendererFn>;
+  private _siteRender: ReturnType<SiteRendererFn> | undefined;
   private _cwd: string;
 
   constructor(options: {
-    siteRender: ReturnType<SiteRendererFn>;
+    siteRender?: ReturnType<SiteRendererFn>;
     cwd: string;
   }) {
     this._siteRender = options.siteRender;
     this._cwd = options.cwd;
   }
 
-  async evalMd(content: string, props: PageProps, options: { baseUrl: string }) {
+  async evalMd(
+    content: string,
+    props?: PageProps,
+    options?: { baseUrl?: string },
+  ) {
     const evaluated = await mdx.evaluate(content, {
       ...runtime,
       ...options,
     });
 
     return renderToStaticMarkup(
-      this._siteRender.pageRender({
-        content: React.createElement(evaluated.default, props),
-      }),
+      this._siteRender
+        ? this._siteRender.pageRender({
+            content: React.createElement(evaluated.default, props),
+          })
+        : React.createElement(evaluated.default, props),
     );
   }
 
@@ -72,9 +78,11 @@ export class EvalService {
           pageProps.queriedPages = await queryPages(userPage.query());
         }
         return renderToStaticMarkup(
-          this._siteRender.pageRender({
-            content: React.createElement(PageComponent, pageProps),
-          }),
+          this._siteRender
+            ? this._siteRender.pageRender({
+                content: React.createElement(PageComponent, pageProps),
+              })
+            : React.createElement(PageComponent, pageProps),
         );
       },
     });

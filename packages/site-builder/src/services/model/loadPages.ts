@@ -38,7 +38,9 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
     const route = '/' + relativePath.split(sep).slice(0, -1).join('/');
 
     const excerptPathDraft = join(dirname(path), 'excerpt.md');
-    const excerptPath = existsSync(excerptPathDraft) ? excerptPathDraft : undefined;
+    const excerptPath = existsSync(excerptPathDraft)
+      ? excerptPathDraft
+      : undefined;
 
     switch (ext) {
       case 'md':

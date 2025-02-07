@@ -1,5 +1,4 @@
 import { buildSchema } from 'graphql';
-import { PageFields } from './page';
 import { PageConfig } from './page-config';
 
 /**
@@ -21,7 +20,7 @@ type PageFilterInput = {
 export type PagesFn = (props: {
   limit: number;
   filter: PageFilterInput;
-}) => Promise<PageFields[]>;
+}) => Promise<QueryPageResult[]>;
 
 /**
  * There is a specific type in GraphQL for ids - `ID`.
