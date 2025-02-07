@@ -87,6 +87,7 @@ export const build = async () => {
       page,
       rawProcessData,
       targetPageDir,
+      processQueries: true,
     });
 
     const postEvalResult: PostEvalResult = {

@@ -15,7 +15,10 @@ export class EvalService {
   private _siteRender: ReturnType<SiteRendererFn>;
   private _cwd: string;
 
-  constructor(options: { siteRender: ReturnType<SiteRendererFn>; cwd: string }) {
+  constructor(options: {
+    siteRender: ReturnType<SiteRendererFn>;
+    cwd: string;
+  }) {
     this._siteRender = options.siteRender;
     this._cwd = options.cwd;
   }
@@ -24,8 +27,14 @@ export class EvalService {
     page: Page;
     rawProcessData: RawProcessData;
     targetPageDir: string;
+    processQueries?: boolean;
   }) {
-    const { page, rawProcessData, targetPageDir } = options;
+    const {
+      page,
+      rawProcessData,
+      targetPageDir,
+      processQueries = false,
+    } = options;
 
     const pageProps: PageProps = {
       queriedPages: [],
@@ -51,7 +60,7 @@ export class EvalService {
         );
         const userPage = await import(`${this._cwd}/${transpiledPagePath}`);
         const PageComponent = userPage.default;
-        if (userPage.query) {
+        if (processQueries && userPage.query) {
           if (!_isFunction(userPage.query)) {
             throw new BuildError(
               `"query" should be a function. See "${page.relativePath}"`,

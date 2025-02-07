@@ -23,9 +23,7 @@ const Blog: PageComponent = ({ queriedPages }) => {
       <h1>Recent Blog Posts</h1>
       {queriedPages.map((page) => (
         <div>
-          <h3 key={page.path}>
-            {page.config?.title}
-          </h3>
+          <h3 key={page.path}>{page.config?.title}</h3>
           <p></p>
         </div>
       ))}
