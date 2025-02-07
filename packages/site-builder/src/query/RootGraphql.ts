@@ -32,7 +32,7 @@ export class RootGraphql {
             pageData.excerpt = await evalService.evalMd(excerptContent);
           }
           result.push(pageData);
-          if (result.length >= limit - 1) {
+          if (limit !== 0 && result.length >= limit - 1) {
             break;
           }
         }

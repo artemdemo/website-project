@@ -1,6 +1,6 @@
 import React from 'react';
-import { PageRenderFn } from 'site-builder/types';
+import { PageWrapperFn } from 'site-builder/types';
 
-export const pageRender: PageRenderFn = ({ content }) => {
+export const pageWrapper: PageWrapperFn = ({ content }) => {
   return <div data-testid="Page">{content}</div>;
 };

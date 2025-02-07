@@ -1,6 +1,7 @@
 export type {
   SiteRendererFn,
-  PageRenderFn,
+  RenderPagesFn,
+  PageWrapperFn,
   PageComponent,
   PageQuery,
 } from 'definitions';

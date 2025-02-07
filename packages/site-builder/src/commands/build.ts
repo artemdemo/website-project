@@ -13,6 +13,7 @@ import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { EvalService } from '../services/EvalService';
+import { queryPagesGQL } from '../query/queryPagesGQL';
 
 const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 
@@ -117,6 +118,15 @@ export const build = async () => {
 
     await writeFile(join(buildPageDir, 'index.html'), htmlContent, {
       encoding: 'utf-8',
+    });
+  }
+
+  if (siteRender.renderPages) {
+    await siteRender.renderPages({
+      createPage: async () => {},
+      queryPages: async (query) => {
+        return queryPagesGQL(query);
+      },
     });
   }
 };

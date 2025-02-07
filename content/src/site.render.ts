@@ -1,9 +1,11 @@
 import { SiteRendererFn } from 'site-builder/types';
-import { pageRender } from './render/pageRender';
+import { pageWrapper } from './render/pageRender';
+import { renderPages } from './render/renderPages';
 
 const siteRenderer: SiteRendererFn = () => {
   return {
-    pageRender,
+    pageWrapper,
+    renderPages,
   };
 };
 

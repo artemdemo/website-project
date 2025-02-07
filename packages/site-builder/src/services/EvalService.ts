@@ -7,7 +7,7 @@ import _isFunction from 'lodash/isFunction';
 import * as mdx from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import { BuildError } from 'error-reporter';
-import { queryPages } from '../query/queryPages';
+import { queryPagesGQL } from '../query/queryPagesGQL';
 import { RawProcessData } from '../plugins/IPlugin';
 import { replaceExt } from './fs';
 
@@ -35,7 +35,7 @@ export class EvalService {
 
     return renderToStaticMarkup(
       this._siteRender
-        ? this._siteRender.pageRender({
+        ? this._siteRender.pageWrapper({
             content: React.createElement(evaluated.default, props),
           })
         : React.createElement(evaluated.default, props),
@@ -75,11 +75,11 @@ export class EvalService {
               `"query" should be a function. See "${page.relativePath}"`,
             );
           }
-          pageProps.queriedPages = await queryPages(userPage.query());
+          pageProps.queriedPages = await queryPagesGQL(userPage.query());
         }
         return renderToStaticMarkup(
           this._siteRender
-            ? this._siteRender.pageRender({
+            ? this._siteRender.pageWrapper({
                 content: React.createElement(PageComponent, pageProps),
               })
             : React.createElement(PageComponent, pageProps),
