@@ -24,13 +24,21 @@ export const renderPages: RenderPagesFn = async ({
   const amountOfPaginatioPages = Math.ceil(pages.length / POSTS_PER_PAGE);
 
   for (let pageIdx = 0; pageIdx < amountOfPaginatioPages; pageIdx++) {
+    createPage({
+      templatePath: './src/templates/blogPaginationPage.tsx',
+      props: {
+        pagination: {
+          currentPageIdx: pageIdx,
+          totalPages: amountOfPaginatioPages,
+        },
+      },
+    });
+
     // pageIdx = 0:
     //   postIdx = 0; postIdx < 5;
     //   postIdx = 5; postIdx < 10;
-    for (let postIdx = pageIdx * POSTS_PER_PAGE; postIdx < pageIdx * POSTS_PER_PAGE + POSTS_PER_PAGE; postIdx++) {
-      if (pages[postIdx]) {
-        createPage();
-      }
-    }
+    // for (let postIdx = pageIdx * POSTS_PER_PAGE; postIdx < pageIdx * POSTS_PER_PAGE + POSTS_PER_PAGE; postIdx++) {
+    //   if (pages[postIdx]) {}
+    // }
   }
 };

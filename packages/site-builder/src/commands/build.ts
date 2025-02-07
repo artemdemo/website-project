@@ -1,7 +1,7 @@
 import { isType } from 'variant';
 import _isFunction from 'lodash/isFunction';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
+import { join, dirname, sep } from 'node:path';
 import tsup from 'tsup';
 import { SiteRendererFn } from 'definitions';
 import { renderHtmlOfPage } from 'html-generator';
@@ -14,6 +14,7 @@ import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin'
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { EvalService } from '../services/EvalService';
 import { queryPagesGQL } from '../query/queryPagesGQL';
+import { BuildError } from 'error-reporter';
 
 const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 
@@ -123,7 +124,18 @@ export const build = async () => {
 
   if (siteRender.renderPages) {
     await siteRender.renderPages({
-      createPage: async () => {},
+      createPage: async ({ templatePath, props }) => {
+        const templateFileNameExt = (
+          templatePath.split(sep).at(-1) || templatePath
+        )
+          .split('.')
+          .at(-1);
+        if (templateFileNameExt !== 'tsx') {
+          throw new BuildError(
+            `Template file could have only 'tsx' extension. Given "${templateFileNameExt}", see in "${templatePath}"`,
+          );
+        }
+      },
       queryPages: async (query) => {
         return queryPagesGQL(query);
       },

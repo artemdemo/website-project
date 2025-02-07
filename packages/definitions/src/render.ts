@@ -6,7 +6,10 @@ export type PageWrapperFn = (options: { content: ReactNode }) => ReactNode;
 export type PageTitleRenderFn = (page: Page) => string;
 
 export type RenderPagesFn = (options: {
-  createPage: () => Promise<void>;
+  createPage: (options: {
+    templatePath: string;
+    props?: Record<string, unknown>;
+  }) => Promise<void>;
   queryPages: (query: string) => Promise<Partial<QueryPageResult>[]>;
 }) => Promise<void>;
 
