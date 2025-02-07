@@ -8,7 +8,7 @@
     "types:all": "turbo run types",
     "test": "turbo run test",
     "preview": "yarn workspace preview start",
-    "lint": "yarn lint:prettier; yarn lint:versions",
+    "lint:all": "yarn lint:prettier; yarn lint:versions",
     "lint:prettier": "prettier --write .",
     "lint:versions": "syncpack list-mismatches"
   },
