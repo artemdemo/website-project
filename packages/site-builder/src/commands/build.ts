@@ -138,6 +138,8 @@ export const build = async () => {
           );
         }
 
+        // ToDo: Maybe collect all the data for pages that need to be rendered and the render them?
+        //  Currenlty it's happening one-by-one, which is not performant.
         await tsup.build({
           entry: {
             [join(TARGET_PAGES_DIR, route.split('/').join(sep), 'index')]:
@@ -147,6 +149,9 @@ export const build = async () => {
           outDir: '.',
           external: ['react', 'react-dom'],
         });
+
+        // ToDo: Now I need to render actual html here.
+        // Use `EvalService.evalTS()`
       },
       queryPages: async (query) => {
         return queryPagesGQL(query);
