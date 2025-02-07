@@ -3,7 +3,12 @@ import { existsSync } from 'node:fs';
 import { dirname, join, sep, extname } from 'node:path';
 import { globby } from 'globby';
 import { pageConfigSchema, Page } from 'definitions';
-import { EXCERPT_FILE, PAGE_CONFIG_FILE, PAGES_DIR, THUMBNAIL_FILE_PATTERN } from '../../constants';
+import {
+  EXCERPT_FILE,
+  PAGE_CONFIG_FILE,
+  PAGES_DIR,
+  THUMBNAIL_FILE_PATTERN,
+} from '../../constants';
 import { BuildError } from 'error-reporter';
 
 const loadPageConfig = async (postPath: string) => {
@@ -16,9 +21,7 @@ const loadPageConfig = async (postPath: string) => {
 
 const getExcerptPath = (pagePath: string) => {
   const excerptPathDraft = join(dirname(pagePath), EXCERPT_FILE);
-  return existsSync(excerptPathDraft)
-      ? excerptPathDraft
-      : undefined;
+  return existsSync(excerptPathDraft) ? excerptPathDraft : undefined;
 };
 
 const loadThumbnailPath = async (pagePath: string) => {
@@ -32,7 +35,7 @@ ${files.join('\n')}`);
   }
 
   return files[0];
-}
+};
 
 export const loadPages = async (cwd: string): Promise<Array<Page>> => {
   const pathPattern = [

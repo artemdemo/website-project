@@ -72,10 +72,7 @@ export class ProcessAssetsPlugin implements IPlugin {
       await copyDeps(page.path, buildPageDir, deps.videos);
     }
     if (page.thumbnailPath) {
-      const thumbnailPathOrig = join(
-        dirname(page.path),
-        page.thumbnailPath,
-      );
+      const thumbnailPathOrig = join(dirname(page.path), page.thumbnailPath);
       const imgName = thumbnailPathOrig.split(sep).at(-1) || thumbnailPathOrig;
       await copyFile(thumbnailPathOrig, join(buildPageDir, imgName));
     }

@@ -49,6 +49,7 @@ export const build = async () => {
   const sireRenderFn: SiteRendererFn = (
     await import(`${cwd}/target/site.render.js`)
   ).default;
+  const siteRender = sireRenderFn();
 
   const plugins: IPlugin[] = [
     new MdImportsPlugin(),
@@ -56,7 +57,7 @@ export const build = async () => {
     new PageCssPlugin(),
   ];
 
-  const evalService = new EvalService({ siteRender: sireRenderFn(), cwd });
+  const evalService = new EvalService({ siteRender, cwd });
 
   for (const page of model?.pages) {
     const targetPageDir = dirname(
@@ -106,7 +107,9 @@ export const build = async () => {
     }
 
     const htmlContent = await renderHtmlOfPage({
-      pageTitle: `${model.config.titlePrefix} | ${page.config.title}`,
+      pageTitle: siteRender.pageTitleRender
+        ? siteRender.pageTitleRender(page)
+        : `${model.config.titlePrefix} | ${page.config.title}`,
       metaDescription: model.config.metaDescription,
       content: evaluatedContent,
       assets: postEvalResult.htmlAssets,
