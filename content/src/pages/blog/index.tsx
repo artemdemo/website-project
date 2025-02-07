@@ -17,11 +17,17 @@ export const query: PageQuery = () => `{
 }`;
 
 const Blog: PageComponent = ({ queriedPages }) => {
-  console.log('Blog >', queriedPages);
   return (
     <>
       <TopMenu />
-      <h1>Blog Posts</h1>
+      <h1>Recent Blog Posts</h1>
+      {queriedPages.map((page) => (
+        <p key={page.path}>
+          {page.config?.title}
+        </p>
+      ))}
+
+      <a href="#">All posts</a>
     </>
   );
 };
