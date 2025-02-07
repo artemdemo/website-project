@@ -14,7 +14,7 @@ type PageFilterInput = {
 export type PagesFn = (props: {
   limit: number;
   filter: PageFilterInput;
-}) => PageFields[];
+}) => Promise<PageFields[]>;
 
 /**
  * There is a specific type in GraphQL for ids - `ID`.

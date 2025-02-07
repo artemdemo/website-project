@@ -4,7 +4,7 @@ import { PageFields } from 'definitions';
 import { getAppContext } from '../services/context';
 
 export class RootGraphql {
-  pages: PagesFn = ({ limit, filter }) => {
+  pages: PagesFn = async ({ limit, filter }) => {
     const { model } = getAppContext();
     const result: PageFields[] = [];
 
@@ -21,6 +21,7 @@ export class RootGraphql {
         }
       }
     }
+
     return result;
   };
 }

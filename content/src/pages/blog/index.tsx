@@ -22,9 +22,12 @@ const Blog: PageComponent = ({ queriedPages }) => {
       <TopMenu />
       <h1>Recent Blog Posts</h1>
       {queriedPages.map((page) => (
-        <p key={page.path}>
-          {page.config?.title}
-        </p>
+        <div>
+          <h3 key={page.path}>
+            {page.config?.title}
+          </h3>
+          <p></p>
+        </div>
       ))}
 
       <a href="#">All posts</a>
