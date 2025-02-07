@@ -24,6 +24,8 @@ export class RootGraphql {
             config: page.config,
           };
           if (page.excerptPath) {
+            // ToDo: This read from the disc will happen on every query.
+            //  Not that performant. Maybe cache it?
             const excerptContent = await readFile(join(cwd, page.excerptPath), {
               encoding: 'utf8',
             });
