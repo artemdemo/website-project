@@ -122,9 +122,11 @@ export const build = async () => {
     });
   }
 
+  //
+  // Rendering custom user pages.
   if (siteRender.renderPages) {
     await siteRender.renderPages({
-      createPage: async ({ templatePath, props }) => {
+      createPage: async ({ templatePath, route, props }) => {
         const templateFileNameExt = (
           templatePath.split(sep).at(-1) || templatePath
         )
@@ -135,6 +137,15 @@ export const build = async () => {
             `Template file could have only 'tsx' extension. Given "${templateFileNameExt}", see in "${templatePath}"`,
           );
         }
+
+        await tsup.build({
+          entry: {
+            [join(TARGET_PAGES_DIR, route.split('/').join(sep), 'index')]: templatePath
+          },
+          format: ['esm'],
+          outDir: '.',
+          external: ['react', 'react-dom'],
+        });
       },
       queryPages: async (query) => {
         return queryPagesGQL(query);

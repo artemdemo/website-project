@@ -8,6 +8,7 @@ export type PageTitleRenderFn = (page: Page) => string;
 export type RenderPagesFn = (options: {
   createPage: (options: {
     templatePath: string;
+    route: string;
     props?: Record<string, unknown>;
   }) => Promise<void>;
   queryPages: (query: string) => Promise<Partial<QueryPageResult>[]>;
