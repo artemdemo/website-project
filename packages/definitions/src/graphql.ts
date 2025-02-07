@@ -1,10 +1,17 @@
 import { buildSchema } from 'graphql';
 import { PageFields } from './page';
+import { PageConfig } from './page-config';
 
 /**
  * Schema filter suggestions: https://dgraph.io/docs/v21.03/graphql/schema/search/
  *
  */
+
+export interface QueryPageResult {
+  route: string;
+  excerpt?: string;
+  config: PageConfig;
+}
 
 type PageFilterInput = {
   tags?: string[];
@@ -33,8 +40,7 @@ export const schema = buildSchema(`
 
   type Page {
     route: String!
-    path: String!
-    relativePath: String!
+    excerpt: String
     config: PageConfig!
   }
   type PageConfig {

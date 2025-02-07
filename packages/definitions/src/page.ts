@@ -1,21 +1,13 @@
 import React from 'react';
 import { VariantOf, variant, fields } from 'variant';
-import { z } from 'zod';
-
-export const pageConfigSchema = z.object({
-  title: z.string(),
-  date: z.string().optional(),
-  featuredImage: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  categories: z.array(z.string()).optional(),
-});
-
-export type PageConfig = z.infer<typeof pageConfigSchema>;
+import { PageConfig } from './page-config';
+import { QueryPageResult } from './graphql';
 
 export interface PageFields {
   route: string;
   path: string;
   relativePath: string;
+  excerptPath?: string;
   config: PageConfig;
 }
 
@@ -26,7 +18,7 @@ export const Page = variant({
 export type Page = VariantOf<typeof Page>;
 
 export type PageProps = {
-  queriedPages: Partial<PageFields>[];
+  queriedPages: Partial<QueryPageResult>[];
 };
 
 export type PageQuery = () => string;

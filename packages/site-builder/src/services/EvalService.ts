@@ -23,18 +23,28 @@ export class EvalService {
     this._cwd = options.cwd;
   }
 
-  async evaluate(options: {
-    page: Page;
-    rawProcessData: RawProcessData;
-    targetPageDir: string;
-    processQueries?: boolean;
-  }) {
-    const {
-      page,
-      rawProcessData,
-      targetPageDir,
-      processQueries = false,
-    } = options;
+  async evalMd(content: string, props: PageProps, options: { baseUrl: string }) {
+    const evaluated = await mdx.evaluate(content, {
+      ...runtime,
+      ...options,
+    });
+
+    return renderToStaticMarkup(
+      this._siteRender.pageRender({
+        content: React.createElement(evaluated.default, props),
+      }),
+    );
+  }
+
+  async evalPage(
+    page: Page,
+    options: {
+      rawProcessData: RawProcessData;
+      targetPageDir: string;
+      processQueries?: boolean;
+    },
+  ) {
+    const { rawProcessData, targetPageDir, processQueries = false } = options;
 
     const pageProps: PageProps = {
       queriedPages: [],
@@ -42,16 +52,9 @@ export class EvalService {
 
     return await match(page, {
       md: async () => {
-        const evaluated = await mdx.evaluate(rawProcessData.content, {
-          ...runtime,
+        return this.evalMd(rawProcessData.content, pageProps, {
           baseUrl: `file://${this._cwd}/index`,
         });
-
-        return renderToStaticMarkup(
-          this._siteRender.pageRender({
-            content: React.createElement(evaluated.default, pageProps),
-          }),
-        );
       },
       tsx: async () => {
         const transpiledPagePath = join(

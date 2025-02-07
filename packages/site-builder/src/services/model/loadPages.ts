@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { dirname, join, sep, extname } from 'node:path';
 import { globby } from 'globby';
 import { pageConfigSchema, Page } from 'definitions';
@@ -36,6 +37,9 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
 
     const route = '/' + relativePath.split(sep).slice(0, -1).join('/');
 
+    const excerptPathDraft = join(dirname(path), 'excerpt.md');
+    const excerptPath = existsSync(excerptPathDraft) ? excerptPathDraft : undefined;
+
     switch (ext) {
       case 'md':
         posts.push(
@@ -43,6 +47,7 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
             path,
             route,
             relativePath,
+            excerptPath,
             config: await loadPageConfig(path),
           }),
         );
@@ -53,6 +58,7 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
             path,
             route,
             relativePath,
+            excerptPath,
             config: await loadPageConfig(path),
           }),
         );

@@ -83,8 +83,7 @@ export const build = async () => {
     await mkdir(buildPageDir, { recursive: true });
 
     // Evaluating
-    const evaluatedContent = await evalService.evaluate({
-      page,
+    const evaluatedContent = await evalService.evalPage(page, {
       rawProcessData,
       targetPageDir,
       processQueries: true,

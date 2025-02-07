@@ -1,8 +1,6 @@
 One of the challenging issues with in-game explosions - is to decide how you'll deal damage to the player.
 First, it should be an area damage and regardless of the player's position he should receive damage (if he stays close enough).
 
-<!-- end -->
-
 Without the damage - explosion is only a cool visual effect, but there aren't many emotions attached to it.
 It looks interesting, but it's not frightening:
 
