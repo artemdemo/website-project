@@ -23,7 +23,9 @@ const Blog: PageComponent = ({ queriedPages }) => {
       <h1>Recent Blog Posts</h1>
       {queriedPages.map((page) => (
         <div key={page.route}>
-          <h3>{page.config?.title}</h3>
+          <h3>
+            <a href={page.route}>{page.config?.title}</a>
+          </h3>
           <img src={page.route! + '/' + page.thumbnail} />
           <p dangerouslySetInnerHTML={{ __html: page.excerpt || '' }}></p>
         </div>
