@@ -42,6 +42,17 @@ export class EvalService {
     );
   }
 
+  async evalTS(importedFile: any, props: Record<string, unknown>) {
+    const PageComponent = importedFile.default;
+    return renderToStaticMarkup(
+      this._siteRender
+        ? this._siteRender.pageWrapper({
+            content: React.createElement(PageComponent, props),
+          })
+        : React.createElement(PageComponent, props),
+    );
+  }
+
   async evalPage(
     page: Page,
     options: {
@@ -68,7 +79,6 @@ export class EvalService {
           replaceExt(basename(page.relativePath), '.js'),
         );
         const userPage = await import(`${this._cwd}/${transpiledPagePath}`);
-        const PageComponent = userPage.default;
         if (processQueries && userPage.query) {
           if (!_isFunction(userPage.query)) {
             throw new BuildError(
@@ -77,13 +87,7 @@ export class EvalService {
           }
           pageProps.queriedPages = await queryPagesGQL(userPage.query());
         }
-        return renderToStaticMarkup(
-          this._siteRender
-            ? this._siteRender.pageWrapper({
-                content: React.createElement(PageComponent, pageProps),
-              })
-            : React.createElement(PageComponent, pageProps),
-        );
+        return this.evalTS(userPage, pageProps);
       },
     });
   }

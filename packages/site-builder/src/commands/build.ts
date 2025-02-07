@@ -140,7 +140,8 @@ export const build = async () => {
 
         await tsup.build({
           entry: {
-            [join(TARGET_PAGES_DIR, route.split('/').join(sep), 'index')]: templatePath
+            [join(TARGET_PAGES_DIR, route.split('/').join(sep), 'index')]:
+              templatePath,
           },
           format: ['esm'],
           outDir: '.',
