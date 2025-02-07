@@ -1,13 +1,9 @@
-import React from 'react';
-import { match, isType } from 'variant';
-import * as mdx from '@mdx-js/mdx';
-import _isFunction from 'lodash/isFunction'
-import { renderToStaticMarkup } from 'react-dom/server';
+import { isType } from 'variant';
+import _isFunction from 'lodash/isFunction';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { join, dirname, basename } from 'node:path';
+import { join, dirname } from 'node:path';
 import tsup from 'tsup';
-import * as runtime from 'react/jsx-runtime';
-import { PageProps, SiteRendererFn } from 'definitions';
+import { SiteRendererFn } from 'definitions';
 import { renderHtmlOfPage } from 'html-generator';
 import { createAppContext, getAppContext } from '../services/context';
 import { readFullPostContent } from '../services/readPost';
@@ -16,9 +12,7 @@ import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
-import { replaceExt } from '../services/fs';
-import { queryPages } from '../query/queryPages';
-import { BuildError } from 'error-reporter';
+import { EvalService } from '../services/EvalService';
 
 const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 
@@ -56,17 +50,13 @@ export const build = async () => {
     await import(`${cwd}/target/site.render.js`)
   ).default;
 
-  const siteRender = sireRenderFn();
-
-  const pageProps: PageProps = {
-    queriedPages: [],
-  };
-
   const plugins: IPlugin[] = [
     new MdImportsPlugin(),
     new ProcessAssetsPlugin(),
     new PageCssPlugin(),
   ];
+
+  const evalService = new EvalService({ siteRender: sireRenderFn(), cwd });
 
   for (const page of model?.pages) {
     const targetPageDir = dirname(
@@ -93,38 +83,10 @@ export const build = async () => {
     await mkdir(buildPageDir, { recursive: true });
 
     // Evaluating
-    const evaluatedContent = await match(page, {
-      md: async () => {
-        const evaluated = await mdx.evaluate(rawProcessData.content, {
-          ...runtime,
-          baseUrl: `file://${cwd}/index`,
-        });
-
-        return renderToStaticMarkup(
-          siteRender.pageRender({
-            content: React.createElement(evaluated.default, pageProps),
-          }),
-        );
-      },
-      tsx: async () => {
-        const transpiledPagePath = join(
-          targetPageDir,
-          replaceExt(basename(page.relativePath), '.js'),
-        );
-        const userPage = await import(`${cwd}/${transpiledPagePath}`);
-        const PageComponent = userPage.default;
-        if (userPage.query) {
-          if (!_isFunction(userPage.query)) {
-            throw new BuildError(`"query" should be a function. See "${page.relativePath}"`);
-          }
-          pageProps.queriedPages = await queryPages(userPage.query());
-        }
-        return renderToStaticMarkup(
-          siteRender.pageRender({
-            content: React.createElement(PageComponent, pageProps),
-          }),
-        );
-      },
+    const evaluatedContent = await evalService.evaluate({
+      page,
+      rawProcessData,
+      targetPageDir,
     });
 
     const postEvalResult: PostEvalResult = {
