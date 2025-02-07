@@ -6,6 +6,7 @@ export const query: PageQuery = () => `{
   pages(limit: 10, filter: { categories: ["blog"] }) {
     route
     excerpt
+    thumbnail
     config {
       title
       date
@@ -23,6 +24,7 @@ const Blog: PageComponent = ({ queriedPages }) => {
       {queriedPages.map((page) => (
         <div key={page.route}>
           <h3>{page.config?.title}</h3>
+          <img src={page.route! + '/' + page.thumbnail} />
           <p dangerouslySetInnerHTML={{ __html: page.excerpt || ''}}></p>
         </div>
       ))}

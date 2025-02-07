@@ -20,6 +20,7 @@ export class RootGraphql {
         ) {
           const pageData: QueryPageResult = {
             route: page.route,
+            thumbnail: page.thumbnailPath,
             config: page.config,
           };
           if (page.excerptPath) {

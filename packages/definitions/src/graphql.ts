@@ -9,6 +9,7 @@ import { PageConfig } from './page-config';
 export interface QueryPageResult {
   route: string;
   excerpt?: string;
+  thumbnail?: string;
   config: PageConfig;
 }
 
@@ -40,6 +41,7 @@ export const schema = buildSchema(`
   type Page {
     route: String!
     excerpt: String
+    thumbnail: String
     config: PageConfig!
   }
   type PageConfig {
