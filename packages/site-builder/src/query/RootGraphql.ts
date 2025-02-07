@@ -10,7 +10,10 @@ export class RootGraphql {
 
     for (const page of model.pages) {
       if (Array.isArray(filter.categories) && filter.categories.length > 0) {
-        if (_intersection(page.config.categories, filter.categories)) {
+        if (
+          Array.isArray(page.config.categories) &&
+          _intersection(page.config.categories, filter.categories)
+        ) {
           result.push(page);
           if (result.length >= limit - 1) {
             break;
