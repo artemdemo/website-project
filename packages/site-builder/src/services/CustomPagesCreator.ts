@@ -1,5 +1,5 @@
 import tsup from 'tsup';
-import { dirname, join, sep } from 'node:path';
+import { join, sep } from 'node:path';
 import { CreatePageOptions, Page, SiteRendererFn } from 'definitions';
 import { BuildError } from 'error-reporter';
 import { EvalService } from './EvalService';
@@ -10,11 +10,8 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 export class CustomPagesCreator {
   private _queue: {
-    templatePath: string;
+    page: Page,
     targetPath: string;
-    relativePath: string;
-    route: string;
-    title: string;
     props?: Record<string, unknown>;
   }[] = [];
   private _cwd: string;
@@ -40,7 +37,7 @@ export class CustomPagesCreator {
       );
     }
 
-    if (this._queue.some((item) => item.route === route)) {
+    if (this._queue.some((item) => item.page.route === route)) {
       throw new BuildError(`Route already in use. Given "${route}"`);
     }
 
@@ -48,14 +45,16 @@ export class CustomPagesCreator {
 
     const targetPath = join('./', relativePath, 'index');
 
-    // ToDo: Maybe I need to use actual Page type here.
-    //   At this point I'm pretty much copying all the properties of the page here
     this._queue.push({
-      templatePath,
+      page: Page.tsx({
+        route,
+        path: templatePath,
+        relativePath,
+        config: {
+          title,
+        },
+      }),
       targetPath,
-      relativePath,
-      route,
-      title,
       props,
     });
   }
@@ -63,7 +62,7 @@ export class CustomPagesCreator {
   async renderPagesToTarget() {
     await tsup.build({
       entry: this._queue.reduce<Record<string, string>>((acc, item) => {
-        acc[item.targetPath] = item.templatePath;
+        acc[item.targetPath] = item.page.path;
         return acc;
       }, {}),
       format: ['esm'],
@@ -80,7 +79,7 @@ export class CustomPagesCreator {
       );
       if (!userPage.default) {
         throw new BuildError(
-          `Can't evaluate page that doesn't have "default" export. See "${qItem.templatePath}"`,
+          `Can't evaluate page that doesn't have "default" export. See "${qItem.page.path}"`,
         );
       }
       const evaluatedContent = await this._evalService.evalTS(
@@ -88,22 +87,13 @@ export class CustomPagesCreator {
         qItem.props,
       );
 
-      const buildPageDir = join('./', BUILD_DIR, qItem.relativePath);
+      const buildPageDir = join('./', BUILD_DIR, qItem.page.relativePath);
       await mkdir(buildPageDir, { recursive: true });
-
-      const page: Page = Page.tsx({
-        route: qItem.route,
-        path: qItem.templatePath,
-        relativePath: qItem.relativePath,
-        config: {
-          title: qItem.title,
-        },
-      });
 
       const htmlContent = await renderHtmlOfPage({
         pageTitle: this._siteRender?.pageTitleRender
-          ? this._siteRender.pageTitleRender(page)
-          : `${model.config.titlePrefix} | ${page.config.title}`,
+          ? this._siteRender.pageTitleRender(qItem.page)
+          : `${model.config.titlePrefix} | ${qItem.page.config.title}`,
         metaDescription: model.config.metaDescription,
         content: evaluatedContent,
         // ToDo: I need to run here postEval plugins.
