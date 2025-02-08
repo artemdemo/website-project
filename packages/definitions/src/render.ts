@@ -8,6 +8,7 @@ export type PageTitleRenderFn = (page: Page) => string;
 export interface CreatePageOptions {
   templatePath: string;
   route: string;
+  title: string;
   props?: Record<string, unknown>;
 }
 

@@ -25,9 +25,11 @@ export const renderPages: RenderPagesFn = async ({
 
   for (let pageIdx = 0; pageIdx < amountOfPaginatioPages; pageIdx++) {
     createPage({
-      templatePath: './src/templates/blogPaginationPage.tsx',
+      templatePath: 'src/templates/blogPaginationPage.tsx',
       route: `/blog/page/${pageIdx + 1}`,
+      title: `Blog Page: ${pageIdx + 1}`,
       props: {
+        pages,
         pagination: {
           currentPageIdx: pageIdx,
           totalPages: amountOfPaginatioPages,

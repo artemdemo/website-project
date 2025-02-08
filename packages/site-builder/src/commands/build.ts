@@ -19,7 +19,6 @@ import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin'
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { EvalService } from '../services/EvalService';
 import { queryPagesGQL } from '../query/queryPagesGQL';
-import { BuildError } from 'error-reporter';
 import { CustomPagesCreator } from '../services/CustomPagesCreator';
 
 export const build = async () => {
@@ -128,7 +127,7 @@ export const build = async () => {
   //
   // Rendering custom user pages.
   if (siteRender.renderPages) {
-    const pagesCreator = new CustomPagesCreator();
+    const pagesCreator = new CustomPagesCreator({ cwd, siteRender });
 
     await siteRender.renderPages({
       createPage: (options) => {
@@ -143,5 +142,7 @@ export const build = async () => {
 
     // ToDo: Now I need to render actual html here.
     // Use `EvalService.evalTS()`
+
+    await pagesCreator.evalAndCreatePages();
   }
 };

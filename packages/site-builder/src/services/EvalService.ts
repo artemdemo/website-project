@@ -42,7 +42,12 @@ export class EvalService {
     );
   }
 
-  async evalTS(importedFile: any, props: Record<string, unknown>) {
+  async evalTS(importedFile: any, props?: Record<string, unknown>) {
+    if (!importedFile.default) {
+      throw new BuildError(
+        `Can't evaluate file that doesn't have "default" export`,
+      );
+    }
     const PageComponent = importedFile.default;
     return renderToStaticMarkup(
       this._siteRender
