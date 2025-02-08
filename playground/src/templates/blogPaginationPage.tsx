@@ -19,8 +19,12 @@ const blogPaginationPage: React.FC<{
           <h3>
             <a href={page.route}>{page.config?.title}</a>
           </h3>
-          <img src={page.route! + '/' + page.thumbnail} />
-          <p dangerouslySetInnerHTML={{ __html: page.excerpt || '' }}></p>
+          {page.thumbnail && (
+            <img src={page.route! + '/' + page.thumbnail} />
+          )}
+          {page.excerpt && (
+            <p dangerouslySetInnerHTML={{ __html: page.excerpt || '' }}></p>
+          )}
         </div>
       ))}
       <div>

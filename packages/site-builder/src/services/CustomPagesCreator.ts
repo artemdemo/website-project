@@ -73,7 +73,6 @@ export class CustomPagesCreator {
   async evalAndCreatePages() {
     const { model } = getAppContext();
     for (const qItem of this._queue) {
-      console.log('>> qItem.targetPath', qItem.targetPath);
       const userPage = await import(
         join(this._cwd, TARGET_PAGES_DIR, `${qItem.targetPath}.js`)
       );
