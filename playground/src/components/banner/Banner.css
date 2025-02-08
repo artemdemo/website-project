@@ -1,0 +1,6 @@
+.Banner {
+  width: 100%;
+  height: 70px;
+  color: rgba(255, 255, 255, 0.413);
+  background-image: url('./test-bg.png');
+}
