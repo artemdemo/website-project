@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { PageComponent } from 'site-builder/types';
-import { TopMenu } from '../components/menu/TopMenu';
 import { Banner } from '../components/banner/Banner';
 
 const Posts: PageComponent = () => {
