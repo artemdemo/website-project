@@ -39,6 +39,10 @@ export class RootGraphql {
       }
     }
 
+    result.sort((pageA, pageB) => {
+      return pageA.route.localeCompare(pageB.route);
+    });
+
     return result;
   };
 }
