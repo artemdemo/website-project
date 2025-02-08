@@ -21,7 +21,6 @@ export class CustomPagesCreator {
   private _siteRender: ReturnType<SiteRendererFn> | undefined;
   private _evalService: EvalService;
 
-
   constructor(options: {
     siteRender?: ReturnType<SiteRendererFn>;
     cwd: string;
@@ -47,11 +46,7 @@ export class CustomPagesCreator {
 
     const relativePath = route.split('/').join(sep);
 
-    const targetPath = join(
-      TARGET_PAGES_DIR,
-      relativePath,
-      'index',
-    );
+    const targetPath = join('./', relativePath, 'index');
 
     this._queue.push({
       templatePath,
@@ -70,7 +65,7 @@ export class CustomPagesCreator {
         return acc;
       }, {}),
       format: ['esm'],
-      outDir: '.',
+      outDir: TARGET_PAGES_DIR,
       external: ['react', 'react-dom'],
     });
   }
@@ -78,13 +73,19 @@ export class CustomPagesCreator {
   async evalAndCreatePages() {
     const { model } = getAppContext();
     for (const qItem of this._queue) {
-      const userPage = await import(`${this._cwd}/${qItem.targetPath}.js`);
+      console.log('>> qItem.targetPath', qItem.targetPath);
+      const userPage = await import(
+        join(this._cwd, TARGET_PAGES_DIR, `${qItem.targetPath}.js`)
+      );
       if (!userPage.default) {
         throw new BuildError(
           `Can't evaluate page that doesn't have "default" export. See "${qItem.templatePath}"`,
         );
       }
-      const evaluatedContent = await this._evalService.evalTS(userPage, qItem.props);
+      const evaluatedContent = await this._evalService.evalTS(
+        userPage,
+        qItem.props,
+      );
 
       const buildPageDir = join('./', BUILD_DIR, qItem.relativePath);
       await mkdir(buildPageDir, { recursive: true });

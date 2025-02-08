@@ -44,7 +44,10 @@ export const renderPages: RenderPagesFn = async ({
       route: `/blog/page/${pageIdx + 1}`,
       title: `Blog Page: ${pageIdx + 1}`,
       props: {
-        pages: pages.slice(pageIdx * POSTS_PER_PAGE, (pageIdx + 1) * POSTS_PER_PAGE),
+        pages: pages.slice(
+          pageIdx * POSTS_PER_PAGE,
+          (pageIdx + 1) * POSTS_PER_PAGE,
+        ),
         pagination: {
           currentPageIdx: pageIdx,
           totalPages: amountOfPaginatioPages,
