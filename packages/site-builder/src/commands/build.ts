@@ -1,9 +1,9 @@
 import { isType } from 'variant';
 import _isFunction from 'lodash/isFunction';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
+import { join, dirname, sep } from 'node:path';
 import tsup from 'tsup';
-import { SiteRendererFn } from 'definitions';
+import { Page, SiteRendererFn } from 'definitions';
 import { renderHtmlOfPage } from 'html-generator';
 import { createAppContext, getAppContext } from '../services/context';
 import { readFullPostContent } from '../services/readPost';
@@ -130,8 +130,17 @@ export const build = async () => {
     const pagesCreator = new CustomPagesCreator({ cwd, siteRender });
 
     await siteRender.renderPages({
-      createPage: (options) => {
-        pagesCreator.queuePage(options);
+      createPage: ({ templatePath, title, route, props }) => {
+        const relativePath = route.split('/').join(sep);
+        const page = Page.tsx({
+          route,
+          path: templatePath,
+          relativePath,
+          config: {
+            title,
+          },
+        });
+        pagesCreator.queuePage(page, props);
       },
       queryPages: async (query) => {
         return queryPagesGQL(query);

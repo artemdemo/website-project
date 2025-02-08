@@ -10,7 +10,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 export class CustomPagesCreator {
   private _queue: {
-    page: Page,
+    page: Page;
     targetPath: string;
     props?: Record<string, unknown>;
   }[] = [];
@@ -27,33 +27,24 @@ export class CustomPagesCreator {
     this._evalService = new EvalService(options);
   }
 
-  queuePage({ templatePath, title, route, props }: CreatePageOptions) {
-    const templateFileNameExt = (templatePath.split(sep).at(-1) || templatePath)
+  queuePage(page: Page, props?: Record<string, unknown>) {
+    const templateFileNameExt = (page.path.split(sep).at(-1) || page.path)
       .split('.')
       .at(-1);
     if (templateFileNameExt !== 'tsx') {
       throw new BuildError(
-        `Template file could have only 'tsx' extension. Given "${templateFileNameExt}", see in "${templatePath}"`,
+        `Template file could have only 'tsx' extension. Given "${templateFileNameExt}", see in "${page.path}"`,
       );
     }
 
-    if (this._queue.some((item) => item.page.route === route)) {
-      throw new BuildError(`Route already in use. Given "${route}"`);
+    if (this._queue.some((item) => item.page.route === page.route)) {
+      throw new BuildError(`Route already in use. Given "${page.route}"`);
     }
 
-    const relativePath = route.split('/').join(sep);
-
-    const targetPath = join('./', relativePath, 'index');
+    const targetPath = join('./', page.relativePath, 'index');
 
     this._queue.push({
-      page: Page.tsx({
-        route,
-        path: templatePath,
-        relativePath,
-        config: {
-          title,
-        },
-      }),
+      page,
       targetPath,
       props,
     });
