@@ -12,10 +12,11 @@ import {
 import { BuildError } from 'error-reporter';
 
 const loadPageConfig = async (postPath: string) => {
-  const rawConfig = await readFile(
-    join(dirname(postPath), PAGE_CONFIG_FILE),
-    'utf8',
-  );
+  const configPath = join(dirname(postPath), PAGE_CONFIG_FILE);
+  if (!existsSync(configPath)) {
+    throw new BuildError(`Config file doesn't exist for "${postPath}"`);
+  }
+  const rawConfig = await readFile(configPath, 'utf8');
   return pageConfigSchema.parse(JSON.parse(rawConfig));
 };
 
