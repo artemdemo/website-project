@@ -11,7 +11,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 export class CustomPagesCreator {
   private _queue: {
     page: Page;
-    targetPath: string;
+    targetPageDir: string;
     props?: Record<string, unknown>;
   }[] = [];
   private _cwd: string;
@@ -41,11 +41,11 @@ export class CustomPagesCreator {
       throw new BuildError(`Route already in use. Given "${page.route}"`);
     }
 
-    const targetPath = join('./', page.relativePath, 'index');
+    const targetPageDir = join('./', page.relativePath);
 
     this._queue.push({
       page,
-      targetPath,
+      targetPageDir,
       props,
     });
   }
@@ -53,7 +53,7 @@ export class CustomPagesCreator {
   async renderPagesToTarget() {
     await tsup.build({
       entry: this._queue.reduce<Record<string, string>>((acc, item) => {
-        acc[item.targetPath] = item.page.path;
+        acc[join(item.targetPageDir, 'index')] = item.page.path;
         return acc;
       }, {}),
       format: ['esm'],
@@ -66,7 +66,7 @@ export class CustomPagesCreator {
     const { model } = getAppContext();
     for (const qItem of this._queue) {
       const userPage = await import(
-        join(this._cwd, TARGET_PAGES_DIR, `${qItem.targetPath}.js`)
+        join(this._cwd, TARGET_PAGES_DIR, join(qItem.targetPageDir, `index.js`))
       );
       if (!userPage.default) {
         throw new BuildError(
