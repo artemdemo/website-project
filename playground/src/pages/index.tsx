@@ -10,7 +10,6 @@ const Posts: PageComponent = () => {
   return (
     <>
       <Banner />
-      <TopMenu />
       <h1>Posts List</h1>
     </>
   );

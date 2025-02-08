@@ -1,6 +1,6 @@
-import { TopMenu } from './components/menu/TopMenu.tsx';
+import { Banner } from './components/banner/Banner.tsx';
 
-<TopMenu />
+<Banner />
 
 ![Designing Games, by Tynan Sylvester](designing-games.jpg)
 
