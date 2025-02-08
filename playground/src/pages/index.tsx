@@ -4,13 +4,10 @@ import { TopMenu } from '../components/menu/TopMenu';
 import { Banner } from '../components/banner/Banner';
 
 const Posts: PageComponent = () => {
-  useEffect(() => {
-    console.log('Posts List');
-  }, []);
   return (
     <>
       <Banner />
-      <h1>Posts List</h1>
+      <h1>Home Page</h1>
     </>
   );
 };
