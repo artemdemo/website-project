@@ -85,14 +85,14 @@ export const build = async () => {
       }
     }
 
-    const buildPageDir = dirname(join('./', BUILD_DIR, page.relativePath));
-    await mkdir(buildPageDir, { recursive: true });
-
     // Evaluating
     const evaluatedContent = await evalService.evalPage(page, {
       rawProcessData,
       targetPageDir,
     });
+
+    const buildPageDir = dirname(join('./', BUILD_DIR, page.relativePath));
+    await mkdir(buildPageDir, { recursive: true });
 
     const postEvalResult: PostEvalResult = {
       htmlAssets: [],
