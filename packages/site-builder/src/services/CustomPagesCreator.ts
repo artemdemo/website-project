@@ -64,27 +64,27 @@ export class CustomPagesCreator {
 
   async evalAndCreatePages() {
     const { model } = getAppContext();
-    for (const qItem of this._pagesQueue) {
+    for (const qPage of this._pagesQueue) {
       const userPage = await import(
-        join(this._cwd, TARGET_PAGES_DIR, join(qItem.targetPageDir, `index.js`))
+        join(this._cwd, TARGET_PAGES_DIR, join(qPage.targetPageDir, `index.js`))
       );
       if (!userPage.default) {
         throw new BuildError(
-          `Can't evaluate page that doesn't have "default" export. See "${qItem.page.path}"`,
+          `Can't evaluate page that doesn't have "default" export. See "${qPage.page.path}"`,
         );
       }
       const evaluatedContent = await this._evalService.evalTS(
         userPage,
-        qItem.props,
+        qPage.props,
       );
 
-      const buildPageDir = join('./', BUILD_DIR, qItem.page.relativePath);
+      const buildPageDir = join('./', BUILD_DIR, qPage.page.relativePath);
       await mkdir(buildPageDir, { recursive: true });
 
       const htmlContent = await renderHtmlOfPage({
         pageTitle: this._siteRender?.pageTitleRender
-          ? this._siteRender.pageTitleRender(qItem.page)
-          : `${model.config.titlePrefix} | ${qItem.page.config.title}`,
+          ? this._siteRender.pageTitleRender(qPage.page)
+          : `${model.config.titlePrefix} | ${qPage.page.config.title}`,
         metaDescription: model.config.metaDescription,
         content: evaluatedContent,
         // ToDo: I need to run here postEval plugins.
