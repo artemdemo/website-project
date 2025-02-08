@@ -29,7 +29,9 @@ const blogPaginationPage: React.FC<{
       ))}
       <div>
         {Array.from({ length: pagination.totalPages }).map((_, idx) => (
-          <span key={idx}>{idx + 1}</span>
+          <span key={idx}>
+            <a href={`/blog/page/${idx + 1}`}>{idx + 1}&nbsp;</a>
+          </span>
         ))}
       </div>
     </div>
