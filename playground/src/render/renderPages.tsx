@@ -26,7 +26,7 @@ export const renderPages: RenderPagesFn = async ({
   if (pages.length > 0) {
     createPage({
       templatePath: 'src/templates/blogPaginationPage.tsx',
-      route: `/blog/page`,
+      route: `/blog`,
       title: `Blog Page`,
       props: {
         pages: pages.slice(0, POSTS_PER_PAGE),

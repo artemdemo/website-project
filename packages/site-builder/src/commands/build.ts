@@ -1,7 +1,7 @@
 import { isType } from 'variant';
 import _isFunction from 'lodash/isFunction';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { join, dirname, sep } from 'node:path';
+import { join, dirname } from 'node:path';
 import tsup from 'tsup';
 import { SiteRendererFn } from 'definitions';
 import { renderHtmlOfPage } from 'html-generator';

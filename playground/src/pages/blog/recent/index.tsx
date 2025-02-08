@@ -2,7 +2,7 @@ import React from 'react';
 import type { PageComponent, PageQuery } from 'site-builder/types';
 
 export const query: PageQuery = () => `{
-  pages(limit: 10, filter: { categories: ["blog"] }) {
+  pages(limit: 5, filter: { categories: ["blog"] }) {
     route
     excerpt
     thumbnail
@@ -24,12 +24,14 @@ const Blog: PageComponent = ({ queriedPages }) => {
           <h3>
             <a href={page.route}>{page.config?.title}</a>
           </h3>
-          <img src={page.route! + '/' + page.thumbnail} />
-          <p dangerouslySetInnerHTML={{ __html: page.excerpt || '' }}></p>
+          {page.thumbnail && (
+            <img src={page.route! + '/' + page.thumbnail} />
+          )}
+          {page.excerpt && (
+            <p dangerouslySetInnerHTML={{ __html: page.excerpt || '' }}></p>
+          )}
         </div>
       ))}
-
-      <a href="#">All posts</a>
     </>
   );
 };

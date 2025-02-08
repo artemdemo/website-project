@@ -48,6 +48,8 @@ export class CustomPagesCreator {
 
     const targetPath = join('./', relativePath, 'index');
 
+    // ToDo: Maybe I need to use actual Page type here.
+    //   At this point I'm pretty much copying all the properties of the page here
     this._queue.push({
       templatePath,
       targetPath,
