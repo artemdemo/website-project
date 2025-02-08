@@ -58,12 +58,9 @@ export class EvalService {
     options: {
       rawProcessData: RawProcessData;
       targetPageDir: string;
-      // ToDo: Do I really need `processQueries`?
-      //   Looks like I always pass `true`, no?
-      processQueries?: boolean;
     },
   ) {
-    const { rawProcessData, targetPageDir, processQueries = false } = options;
+    const { rawProcessData, targetPageDir } = options;
 
     const pageProps: PageProps = {
       queriedPages: [],
@@ -81,7 +78,7 @@ export class EvalService {
           replaceExt(basename(page.relativePath), '.js'),
         );
         const userPage = await import(`${this._cwd}/${transpiledPagePath}`);
-        if (processQueries && userPage.query) {
+        if (userPage.query) {
           if (!_isFunction(userPage.query)) {
             throw new BuildError(
               `"query" should be a function. See "${page.relativePath}"`,

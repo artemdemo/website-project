@@ -93,7 +93,6 @@ export const build = async () => {
     const evaluatedContent = await evalService.evalPage(page, {
       rawProcessData,
       targetPageDir,
-      processQueries: true,
     });
 
     const postEvalResult: PostEvalResult = {
