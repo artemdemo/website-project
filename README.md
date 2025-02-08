@@ -38,7 +38,6 @@
 - Site Reload in Development Mode
   - Initially, a full site reload upon changes in user code should suffice.
   - Eventually, maybe implement HMR for faster feedback during development.
-
 - Error Stack Links to Source Files
   - Currently, error stacks link to JavaScript files in the `dist` directory. It would be better if they linked to the original TypeScript files.
   - To achieve this, source maps will likely need to be provided.
