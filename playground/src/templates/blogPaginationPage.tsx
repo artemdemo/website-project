@@ -1,4 +1,5 @@
 import React from 'react';
+import './blogPaginationPage.css';
 
 const blogPaginationPage: React.FC<{
   pages: {
