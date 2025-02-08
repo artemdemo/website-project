@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "description": "Website Project",
   "scripts": {
-    "build:all": "turbo run build --filter='!website-content'",
-    "build:watch": "turbo watch build --filter='!website-content'",
+    "build:all": "turbo run build --filter='!website-playground'",
+    "build:watch": "turbo watch build --filter='!website-playground'",
     "types:all": "turbo run types",
     "test": "turbo run test",
     "preview": "yarn workspace preview start",
@@ -16,7 +16,7 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "content",
+      "playground",
       "packages/*"
     ]
   },
