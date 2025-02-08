@@ -16,6 +16,8 @@
 
 ## ToDo
 
+- Pages should be sorted by page title
+  - File system is the source of truth for the order (not the date)
 - Blog Posts Preview
   - Consider allowing the combination of pages under "meta categories" to create preview pages for these categories.
   - "Meta categories" would not be visible to site visitors and would only be used during development.
