@@ -1,6 +1,6 @@
 import tsup from 'tsup';
 import { join, sep } from 'node:path';
-import { CreatePageOptions, Page, SiteRendererFn } from 'definitions';
+import { Page, SiteRendererFn } from 'definitions';
 import { BuildError } from 'error-reporter';
 import { EvalService } from './EvalService';
 import { BUILD_DIR, TARGET_PAGES_DIR } from '../constants';
