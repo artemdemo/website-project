@@ -1,6 +1,6 @@
 import { Page } from 'definitions';
 import { copyFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, sep } from 'node:path';
 import { IPlugin, PostEvalResult, RawProcessData } from '../IPlugin';
 import { existsSync } from 'node:fs';
 
@@ -70,6 +70,11 @@ export class ProcessAssetsPlugin implements IPlugin {
     if (deps) {
       await copyDeps(page.path, buildPageDir, deps.images);
       await copyDeps(page.path, buildPageDir, deps.videos);
+    }
+    if (page.thumbnailPath) {
+      const thumbnailPathOrig = join(dirname(page.path), page.thumbnailPath);
+      const imgName = thumbnailPathOrig.split(sep).at(-1) || thumbnailPathOrig;
+      await copyFile(thumbnailPathOrig, join(buildPageDir, imgName));
     }
     return {};
   }

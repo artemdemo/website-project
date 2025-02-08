@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "description": "Website Project",
   "scripts": {
-    "build:all": "yarn clear; turbo run build",
+    "build:all": "turbo run build --filter='!website-playground'",
+    "build:watch": "turbo watch build --filter='!website-playground'",
     "types:all": "turbo run types",
     "test": "turbo run test",
-    "clear": "rm -rf content/target;rm -rf content/build",
     "preview": "yarn workspace preview start",
-    "lint": "yarn lint:prettier; yarn lint:versions",
+    "lint:all": "yarn lint:prettier; yarn lint:versions",
     "lint:prettier": "prettier --write .",
     "lint:versions": "syncpack list-mismatches"
   },
@@ -16,7 +16,7 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "content",
+      "playground",
       "packages/*"
     ]
   },

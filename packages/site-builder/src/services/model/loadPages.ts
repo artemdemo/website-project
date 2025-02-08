@@ -1,15 +1,41 @@
 import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { dirname, join, sep, extname } from 'node:path';
 import { globby } from 'globby';
 import { pageConfigSchema, Page } from 'definitions';
-import { PAGE_CONFIG_FILE, PAGES_DIR } from '../../constants';
+import {
+  EXCERPT_FILE,
+  PAGE_CONFIG_FILE,
+  PAGES_DIR,
+  THUMBNAIL_FILE_PATTERN,
+} from '../../constants';
+import { BuildError } from 'error-reporter';
 
 const loadPageConfig = async (postPath: string) => {
-  const rawConfig = await readFile(
-    join(dirname(postPath), PAGE_CONFIG_FILE),
-    'utf8',
-  );
+  const configPath = join(dirname(postPath), PAGE_CONFIG_FILE);
+  if (!existsSync(configPath)) {
+    throw new BuildError(`Config file doesn't exist for "${postPath}"`);
+  }
+  const rawConfig = await readFile(configPath, 'utf8');
   return pageConfigSchema.parse(JSON.parse(rawConfig));
+};
+
+const getExcerptPath = (pagePath: string) => {
+  const excerptPathDraft = join(dirname(pagePath), EXCERPT_FILE);
+  return existsSync(excerptPathDraft) ? excerptPathDraft : undefined;
+};
+
+const loadThumbnailPath = async (pagePath: string) => {
+  const files = await globby(THUMBNAIL_FILE_PATTERN, {
+    cwd: dirname(pagePath),
+  });
+
+  if (files.length > 1) {
+    throw new BuildError(`You can have only one thumbnail, got ${files.length}:
+${files.join('\n')}`);
+  }
+
+  return files[0];
 };
 
 export const loadPages = async (cwd: string): Promise<Array<Page>> => {
@@ -22,7 +48,7 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
   });
 
   if (files.length === 0) {
-    throw new Error(`There are no pages for pattern "${pathPattern}"`);
+    throw new BuildError(`There are no pages for pattern "${pathPattern}"`);
   }
 
   const posts: Array<Page> = [];
@@ -35,6 +61,9 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
 
     const route = '/' + relativePath.split(sep).slice(0, -1).join('/');
 
+    const excerptPath = getExcerptPath(path);
+    const thumbnailPath = await loadThumbnailPath(path);
+
     switch (ext) {
       case 'md':
         posts.push(
@@ -42,6 +71,8 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
             path,
             route,
             relativePath,
+            excerptPath,
+            thumbnailPath,
             config: await loadPageConfig(path),
           }),
         );
@@ -52,12 +83,14 @@ export const loadPages = async (cwd: string): Promise<Array<Page>> => {
             path,
             route,
             relativePath,
+            excerptPath,
+            thumbnailPath,
             config: await loadPageConfig(path),
           }),
         );
         break;
       default:
-        throw new Error(
+        throw new BuildError(
           `Not supported file extension "${ext}" in "${relativePath}"`,
         );
     }

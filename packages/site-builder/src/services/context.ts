@@ -1,6 +1,7 @@
 import process from 'node:process';
 import { map } from 'nanostores';
 import { loadModel, Model } from './model/loadModel';
+import { BuildError } from 'error-reporter';
 
 interface AppContext {
   cwd: string;
@@ -27,7 +28,7 @@ export const getAppContext = (): InitializedAppContext => {
   const { model } = context;
 
   if (!model) {
-    throw new Error('`model` needs to be initialized before consumption');
+    throw new BuildError('`model` needs to be initialized before consumption');
   }
 
   return {

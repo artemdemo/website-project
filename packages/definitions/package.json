@@ -7,12 +7,14 @@
     "types": "tsc --noEmit"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./graphql": "./src/graphql.ts"
   },
   "dependencies": {
     "typescript": "^5.0.0"
   },
   "devDependencies": {
+    "graphql": "^16.10.0",
     "react": "^19.0.0",
     "variant": "3.0.0-dev.27",
     "zod": "^3.24.1"

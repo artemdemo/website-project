@@ -1,24 +1,25 @@
-import React from 'react';
-import { match, isType } from 'variant';
-import * as mdx from '@mdx-js/mdx';
-import { renderToStaticMarkup } from 'react-dom/server';
+import { isType } from 'variant';
+import _isFunction from 'lodash/isFunction';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { join, dirname, basename } from 'node:path';
+import { join, dirname } from 'node:path';
 import tsup from 'tsup';
-import * as runtime from 'react/jsx-runtime';
-import { PageProps, SiteRendererFn } from 'definitions';
+import { SiteRendererFn } from 'definitions';
 import { renderHtmlOfPage } from 'html-generator';
 import { createAppContext, getAppContext } from '../services/context';
 import { readFullPostContent } from '../services/readPost';
-import { BUILD_ASSETS_DIR, BUILD_DIR, TARGET_DIR } from '../constants';
-import { queryPages } from '../services/queryPages';
+import {
+  BUILD_ASSETS_DIR,
+  BUILD_DIR,
+  TARGET_DIR,
+  TARGET_PAGES_DIR,
+} from '../constants';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
-import { replaceExt } from '../services/fs';
-
-const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
+import { EvalService } from '../services/EvalService';
+import { queryPagesGQL } from '../query/queryPagesGQL';
+import { CustomPagesCreator } from '../services/CustomPagesCreator';
 
 export const build = async () => {
   await createAppContext();
@@ -53,18 +54,15 @@ export const build = async () => {
   const sireRenderFn: SiteRendererFn = (
     await import(`${cwd}/target/site.render.js`)
   ).default;
-
   const siteRender = sireRenderFn();
-
-  const pageProps: PageProps = {
-    queryPages,
-  };
 
   const plugins: IPlugin[] = [
     new MdImportsPlugin(),
     new ProcessAssetsPlugin(),
     new PageCssPlugin(),
   ];
+
+  const evalService = new EvalService({ siteRender, cwd });
 
   for (const page of model?.pages) {
     const targetPageDir = dirname(
@@ -91,31 +89,9 @@ export const build = async () => {
     await mkdir(buildPageDir, { recursive: true });
 
     // Evaluating
-    const evaluatedContent = await match(page, {
-      md: async () => {
-        const evaluated = await mdx.evaluate(rawProcessData.content, {
-          ...runtime,
-          baseUrl: `file://${cwd}/index`,
-        });
-
-        return renderToStaticMarkup(
-          siteRender.pageRender({
-            content: React.createElement(evaluated.default, pageProps),
-          }),
-        );
-      },
-      tsx: async () => {
-        const transpiledPagePath = join(
-          targetPageDir,
-          replaceExt(basename(page.relativePath), '.js'),
-        );
-        const Page = await import(`${cwd}/${transpiledPagePath}`);
-        return renderToStaticMarkup(
-          siteRender.pageRender({
-            content: React.createElement(Page.default, pageProps),
-          }),
-        );
-      },
+    const evaluatedContent = await evalService.evalPage(page, {
+      rawProcessData,
+      targetPageDir,
     });
 
     const postEvalResult: PostEvalResult = {
@@ -135,7 +111,9 @@ export const build = async () => {
     }
 
     const htmlContent = await renderHtmlOfPage({
-      pageTitle: `${model.config.titlePrefix} | ${page.config.title}`,
+      pageTitle: siteRender.pageTitleRender
+        ? siteRender.pageTitleRender(page)
+        : `${model.config.titlePrefix} | ${page.config.title}`,
       metaDescription: model.config.metaDescription,
       content: evaluatedContent,
       assets: postEvalResult.htmlAssets,
@@ -144,5 +122,27 @@ export const build = async () => {
     await writeFile(join(buildPageDir, 'index.html'), htmlContent, {
       encoding: 'utf-8',
     });
+  }
+
+  //
+  // Rendering custom user pages.
+  if (siteRender.renderPages) {
+    const pagesCreator = new CustomPagesCreator({ cwd, siteRender });
+
+    await siteRender.renderPages({
+      createPage: (options) => {
+        pagesCreator.queuePage(options);
+      },
+      queryPages: async (query) => {
+        return queryPagesGQL(query);
+      },
+    });
+
+    await pagesCreator.renderPagesToTarget();
+
+    // ToDo: Now I need to render actual html here.
+    // Use `EvalService.evalTS()`
+
+    await pagesCreator.evalAndCreatePages();
   }
 };
