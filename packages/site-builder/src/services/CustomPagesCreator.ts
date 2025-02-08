@@ -52,6 +52,9 @@ export class CustomPagesCreator {
 
   async renderPagesToTarget() {
     await tsup.build({
+      // entry: {
+      //  [path to output file]: "path to input file"
+      // },
       entry: this._pagesQueue.reduce<Record<string, string>>((acc, item) => {
         acc[join(item.targetPageDir, 'index')] = item.page.path;
         return acc;
