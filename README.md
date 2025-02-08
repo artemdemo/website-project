@@ -25,6 +25,7 @@
   - Allow users to create a page that displays all content associated with a selected tag, similar to "Blog Posts Preview."
 - Page that displays some wasm project
 - `script.ts` to load arbitrary code for the runtim
+- `preview` should command that `site-builder` exposes
 - Tests for the `site-builder`
   - Site builder should be tested, at least sanity tests
 - Dynamic Content at Runtime

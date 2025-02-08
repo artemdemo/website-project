@@ -7,7 +7,12 @@ import { SiteRendererFn } from 'definitions';
 import { renderHtmlOfPage } from 'html-generator';
 import { createAppContext, getAppContext } from '../services/context';
 import { readFullPostContent } from '../services/readPost';
-import { BUILD_ASSETS_DIR, BUILD_DIR, TARGET_DIR } from '../constants';
+import {
+  BUILD_ASSETS_DIR,
+  BUILD_DIR,
+  TARGET_DIR,
+  TARGET_PAGES_DIR,
+} from '../constants';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';
@@ -15,8 +20,7 @@ import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { EvalService } from '../services/EvalService';
 import { queryPagesGQL } from '../query/queryPagesGQL';
 import { BuildError } from 'error-reporter';
-
-const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
+import { CustomPagesCreator } from '../services/CustomPagesCreator';
 
 export const build = async () => {
   await createAppContext();
@@ -125,37 +129,20 @@ export const build = async () => {
   //
   // Rendering custom user pages.
   if (siteRender.renderPages) {
+    const pagesCreator = new CustomPagesCreator();
+
     await siteRender.renderPages({
-      createPage: async ({ templatePath, route, props }) => {
-        const templateFileNameExt = (
-          templatePath.split(sep).at(-1) || templatePath
-        )
-          .split('.')
-          .at(-1);
-        if (templateFileNameExt !== 'tsx') {
-          throw new BuildError(
-            `Template file could have only 'tsx' extension. Given "${templateFileNameExt}", see in "${templatePath}"`,
-          );
-        }
-
-        // ToDo: Maybe collect all the data for pages that need to be rendered and the render them?
-        //  Currenlty it's happening one-by-one, which is not performant.
-        await tsup.build({
-          entry: {
-            [join(TARGET_PAGES_DIR, route.split('/').join(sep), 'index')]:
-              templatePath,
-          },
-          format: ['esm'],
-          outDir: '.',
-          external: ['react', 'react-dom'],
-        });
-
-        // ToDo: Now I need to render actual html here.
-        // Use `EvalService.evalTS()`
+      createPage: (options) => {
+        pagesCreator.queuePage(options);
       },
       queryPages: async (query) => {
         return queryPagesGQL(query);
       },
     });
+
+    await pagesCreator.renderPagesToTarget();
+
+    // ToDo: Now I need to render actual html here.
+    // Use `EvalService.evalTS()`
   }
 };

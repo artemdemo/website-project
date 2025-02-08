@@ -4,6 +4,7 @@ export const BUILD_DIR = 'build';
 export const TARGET_DIR = 'target';
 export const ASSETS_DIR = '_assets';
 
+export const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 export const BUILD_ASSETS_DIR = join(BUILD_DIR, ASSETS_DIR);
 
 const CONTENT_DIR = 'src';
