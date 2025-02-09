@@ -33,15 +33,6 @@ export class PagesCreator {
   }
 
   queuePage(page: Page, props?: Record<string, unknown>) {
-    const templateFileNameExt = (page.path.split(sep).at(-1) || page.path)
-      .split('.')
-      .at(-1);
-    if (templateFileNameExt !== 'tsx') {
-      throw new BuildError(
-        `Template file could have only 'tsx' extension. Given "${templateFileNameExt}", see in "${page.path}"`,
-      );
-    }
-
     if (this._pagesQueue.some((item) => item.page.route === page.route)) {
       throw new BuildError(`Route already in use. Given "${page.route}"`);
     }
@@ -58,7 +49,12 @@ export class PagesCreator {
       //  [path to output file]: "path to input file"
       // },
       entry: this._pagesQueue.reduce<Record<string, string>>((acc, item) => {
-        acc[join('./', replaceExt(item.page.relativePath, ''))] = item.page.path;
+        const templateFileNameExt = (item.page.path.split(sep).at(-1) || item.page.path)
+          .split('.')
+          .at(-1);
+        if (templateFileNameExt === 'tsx') {
+          acc[join('./', replaceExt(item.page.relativePath, ''))] = item.page.path;
+        }
         return acc;
       }, {}),
       format: ['esm'],
