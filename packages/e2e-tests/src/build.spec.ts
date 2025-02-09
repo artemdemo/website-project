@@ -4,5 +4,7 @@ import { e2eTestkit } from './infra/e2eTestkit';
 describe('build', () => {
   const { driver, builders } = e2eTestkit();
 
-  it('should', async () => {});
+  it('should', async () => {
+    await driver.projects.setup();
+  });
 });
