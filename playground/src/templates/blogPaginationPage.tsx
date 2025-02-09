@@ -20,9 +20,7 @@ const blogPaginationPage: React.FC<{
           <h3>
             <a href={page.route}>{page.config?.title}</a>
           </h3>
-          {page.thumbnail && (
-            <img src={page.route! + '/' + page.thumbnail} />
-          )}
+          {page.thumbnail && <img src={page.route! + '/' + page.thumbnail} />}
           {page.excerpt && (
             <p dangerouslySetInnerHTML={{ __html: page.excerpt || '' }}></p>
           )}
@@ -30,7 +28,7 @@ const blogPaginationPage: React.FC<{
       ))}
       <div>
         {Array.from({ length: pagination.totalPages }).map((_, idx) => (
-          <span key={idx}>
+          <span className="pagination-item" key={idx}>
             <a href={`/blog/page/${idx + 1}`}>{idx + 1}&nbsp;</a>
           </span>
         ))}

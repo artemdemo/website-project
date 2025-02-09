@@ -24,9 +24,7 @@ const Blog: PageComponent = ({ queriedPages }) => {
           <h3>
             <a href={page.route}>{page.config?.title}</a>
           </h3>
-          {page.thumbnail && (
-            <img src={page.route! + '/' + page.thumbnail} />
-          )}
+          {page.thumbnail && <img src={page.route! + '/' + page.thumbnail} />}
           {page.excerpt && (
             <p dangerouslySetInnerHTML={{ __html: page.excerpt || '' }}></p>
           )}
