@@ -4,11 +4,7 @@ import { join, sep } from 'node:path';
 import tsup from 'tsup';
 import { Page, SiteRendererFn } from 'definitions';
 import { createAppContext, getAppContext } from '../services/context';
-import {
-  BUILD_ASSETS_DIR,
-  BUILD_DIR,
-  TARGET_DIR,
-} from '../constants';
+import { BUILD_ASSETS_DIR, BUILD_DIR, TARGET_DIR } from '../constants';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin } from '../plugins/IPlugin';
 import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin';

@@ -49,11 +49,14 @@ export class PagesCreator {
       //  [path to output file]: "path to input file"
       // },
       entry: this._pagesQueue.reduce<Record<string, string>>((acc, item) => {
-        const templateFileNameExt = (item.page.path.split(sep).at(-1) || item.page.path)
+        const templateFileNameExt = (
+          item.page.path.split(sep).at(-1) || item.page.path
+        )
           .split('.')
           .at(-1);
         if (templateFileNameExt === 'tsx') {
-          acc[join('./', replaceExt(item.page.relativePath, ''))] = item.page.path;
+          acc[join('./', replaceExt(item.page.relativePath, ''))] =
+            item.page.path;
         }
         return acc;
       }, {}),
@@ -66,7 +69,9 @@ export class PagesCreator {
   async evalAndCreatePages() {
     const { model } = getAppContext();
     for (const { page, props } of this._pagesQueue) {
-      const targetPageDir = dirname(join('./', TARGET_PAGES_DIR, page.relativePath));
+      const targetPageDir = dirname(
+        join('./', TARGET_PAGES_DIR, page.relativePath),
+      );
 
       let rawProcessData: RawProcessData = {
         content: await readFullPostContent(page),

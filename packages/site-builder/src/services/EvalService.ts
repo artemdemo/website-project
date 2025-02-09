@@ -44,7 +44,7 @@ export class EvalService {
   }
 
   // ToDo: Do I still need this method to be public?
-  async evalTS(importedFile: any, props?: Record<string, unknown>) {
+  private async _evalTS(importedFile: any, props?: Record<string, unknown>) {
     if (!importedFile.default) {
       throw new BuildError(
         `Can't evaluate file that doesn't have "default" export`,
@@ -79,12 +79,16 @@ export class EvalService {
 
     return await match(page, {
       md: async () => {
-        return this.evalMd(rawProcessData.content, {
-          ...pageProps,
-          ...(props || {}),
-        }, {
-          baseUrl: `file://${this._cwd}/index`,
-        });
+        return this.evalMd(
+          rawProcessData.content,
+          {
+            ...pageProps,
+            ...(props || {}),
+          },
+          {
+            baseUrl: `file://${this._cwd}/index`,
+          },
+        );
       },
       tsx: async () => {
         const transpiledPagePath = join(
@@ -105,7 +109,7 @@ export class EvalService {
           }
           pageProps.queriedPages = await queryPagesGQL(userPage.query());
         }
-        return this.evalTS(userPage, {
+        return this._evalTS(userPage, {
           ...pageProps,
           ...(props || {}),
         });
