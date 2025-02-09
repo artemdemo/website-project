@@ -4,8 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "yarn clear:build; site-builder build",
-    "clear:build": "rm -rf target; rm -rf build; rm -rf dist"
+    "build": "site-builder build"
   },
   "devDependencies": {
     "site-builder": "workspace:*"

@@ -17,6 +17,7 @@ export const build = async () => {
   const { model, cwd } = getAppContext();
 
   await rm(BUILD_DIR, { recursive: true, force: true });
+  await rm(TARGET_DIR, { recursive: true, force: true });
 
   await tsup.build({
     entry: ['src/site.render.ts'],
@@ -76,9 +77,6 @@ export const build = async () => {
     });
 
     await pagesCreator.renderPagesToTarget();
-
-    // ToDo: Now I need to render actual html here.
-    // Use `EvalService.evalTS()`
 
     await pagesCreator.evalAndCreatePages();
   }
