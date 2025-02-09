@@ -19,7 +19,7 @@ import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin'
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { EvalService } from '../services/EvalService';
 import { queryPagesGQL } from '../query/queryPagesGQL';
-import { CustomPagesCreator } from '../services/CustomPagesCreator';
+import { PagesCreator } from '../services/PagesCreator';
 
 export const build = async () => {
   await createAppContext();
@@ -127,7 +127,7 @@ export const build = async () => {
   //
   // Rendering custom user pages.
   if (siteRender.renderPages) {
-    const pagesCreator = new CustomPagesCreator({ cwd, siteRender });
+    const pagesCreator = new PagesCreator({ cwd, siteRender });
 
     pagesCreator.plugins = plugins;
 

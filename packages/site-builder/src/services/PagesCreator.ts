@@ -11,7 +11,7 @@ import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { readFullPostContent } from './readPost';
 import { replaceExt } from './fs';
 
-export class CustomPagesCreator {
+export class PagesCreator {
   private _pagesQueue: {
     page: Page;
     props?: Record<string, unknown>;
