@@ -72,8 +72,7 @@ export class PagesCreator {
   async evalAndCreatePages() {
     const { model } = getAppContext();
     for (const { page, props } of this._pagesQueue) {
-      // ToDo: Why do I need here `dirname()`? (in build I don't need it)
-      const targetPageDir = join(TARGET_PAGES_DIR, dirname(page.relativePath));
+      const targetPageDir = dirname(join('./', TARGET_PAGES_DIR, page.relativePath));
 
       let rawProcessData: RawProcessData = {
         content: await readFullPostContent(page),
@@ -98,8 +97,7 @@ export class PagesCreator {
         props,
       });
 
-      // ToDo: Why do I need here `dirname()`? (in build I don't need it)
-      const buildPageDir = join('./', BUILD_DIR, dirname(page.relativePath));
+      const buildPageDir = dirname(join('./', BUILD_DIR, page.relativePath));
       await mkdir(buildPageDir, { recursive: true });
 
       const postEvalResult: PostEvalResult = {
