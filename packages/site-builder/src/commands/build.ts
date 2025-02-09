@@ -129,9 +129,12 @@ export const build = async () => {
   if (siteRender.renderPages) {
     const pagesCreator = new CustomPagesCreator({ cwd, siteRender });
 
+    pagesCreator.plugins = plugins;
+
     await siteRender.renderPages({
       createPage: ({ templatePath, title, route, props }) => {
-        const relativePath = route.split('/').join(sep);
+        // const relativePath = route.split('/').join(sep);
+        const relativePath = join(route.split('/').join(sep), 'index.js');
         const page = Page.tsx({
           route,
           path: templatePath,

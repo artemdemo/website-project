@@ -23,6 +23,7 @@ export class EvalService {
     this._cwd = options.cwd;
   }
 
+  // ToDo: Do I still need this method to be public?
   async evalMd(
     content: string,
     props?: PageProps,
@@ -42,6 +43,7 @@ export class EvalService {
     );
   }
 
+  // ToDo: Do I still need this method to be public?
   async evalTS(importedFile: any, props?: Record<string, unknown>) {
     if (!importedFile.default) {
       throw new BuildError(
@@ -61,11 +63,15 @@ export class EvalService {
   async evalPage(
     page: Page,
     options: {
+      // ToDo: This property is used only for MD, let's see how to use it for TS
+      //    Read file as text and then eval?
+      //    See implementation of `mdx.evaluate`, see useage of `baseUrl` there.
       rawProcessData: RawProcessData;
       targetPageDir: string;
+      props?: Record<string, unknown>;
     },
   ) {
-    const { rawProcessData, targetPageDir } = options;
+    const { rawProcessData, targetPageDir, props } = options;
 
     const pageProps: PageProps = {
       queriedPages: [],
@@ -73,7 +79,10 @@ export class EvalService {
 
     return await match(page, {
       md: async () => {
-        return this.evalMd(rawProcessData.content, pageProps, {
+        return this.evalMd(rawProcessData.content, {
+          ...pageProps,
+          ...(props || {}),
+        }, {
           baseUrl: `file://${this._cwd}/index`,
         });
       },
@@ -83,6 +92,11 @@ export class EvalService {
           replaceExt(basename(page.relativePath), '.js'),
         );
         const userPage = await import(`${this._cwd}/${transpiledPagePath}`);
+        if (!userPage.default) {
+          throw new BuildError(
+            `Can't evaluate page that doesn't have "default" export. See "${page.path}"`,
+          );
+        }
         if (userPage.query) {
           if (!_isFunction(userPage.query)) {
             throw new BuildError(
@@ -91,7 +105,10 @@ export class EvalService {
           }
           pageProps.queriedPages = await queryPagesGQL(userPage.query());
         }
-        return this.evalTS(userPage, pageProps);
+        return this.evalTS(userPage, {
+          ...pageProps,
+          ...(props || {}),
+        });
       },
     });
   }

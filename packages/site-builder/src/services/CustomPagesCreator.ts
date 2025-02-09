@@ -1,5 +1,5 @@
 import tsup from 'tsup';
-import { join, sep } from 'node:path';
+import { dirname, join, sep } from 'node:path';
 import { Page, SiteRendererFn } from 'definitions';
 import { BuildError } from 'error-reporter';
 import { EvalService } from './EvalService';
@@ -7,6 +7,9 @@ import { BUILD_DIR, TARGET_PAGES_DIR } from '../constants';
 import { renderHtmlOfPage } from 'html-generator';
 import { getAppContext } from './context';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
+import { readFullPostContent } from './readPost';
+import { replaceExt } from './fs';
 
 export class CustomPagesCreator {
   private _pagesQueue: {
@@ -16,6 +19,7 @@ export class CustomPagesCreator {
   private _cwd: string;
   private _siteRender: ReturnType<SiteRendererFn> | undefined;
   private _evalService: EvalService;
+  private _plugins: IPlugin[] = [];
 
   constructor(options: {
     siteRender?: ReturnType<SiteRendererFn>;
@@ -24,6 +28,10 @@ export class CustomPagesCreator {
     this._siteRender = options.siteRender;
     this._cwd = options.cwd;
     this._evalService = new EvalService(options);
+  }
+
+  set plugins(plugins: IPlugin[]) {
+    this._plugins = [...plugins];
   }
 
   queuePage(page: Page, props?: Record<string, unknown>) {
@@ -52,7 +60,7 @@ export class CustomPagesCreator {
       //  [path to output file]: "path to input file"
       // },
       entry: this._pagesQueue.reduce<Record<string, string>>((acc, item) => {
-        acc[join('./', item.page.relativePath, 'index')] = item.page.path;
+        acc[join('./', replaceExt(item.page.relativePath, ''))] = item.page.path;
         return acc;
       }, {}),
       format: ['esm'],
@@ -63,33 +71,60 @@ export class CustomPagesCreator {
 
   async evalAndCreatePages() {
     const { model } = getAppContext();
-    for (const qItem of this._pagesQueue) {
-      const userPage = await import(
-        join(this._cwd, TARGET_PAGES_DIR, qItem.page.relativePath, `index.js`)
-      );
-      if (!userPage.default) {
-        throw new BuildError(
-          `Can't evaluate page that doesn't have "default" export. See "${qItem.page.path}"`,
-        );
-      }
-      const evaluatedContent = await this._evalService.evalTS(
-        userPage,
-        qItem.props,
-      );
+    for (const { page, props } of this._pagesQueue) {
+      // ToDo: Why do I need here `dirname()`? (in build I don't need it)
+      const targetPageDir = join(TARGET_PAGES_DIR, dirname(page.relativePath));
 
-      const buildPageDir = join('./', BUILD_DIR, qItem.page.relativePath);
+      let rawProcessData: RawProcessData = {
+        content: await readFullPostContent(page),
+      };
+
+      // Process RAW
+      for (const plugin of this._plugins) {
+        const modifiedData = await plugin.processRaw(
+          page,
+          rawProcessData,
+          targetPageDir,
+        );
+        if (modifiedData.content) {
+          rawProcessData.content = modifiedData.content;
+        }
+      }
+
+      // Evaluating
+      const evaluatedContent = await this._evalService.evalPage(page, {
+        rawProcessData,
+        targetPageDir,
+        props,
+      });
+
+      // ToDo: Why do I need here `dirname()`? (in build I don't need it)
+      const buildPageDir = join('./', BUILD_DIR, dirname(page.relativePath));
       await mkdir(buildPageDir, { recursive: true });
+
+      const postEvalResult: PostEvalResult = {
+        htmlAssets: [],
+      };
+
+      // Processing evaluated content
+      // target -> build
+      for (const plugin of this._plugins) {
+        const result = await plugin.postEval(page, buildPageDir);
+        if (result.htmlAssets) {
+          postEvalResult.htmlAssets = [
+            ...postEvalResult.htmlAssets,
+            ...result.htmlAssets,
+          ];
+        }
+      }
 
       const htmlContent = await renderHtmlOfPage({
         pageTitle: this._siteRender?.pageTitleRender
-          ? this._siteRender.pageTitleRender(qItem.page)
-          : `${model.config.titlePrefix} | ${qItem.page.config.title}`,
+          ? this._siteRender.pageTitleRender(page)
+          : `${model.config.titlePrefix} | ${page.config.title}`,
         metaDescription: model.config.metaDescription,
         content: evaluatedContent,
-        // ToDo: I need to run here postEval plugins.
-        //  (Page could have assets, like css, images, etc)
-        //  But I don't have a good idea (at the moment) how to do it.
-        assets: [],
+        assets: postEvalResult.htmlAssets,
       });
 
       await writeFile(join(buildPageDir, 'index.html'), htmlContent, {
