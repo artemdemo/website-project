@@ -16,7 +16,6 @@ export class PagesCreator {
     page: Page;
     props?: Record<string, unknown>;
   }[] = [];
-  private _cwd: string;
   private _siteRender: ReturnType<SiteRendererFn> | undefined;
   private _evalService: EvalService;
   private _plugins: IPlugin[] = [];
@@ -26,7 +25,6 @@ export class PagesCreator {
     cwd: string;
   }) {
     this._siteRender = options.siteRender;
-    this._cwd = options.cwd;
     this._evalService = new EvalService(options);
   }
 
