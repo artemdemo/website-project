@@ -55,7 +55,7 @@ const renderPages = async (
       tsx: () => 'index.tsx',
     });
     await writeFile(
-      pageBuild.code,
+      pageBuild.content,
       join(currentPageDirPath, pageFileName),
       'utf-8',
     );
