@@ -16,6 +16,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "definitions": "workspace:*",
+    "fs-utils": "workspace:*",
     "jsdom": "^26.0.0",
     "vitest": "^3.0.0"
   }

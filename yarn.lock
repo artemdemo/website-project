@@ -1298,6 +1298,7 @@ __metadata:
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
     definitions: "workspace:*"
+    fs-utils: "workspace:*"
     jsdom: "npm:^26.0.0"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
@@ -1722,6 +1723,7 @@ __metadata:
   resolution: "fs-utils@workspace:packages/fs-utils"
   dependencies:
     typescript: "npm:^5.0.0"
+    zod: "npm:^3.24.1"
   languageName: unknown
   linkType: soft
 

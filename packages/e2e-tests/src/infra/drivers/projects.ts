@@ -1,5 +1,6 @@
 import { dirname, join } from 'node:path';
 import { temporaryDirectory } from 'tempy';
+import { writeJson, writePkgJson } from 'fs-utils';
 
 export const projectDriver = () => {
   return {
@@ -16,5 +17,11 @@ async function setup() {
       'site-builder': `file:://${dirname(require.resolve('site-builder/package.json'))}`,
     },
   };
-  const pkgJsonPath = join(projectFolder, 'package.json');
+
+  await writePkgJson(projectFolder, pkgJson);
+
+  await writeJson(join(projectFolder, 'tsconfig.json'), {
+    extends: 'site-builder/tsconfig.user.json',
+    include: ['src'],
+  });
 }
