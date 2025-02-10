@@ -1298,6 +1298,7 @@ __metadata:
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
     definitions: "workspace:*"
+    error-reporter: "workspace:*"
     fs-utils: "workspace:*"
     jsdom: "npm:^26.0.0"
     react: "npm:^19.0.0"

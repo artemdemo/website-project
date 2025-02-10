@@ -10,7 +10,7 @@ export const projectDriver = () => {
   };
 };
 
-async function setup() {
+const setup = async () => {
   const projectFolder = temporaryDirectory();
   const pkgJson = {
     dependencies: {
@@ -24,4 +24,4 @@ async function setup() {
     extends: 'site-builder/tsconfig.user.json',
     include: ['src'],
   });
-}
+};
