@@ -8,8 +8,8 @@ const toJsonString = (data: unknown, opts?: { spaces: number }): string => {
 };
 
 export const writeJson = async (
-  filePath: string,
   data: unknown,
+  filePath: string,
   opts?: { spaces: number },
 ) => {
   const strJson = toJsonString(data, opts);
@@ -24,12 +24,12 @@ export const readJson = async (filePath: string) => {
 };
 
 export const writePkgJson = async (
-  projectFolder: string,
   pkgJson: PackageJson,
+  projectFolder: string,
 ) => {
   const pkgJsonPath = join(projectFolder, 'package.json');
 
-  await writeJson(pkgJsonPath, pkgJson, { spaces: 2 });
+  await writeJson(pkgJson, pkgJsonPath, { spaces: 2 });
 };
 
 export const readPkgJson = async (projectFolder: string) => {
