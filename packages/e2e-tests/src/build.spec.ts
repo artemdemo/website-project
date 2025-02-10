@@ -5,6 +5,7 @@ describe('build', () => {
   const { driver, builders } = e2eTestkit();
 
   it('should', async () => {
-    await driver.project.setup();
+    const { cwd } = await driver.project.setup();
+    await driver.npm.install(cwd);
   });
 });

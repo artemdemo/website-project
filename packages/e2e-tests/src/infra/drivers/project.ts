@@ -24,4 +24,6 @@ const setup = async () => {
     extends: 'site-builder/tsconfig.user.json',
     include: ['src'],
   });
+
+  return { cwd: projectFolder };
 };
