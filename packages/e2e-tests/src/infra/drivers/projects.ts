@@ -6,8 +6,8 @@ export const projectsDriver = () => {
     projects: {
       setup,
     },
-  }
-}
+  };
+};
 
 async function setup() {
   const projectFolder = temporaryDirectory();

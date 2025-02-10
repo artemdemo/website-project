@@ -5,5 +5,5 @@ export const e2eTestkit = () => {
   return {
     driver: createDriver(),
     builders: createBuilders(),
-  }
+  };
 };
