@@ -4,8 +4,8 @@ import { join, basename } from 'node:path';
 import { IPlugin, RawProcessData } from '../IPlugin';
 import { isType } from 'variant';
 import { existsSync } from 'node:fs';
+import { replaceExt } from 'fs-utils';
 import { TARGET_DIR } from '../../constants';
-import { replaceExt } from '../../services/fs';
 import { CssProcessor } from '../../services/CssProcessor';
 
 type MdImport = {

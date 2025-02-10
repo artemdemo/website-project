@@ -1,7 +1,7 @@
-import { projectsDriver } from './projects';
+import { projectDriver } from './projects';
 
 export const createDriver = () => {
   return {
-    ...projectsDriver(),
+    ...projectDriver(),
   };
 };

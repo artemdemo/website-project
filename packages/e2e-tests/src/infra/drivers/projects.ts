@@ -1,9 +1,9 @@
-import { dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { temporaryDirectory } from 'tempy';
 
-export const projectsDriver = () => {
+export const projectDriver = () => {
   return {
-    projects: {
+    project: {
       setup,
     },
   };
@@ -16,4 +16,5 @@ async function setup() {
       'site-builder': `file:://${dirname(require.resolve('site-builder/package.json'))}`,
     },
   };
+  const pkgJsonPath = join(projectFolder, 'package.json');
 }

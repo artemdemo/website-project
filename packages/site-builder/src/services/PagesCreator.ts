@@ -5,11 +5,11 @@ import { BuildError } from 'error-reporter';
 import { EvalService } from './EvalService';
 import { BUILD_DIR, TARGET_PAGES_DIR } from '../constants';
 import { renderHtmlOfPage } from 'html-generator';
-import { getAppContext } from './context';
+import { replaceExt } from 'fs-utils';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { getAppContext } from './context';
 import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { readFullPostContent } from './readPost';
-import { replaceExt } from './fs';
 
 export class PagesCreator {
   private _pagesQueue: {

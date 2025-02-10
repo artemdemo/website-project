@@ -1,0 +1,15 @@
+{
+  "name": "fs-utils",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "typescript": "^5.0.0"
+  }
+}
