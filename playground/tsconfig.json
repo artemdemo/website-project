@@ -1,0 +1,4 @@
+{
+  "extends": "site-builder/tsconfig.user.json",
+  "include": ["src"]
+}
