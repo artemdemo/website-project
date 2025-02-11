@@ -8,6 +8,7 @@
     "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true,
     // "useDefineForClassFields": true,
+    // "allowImportingTsExtensions": true,
     // "noEmit": true,
 
     /* Additional Checks */
