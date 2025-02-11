@@ -1,8 +1,8 @@
 import { describe, it } from 'vitest';
-import { e2eTestkit } from './infra/e2eTestkit';
+import { testkit } from './infra/testkit';
 
 describe('build', () => {
-  const { driver, builders } = e2eTestkit();
+  const { driver, builders } = testkit();
 
   it('should', async () => {
     const { cwd } = await driver.project.setup();

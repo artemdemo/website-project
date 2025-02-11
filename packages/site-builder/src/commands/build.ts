@@ -28,6 +28,8 @@ export const build = async () => {
 
   await mkdir(join('./', BUILD_ASSETS_DIR), { recursive: true });
 
+  // ToDo: Do I really need for `site.render` to be required?
+  //   Can I have some default values for it?
   const sireRenderFn: SiteRendererFn = (
     await import(`${cwd}/target/site.render.js`)
   ).default;
