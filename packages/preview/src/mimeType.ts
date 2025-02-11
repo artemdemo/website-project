@@ -25,5 +25,3 @@ export const getMimeType = (fileExt: string): string => {
 
   return mimeType[fileExt];
 };
-
-
