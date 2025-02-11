@@ -1,4 +1,4 @@
-// maps file extention to MIME types
+// maps file extension to MIME types
 // full list can be found here: https://www.freeformatter.com/mime-types-list.html
 const mimeType: Record<string, string> = {
   '.ico': 'image/x-icon',

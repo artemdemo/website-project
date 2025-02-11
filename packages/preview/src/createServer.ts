@@ -60,7 +60,7 @@ export const createServer = async ({
             res.statusCode = 500;
             res.end(`Error getting the file: ${err}.`);
           } else {
-            // based on the URL path, extract the file extention. e.g. .js, .doc, ...
+            // based on the URL path, extract the file extension. e.g. .js, .doc, ...
             const ext = parse(pathname).ext;
             // if the file is found, set Content-type and send data
             res.setHeader('Content-type', getMimeType(ext));
