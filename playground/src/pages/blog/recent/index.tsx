@@ -22,7 +22,7 @@ const Blog: PageComponent = ({ queriedPages }) => {
       {queriedPages.map((page) => (
         <div key={page.route}>
           <h3>
-            <a href={page.route}>{page.config?.title}</a>
+            <a href={page.route + '/'}>{page.config?.title}</a>
           </h3>
           {page.thumbnail && <img src={page.route! + '/' + page.thumbnail} />}
           {page.excerpt && (
