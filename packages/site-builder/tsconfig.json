@@ -11,5 +11,5 @@
     /* Linting */
     "strict": true
   },
-  "include": ["src"]
+  "include": ["src", "../preview/src/createServer.ts", "../preview/src/mimeType.ts"]
 }

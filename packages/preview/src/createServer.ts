@@ -2,13 +2,12 @@ import http from 'node:http';
 import { existsSync,  statSync, readFile } from 'node:fs';
 import { normalize, join, parse } from 'node:path';
 import { URL } from 'node:url';
-import { getMimeType } from './mimeType';
+import getPort from 'get-port';
+import { getMimeType } from './mimeType.js';
 
-export const createServer = () => {
-  const port = '9000';
+export const createServer = async () => {
+  const port = await getPort();
   const cwd = process.cwd();
-
-  console.log('>>> port', port);
 
   http.createServer(function (req, res) {
     console.log(`${req.method} ${req.url}`);
@@ -17,7 +16,7 @@ export const createServer = () => {
       throw new Error(`Request URL is not provided`);
     }
 
-    const parsedUrl = new URL(req.url);
+    const parsedUrl = new URL(`http://localhost:${port}${req.url}`);
 
     // extract URL path
     // Avoid https://en.wikipedia.org/wiki/Directory_traversal_attack
@@ -52,7 +51,7 @@ export const createServer = () => {
       return;
     }
 
-  }).listen(parseInt(port));
+  }).listen(port);
 
-  console.log(`Server listening on port ${port}`);
+  console.log(`Preview is running on http://localhost:${port}`);
 };

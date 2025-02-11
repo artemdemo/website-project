@@ -1,4 +1,4 @@
-import { createServer } from '../preview/createServer';
+import { createServer } from 'preview';
 
 export const preview = async () => {
   createServer();
