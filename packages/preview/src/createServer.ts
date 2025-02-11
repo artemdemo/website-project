@@ -5,7 +5,9 @@ import { URL } from 'node:url';
 import getPort from 'get-port';
 import { getMimeType } from './mimeType.js';
 
-export const createServer = async ({contentFolder = ''}: {contentFolder?: string} = {}) => {
+export const createServer = async ({
+  contentFolder = '',
+}: { contentFolder?: string } = {}) => {
   const port = await getPort({ port: 3000 });
   const cwd = process.cwd();
 
@@ -18,6 +20,21 @@ export const createServer = async ({contentFolder = ''}: {contentFolder?: string
       }
 
       const parsedUrl = new URL(`http://localhost:${port}${req.url}`);
+
+      // Static site should have slash at the end for every URL.
+      // Otherwise it wouldn't be treated as directory by the browser,
+      // and assets with relative URL will be loaded relative to the previous slash.
+      if (!parsedUrl.pathname.endsWith('/')) {
+        const lastUrlPart = parsedUrl.pathname.split('/').at(-1);
+
+        if (lastUrlPart && !lastUrlPart.includes('.')) {
+          const redirectUrl = parsedUrl.pathname + '/';
+          console.log(`Redirect to: ${redirectUrl}`);
+          res.writeHead(301, { Location: redirectUrl });
+          res.end();
+          return;
+        }
+      }
 
       // extract URL path
       // Avoid https://en.wikipedia.org/wiki/Directory_traversal_attack
