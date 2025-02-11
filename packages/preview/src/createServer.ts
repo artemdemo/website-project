@@ -7,7 +7,8 @@ import { getMimeType } from './mimeType.js';
 
 export const createServer = async ({
   contentFolder = '',
-}: { contentFolder?: string } = {}) => {
+  addTrailingSlash = true,
+}: { contentFolder?: string; addTrailingSlash?: boolean } = {}) => {
   const port = await getPort({ port: 3000 });
   const cwd = process.cwd();
 
@@ -24,7 +25,7 @@ export const createServer = async ({
       // Static site should have slash at the end for every URL.
       // Otherwise it wouldn't be treated as directory by the browser,
       // and assets with relative URL will be loaded relative to the previous slash.
-      if (!parsedUrl.pathname.endsWith('/')) {
+      if (addTrailingSlash && !parsedUrl.pathname.endsWith('/')) {
         const lastUrlPart = parsedUrl.pathname.split('/').at(-1);
 
         if (lastUrlPart && !lastUrlPart.includes('.')) {
