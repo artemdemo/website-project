@@ -3,10 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
-    "start": "http-server ../../playground/build"
+    "types": "tsc --noEmit"
   },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "get-port": "^7.1.0"
   }
 }

@@ -10,16 +10,16 @@ export const TopMenu: React.FC = () => {
           <a href="/">Home</a>
         </MenuLink>
         <MenuLink>
-          <a href="/blog">Blog</a>
+          <a href="/blog/">Blog</a>
         </MenuLink>
         <MenuLink>
-          <a href="/blog/recent">Recent Posts</a>
+          <a href="/blog/recent/">Recent Posts</a>
         </MenuLink>
         <MenuLink>
-          <a href="/about">About</a>
+          <a href="/about/">About</a>
         </MenuLink>
         <MenuLink>
-          <a href="/contact">Contact</a>
+          <a href="/contact/">Contact</a>
         </MenuLink>
       </div>
     </div>

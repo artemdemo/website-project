@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "site-builder build"
+    "build": "site-builder build",
+    "preview": "site-builder preview"
   },
   "devDependencies": {
     "site-builder": "workspace:*"
