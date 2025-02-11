@@ -1,9 +1,13 @@
 import { BuildError } from 'error-reporter';
 import { build } from './commands/build.js';
+import { preview } from './commands/preview.js';
 
 const commands: { [key: string]: (args: string[]) => void } = {
   build: () => {
     build();
+  },
+  preview: () => {
+    preview();
   },
 };
 
