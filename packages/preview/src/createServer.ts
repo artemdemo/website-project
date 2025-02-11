@@ -17,7 +17,7 @@ export const createServer = async ({
       console.log(`${req.method} ${req.url}`);
 
       if (!req.url) {
-        throw new Error(`Request URL is not provided`);
+        throw new Error(`Request URL is missing from the incoming request.`);
       }
 
       const parsedUrl = new URL(`http://localhost:${port}${req.url}`);
