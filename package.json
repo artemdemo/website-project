@@ -1,7 +1,7 @@
 {
-  "name": "website-project",
+  "name": "static-site-generator",
   "version": "0.0.0",
-  "description": "Website Project",
+  "description": "Static Site Generator",
   "scripts": {
     "build:all": "turbo run build --filter='!website-playground'",
     "build:watch": "turbo watch build --filter='!website-playground'",
