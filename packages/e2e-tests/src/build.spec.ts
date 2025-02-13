@@ -1,7 +1,7 @@
 import { describe, it } from 'vitest';
 import { testkit } from './infra/testkit';
 
-describe('build', () => {
+describe('Build Command', () => {
   const { driver, builders } = testkit();
 
   it('should', async () => {
