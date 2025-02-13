@@ -3789,6 +3789,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"static-site-generator@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "static-site-generator@workspace:."
+  dependencies:
+    "@types/node": "npm:^20.0.0"
+    prettier: "npm:^3.0.0"
+    syncpack: "npm:^13.0.0"
+    turbo: "npm:^2.0.0"
+  languageName: unknown
+  linkType: soft
+
 "std-env@npm:^3.8.0":
   version: 3.8.0
   resolution: "std-env@npm:3.8.0"
@@ -4608,17 +4619,6 @@ __metadata:
   resolution: "website-playground@workspace:playground"
   dependencies:
     site-builder: "workspace:*"
-  languageName: unknown
-  linkType: soft
-
-"website-project@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "website-project@workspace:."
-  dependencies:
-    "@types/node": "npm:^20.0.0"
-    prettier: "npm:^3.0.0"
-    syncpack: "npm:^13.0.0"
-    turbo: "npm:^2.0.0"
   languageName: unknown
   linkType: soft
 

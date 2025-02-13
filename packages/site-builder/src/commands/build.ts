@@ -2,7 +2,7 @@ import _isFunction from 'lodash/isFunction';
 import { mkdir, rm } from 'node:fs/promises';
 import { join, sep } from 'node:path';
 import tsup from 'tsup';
-import { Page, SiteRendererFn } from 'definitions';
+import { Page } from 'definitions';
 import { createAppContext, getAppContext } from '../services/context';
 import { BUILD_ASSETS_DIR, BUILD_DIR, TARGET_DIR } from '../constants';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
@@ -11,6 +11,7 @@ import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin'
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { queryPagesGQL } from '../query/queryPagesGQL';
 import { PagesCreator } from '../services/PagesCreator';
+import { loadSiteRender } from '../services/loadSiteRender';
 
 export const build = async () => {
   await createAppContext();
@@ -28,12 +29,7 @@ export const build = async () => {
 
   await mkdir(join('./', BUILD_ASSETS_DIR), { recursive: true });
 
-  // ToDo: Do I really need for `site.render` to be required?
-  //   Can I have some default values for it?
-  const sireRenderFn: SiteRendererFn = (
-    await import(`${cwd}/target/site.render.js`)
-  ).default;
-  const siteRender = sireRenderFn();
+  const siteRender = await loadSiteRender(cwd);
 
   const plugins: IPlugin[] = [
     new MdImportsPlugin(),
