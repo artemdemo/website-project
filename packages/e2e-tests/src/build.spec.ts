@@ -8,11 +8,11 @@ import {
   afterEach,
 } from 'vitest';
 import { chromium, Browser, Page } from 'playwright';
-import { expect as playExpect } from '@playwright/test';
-import { testkit } from './infra/testkit';
 import { join } from 'node:path';
 import { copyFile, mkdir, writeFile } from 'node:fs/promises';
 import { outdent } from 'outdent';
+import { testkit } from './infra/testkit';
+import { compareScreenshots } from './infra/sreenshots';
 
 let browser: Browser;
 let page: Page;
@@ -22,7 +22,7 @@ describe('Build e2e', () => {
 
   beforeAll(async () => {
     browser = await chromium.launch({
-      headless: false,
+      headless: true,
     });
   });
 
@@ -62,9 +62,7 @@ describe('Build e2e', () => {
     previewProcess.kill();
   });
 
-  // ToDo: Looks like this test needs to run wrapped in `test()` method from `@playwright/test`.
-  // But it means that creating of the test project should happen before in a separate process.
-  it.skip('should render bg image in imported component', async () => {
+  it('should render bg image in imported component', async () => {
     const { cwd } = await driver.project.setup({
       pages: {
         '/': builders.dashboardPage({
@@ -135,7 +133,11 @@ describe('Build e2e', () => {
     const previewUrl = await previewProcess.previewUrl();
 
     await page.goto(previewUrl);
+    const result = await compareScreenshots(page, 'css-bg-banner.png');
+    previewProcess.kill();
 
-    await playExpect(page).toHaveScreenshot();
+    if (result !== 0) {
+      throw new Error('Screenshots do not match');
+    }
   });
 });

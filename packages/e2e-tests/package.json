@@ -9,9 +9,13 @@
   },
   "dependencies": {
     "@playwright/test": "^1.50.1",
-    "execa": "^9.5.2"
+    "execa": "^9.5.2",
+    "pixelmatch": "^6.0.0",
+    "pngjs": "^7.0.0"
   },
   "devDependencies": {
+    "@types/pixelmatch": "^5.2.6",
+    "@types/pngjs": "^6.0.5",
     "definitions": "workspace:*",
     "error-reporter": "workspace:*",
     "fs-utils": "workspace:*",
