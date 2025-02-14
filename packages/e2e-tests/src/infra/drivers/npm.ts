@@ -22,8 +22,38 @@ const build = async (projectFolder: string) => {
   await execa('npm', ['run', 'build'], { cwd: projectFolder });
 };
 
+const previewUrlRegex = /(https?:\/\/\S+:\d+)/;
+
 const preview = (projectFolder: string) => {
-  return execa('npm', ['run', 'preview'], { cwd: projectFolder });
+  const previewProcess = execa('npm', ['run', 'preview'], {
+    cwd: projectFolder,
+  });
+  const stdout: string[] = [];
+  const stderr: string[] = [];
+  let urlPromiseResolve: (value: string) => void;
+  const urlPromise = new Promise<string>((resolve) => {
+    urlPromiseResolve = resolve;
+  });
+  previewProcess.stdout.on('data', (chunk) => {
+    const strChunk = chunk.toString();
+    stdout.push(strChunk);
+    const match = previewUrlRegex.exec(strChunk);
+    if (match !== null) {
+      urlPromiseResolve(match[1]);
+    }
+  });
+  previewProcess.stderr.on('data', (chunk) => {
+    stderr.push(chunk.toString());
+  });
+  return {
+    process: previewProcess,
+    stdout,
+    stderr,
+    previewUrl: () => urlPromise,
+    kill: () => {
+      previewProcess.kill('SIGHUP');
+    },
+  };
 };
 
 // const install = async (projectFolder: string) => {

@@ -40,28 +40,22 @@ describe('Build Command', () => {
     await page.close();
   });
 
-  it('should work', async () => {
+  it('should preview page in the browser', async () => {
     const { cwd } = await driver.project.setup();
     await driver.npm.install(cwd);
-
     await driver.npm.build(cwd);
 
-    // Preview is running on http://localhost:3000
     const previewProcess = driver.npm.preview(cwd);
+    const previewUrl = await previewProcess.previewUrl();
 
-    previewProcess.stdout.on('data', (chunk) => {
-      console.log('+=>', chunk.toString());
-    });
+    await page.goto(previewUrl);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    await page.goto('http://localhost:3000');
     expect(await page.title()).toBe('Mock title | Test Page');
     expect(await page.locator('#root h1').innerText()).toBe('Test Page');
     expect(await page.locator('#root p').innerText()).toBe(
       'Some test content.',
     );
 
-    previewProcess.kill('SIGHUP');
+    previewProcess.kill();
   });
 });
