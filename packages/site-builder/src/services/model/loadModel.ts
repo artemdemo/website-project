@@ -1,5 +1,5 @@
-import type { Page } from 'definitions';
-import { SiteConfig, loadBlogConfig } from './loadSiteConfig';
+import type { Page, SiteConfig } from 'definitions';
+import { loadBlogConfig } from './loadSiteConfig';
 import { loadPages } from './loadPages';
 
 export interface Model {

@@ -32,9 +32,7 @@ export const loadSiteRender = async (
     });
   }
   try {
-    const result: unknown = await import(
-      join(cwd, TARGET_DIR, SITE_RENDER_JS)
-    );
+    const result: unknown = await import(join(cwd, TARGET_DIR, SITE_RENDER_JS));
 
     if (isSiteRenderFn(result)) {
       return result.default();

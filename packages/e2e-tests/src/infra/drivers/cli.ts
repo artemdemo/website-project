@@ -1,7 +1,4 @@
-// import { readPkgJson } from 'fs-utils';
-// import { mkdir, symlink } from 'node:fs/promises';
-// import { dirname, join } from 'node:path';
-// import { BuildError } from 'error-reporter';
+// import { execa } from 'execa';
 
 export const cliDriver = () => {
   return {

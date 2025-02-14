@@ -2,7 +2,14 @@ import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join, sep, extname } from 'node:path';
 import { globby } from 'globby';
-import { pageConfigSchema, Page, PAGE_CONFIG_FILE, EXCERPT_FILE, THUMBNAIL_FILE_PATTERN, PAGES_DIR } from 'definitions';
+import {
+  pageConfigSchema,
+  Page,
+  PAGE_CONFIG_FILE,
+  EXCERPT_FILE,
+  THUMBNAIL_FILE_PATTERN,
+  PAGES_DIR,
+} from 'definitions';
 import { BuildError } from 'error-reporter';
 
 const loadPageConfig = async (postPath: string) => {

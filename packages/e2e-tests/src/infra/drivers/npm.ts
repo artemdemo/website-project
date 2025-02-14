@@ -8,6 +8,7 @@ export const npmDriver = () => {
   return {
     npm: {
       install,
+      build,
     },
   };
 };
@@ -16,6 +17,9 @@ const install = async (projectFolder: string) => {
   await execa({ cwd: projectFolder })`npm install`;
 };
 
+const build = async (projectFolder: string) => {
+  await execa({ cwd: projectFolder })`npm run build`;
+};
 
 // const install = async (projectFolder: string) => {
 //   const pkgJson = await readPkgJson(projectFolder);

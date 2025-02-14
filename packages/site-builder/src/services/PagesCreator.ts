@@ -43,18 +43,21 @@ export class PagesCreator {
   }
 
   async renderPagesToTarget() {
-    const entry = this._pagesQueue.reduce<Record<string, string>>((acc, item) => {
-      const templateFileNameExt = (
-        item.page.path.split(sep).at(-1) || item.page.path
-      )
-        .split('.')
-        .at(-1);
-      if (templateFileNameExt === 'tsx') {
-        acc[join('./', replaceExt(item.page.relativePath, ''))] =
-          item.page.path;
-      }
-      return acc;
-    }, {});
+    const entry = this._pagesQueue.reduce<Record<string, string>>(
+      (acc, item) => {
+        const templateFileNameExt = (
+          item.page.path.split(sep).at(-1) || item.page.path
+        )
+          .split('.')
+          .at(-1);
+        if (templateFileNameExt === 'tsx') {
+          acc[join('./', replaceExt(item.page.relativePath, ''))] =
+            item.page.path;
+        }
+        return acc;
+      },
+      {},
+    );
     if (Object.keys(entry).length > 0) {
       await tsup.build({
         // entry: {
