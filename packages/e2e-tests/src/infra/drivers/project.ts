@@ -59,6 +59,6 @@ const renderPages = async (
       pageBuild.content,
       'utf-8',
     );
-    await writeJson(pageBuild.config, join(currentPageDirPath, 'index.json'));
+    await writeJson(join(currentPageDirPath, 'index.json'), pageBuild.config);
   }
 };

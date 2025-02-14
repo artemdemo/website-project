@@ -1,7 +1,7 @@
-import { readPkgJson } from 'fs-utils';
-import { mkdir, symlink } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
-import { BuildError } from 'error-reporter';
+// import { readPkgJson } from 'fs-utils';
+// import { mkdir, symlink } from 'node:fs/promises';
+// import { dirname, join } from 'node:path';
+// import { BuildError } from 'error-reporter';
 
 export const cliDriver = () => {
   return {
@@ -11,4 +11,4 @@ export const cliDriver = () => {
   };
 };
 
-const execute = (args: string[], options: {}) => {};
+const execute = (_args: string[], _options: {}) => {};

@@ -2,7 +2,7 @@ import { describe, it } from 'vitest';
 import { testkit } from './infra/testkit';
 
 describe('Build Command', () => {
-  const { driver, builders } = testkit();
+  const { driver } = testkit();
 
   it('should', async () => {
     const { cwd } = await driver.project.setup();
