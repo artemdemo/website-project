@@ -27,6 +27,8 @@ const setup = async ({
   const pkgJson = {
     dependencies: {
       'site-builder': `file://${dirname(require.resolve('site-builder/package.json'))}`,
+      react: '^19.0.0',
+      'react-dom': '^19.0.0',
     },
     scripts: {
       build: 'site-builder build',
@@ -36,10 +38,14 @@ const setup = async ({
 
   await writePkgJson(projectFolder, pkgJson);
 
-  await writeJson(join(projectFolder, 'tsconfig.json'), {
-    extends: 'site-builder/tsconfig.user.json',
-    include: ['src'],
-  });
+  await writeJson(
+    join(projectFolder, 'tsconfig.json'),
+    {
+      extends: 'site-builder/tsconfig.user.json',
+      include: ['src'],
+    },
+    { spaces: 2 },
+  );
 
   await renderSiteConfig(projectFolder, siteConfig);
 

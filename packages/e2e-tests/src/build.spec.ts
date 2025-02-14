@@ -14,7 +14,7 @@ import { testkit } from './infra/testkit';
 let browser: Browser;
 let page: Page;
 
-describe('Build Command', () => {
+describe('Build e2e', () => {
   const { driver } = testkit();
 
   beforeAll(async () => {

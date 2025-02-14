@@ -1,3 +1,7 @@
+import { dashboardPage } from './page';
+
 export const createBuilders = () => {
-  return {};
+  return {
+    dashboardPage,
+  };
 };
