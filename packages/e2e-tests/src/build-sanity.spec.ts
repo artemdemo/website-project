@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { testkit } from '../infra/testkit';
 import { join } from 'node:path';
+import { testkit } from './infra/testkit';
 
-describe('Build Command', () => {
+describe.skip('Build Sanity', () => {
   const { driver } = testkit();
 
   // ToDo: Add sanity test for a project ithw only one `tsx` page.

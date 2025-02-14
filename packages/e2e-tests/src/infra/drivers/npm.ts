@@ -9,6 +9,7 @@ export const npmDriver = () => {
     npm: {
       install,
       build,
+      preview,
     },
   };
 };
@@ -19,6 +20,10 @@ const install = async (projectFolder: string) => {
 
 const build = async (projectFolder: string) => {
   await execa('npm', ['run', 'build'], { cwd: projectFolder });
+};
+
+const preview = (projectFolder: string) => {
+  return execa('npm', ['run', 'preview'], { cwd: projectFolder });
 };
 
 // const install = async (projectFolder: string) => {

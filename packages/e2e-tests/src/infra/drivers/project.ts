@@ -30,6 +30,7 @@ const setup = async ({
     },
     scripts: {
       build: 'site-builder build',
+      preview: 'site-builder preview',
     },
   };
 
