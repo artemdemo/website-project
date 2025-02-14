@@ -36,11 +36,7 @@ describe('Build Sanity', () => {
             import { PageComponent } from 'site-builder/types';
 
             const Page: PageComponent = () => {
-              return (
-                <>
-                  <h1>Home Page</h1>
-                </>
-              );
+              return <h1>Home Page</h1>;
             };
 
             export default Page;
