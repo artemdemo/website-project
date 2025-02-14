@@ -2,7 +2,7 @@ import { Page } from 'definitions';
 import { existsSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { IPlugin, PostEvalResult, RawProcessData } from '../IPlugin';
-import { replaceExt } from '../../services/fs';
+import { replaceExt } from 'fs-utils';
 import { isType } from 'variant';
 import { CssProcessor } from '../../services/CssProcessor';
 

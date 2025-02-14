@@ -7,9 +7,9 @@ import _isFunction from 'lodash/isFunction';
 import * as mdx from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import { BuildError } from 'error-reporter';
+import { replaceExt } from 'fs-utils';
 import { queryPagesGQL } from '../query/queryPagesGQL';
 import { RawProcessData } from '../plugins/IPlugin';
-import { replaceExt } from './fs';
 
 export class EvalService {
   private _siteRender: ReturnType<SiteRendererFn> | undefined;
@@ -35,7 +35,7 @@ export class EvalService {
     });
 
     return renderToStaticMarkup(
-      this._siteRender
+      this._siteRender?.pageWrapper
         ? this._siteRender.pageWrapper({
             content: React.createElement(evaluated.default, props),
           })
@@ -52,7 +52,7 @@ export class EvalService {
     }
     const PageComponent = importedFile.default;
     return renderToStaticMarkup(
-      this._siteRender
+      this._siteRender?.pageWrapper
         ? this._siteRender.pageWrapper({
             content: React.createElement(PageComponent, props),
           })

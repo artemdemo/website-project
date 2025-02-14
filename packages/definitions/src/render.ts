@@ -18,7 +18,7 @@ export type RenderPagesFn = (options: {
 }) => Promise<void>;
 
 export type SiteRendererFn = () => {
-  pageWrapper: PageWrapperFn;
+  pageWrapper?: PageWrapperFn;
   pageTitleRender?: PageTitleRenderFn;
   renderPages?: RenderPagesFn;
 };

@@ -1,11 +1,10 @@
-import { Page } from 'definitions';
+import { Page, TARGET_DIR } from 'definitions';
 import tsup from 'tsup';
 import { join, basename } from 'node:path';
 import { IPlugin, RawProcessData } from '../IPlugin';
 import { isType } from 'variant';
 import { existsSync } from 'node:fs';
-import { TARGET_DIR } from '../../constants';
-import { replaceExt } from '../../services/fs';
+import { replaceExt } from 'fs-utils';
 import { CssProcessor } from '../../services/CssProcessor';
 
 type MdImport = {

@@ -7,7 +7,7 @@ export const ASSETS_DIR = '_assets';
 export const TARGET_PAGES_DIR = join(TARGET_DIR, 'pages');
 export const BUILD_ASSETS_DIR = join(BUILD_DIR, ASSETS_DIR);
 
-const CONTENT_DIR = 'src';
+export const CONTENT_DIR = 'src';
 export const PAGES_DIR = join(CONTENT_DIR, 'pages');
 
 // ToDo: Every variable below has "file" in its name.

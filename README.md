@@ -1,4 +1,4 @@
-# Website Project
+# Static Site Generator
 
 - Static website generator
   - Allow content to be written in markdown

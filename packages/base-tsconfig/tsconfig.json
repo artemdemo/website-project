@@ -7,6 +7,8 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true,
+    // "useDefineForClassFields": true,
+    // "allowImportingTsExtensions": true,
     // "noEmit": true,
 
     /* Additional Checks */
@@ -16,7 +18,7 @@
     "noFallthroughCasesInSwitch": true,
 
     /* Module Resolution Options */
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "isolatedModules": true,
     "resolveJsonModule": true

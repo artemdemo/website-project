@@ -1,5 +1,5 @@
 {
-  "name": "error-reporter",
+  "name": "fs-utils",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,8 +9,8 @@
   "scripts": {
     "types": "tsc --noEmit"
   },
-  "devDependencies": {
-    "definitions": "workspace:*",
-    "typescript": "^5.0.0"
+  "dependencies": {
+    "typescript": "^5.0.0",
+    "zod": "^3.24.1"
   }
 }

@@ -1,15 +1,14 @@
 import tsup from 'tsup';
 import { dirname, join, sep } from 'node:path';
-import { Page, SiteRendererFn } from 'definitions';
+import { BUILD_DIR, Page, SiteRendererFn, TARGET_PAGES_DIR } from 'definitions';
 import { BuildError } from 'error-reporter';
 import { EvalService } from './EvalService';
-import { BUILD_DIR, TARGET_PAGES_DIR } from '../constants';
 import { renderHtmlOfPage } from 'html-generator';
-import { getAppContext } from './context';
+import { replaceExt } from 'fs-utils';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { getAppContext } from './context';
 import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { readFullPostContent } from './readPost';
-import { replaceExt } from './fs';
 
 export class PagesCreator {
   private _pagesQueue: {
@@ -44,11 +43,8 @@ export class PagesCreator {
   }
 
   async renderPagesToTarget() {
-    await tsup.build({
-      // entry: {
-      //  [path to output file]: "path to input file"
-      // },
-      entry: this._pagesQueue.reduce<Record<string, string>>((acc, item) => {
+    const entry = this._pagesQueue.reduce<Record<string, string>>(
+      (acc, item) => {
         const templateFileNameExt = (
           item.page.path.split(sep).at(-1) || item.page.path
         )
@@ -59,11 +55,20 @@ export class PagesCreator {
             item.page.path;
         }
         return acc;
-      }, {}),
-      format: ['esm'],
-      outDir: TARGET_PAGES_DIR,
-      external: ['react', 'react-dom'],
-    });
+      },
+      {},
+    );
+    if (Object.keys(entry).length > 0) {
+      await tsup.build({
+        // entry: {
+        //  [path to output file]: "path to input file"
+        // },
+        entry,
+        format: ['esm'],
+        outDir: TARGET_PAGES_DIR,
+        external: ['react', 'react-dom'],
+      });
+    }
   }
 
   async evalAndCreatePages() {

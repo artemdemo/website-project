@@ -1,15 +1,4 @@
 {
   "extends": "../base-tsconfig/tsconfig.json",
-  "compilerOptions": {
-    "useDefineForClassFields": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-
-    /* Linting */
-    "strict": true
-  },
-  "include": ["src"]
+  "include": ["src", "src/constants.ts"]
 }
