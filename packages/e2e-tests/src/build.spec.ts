@@ -7,6 +7,7 @@ import { join } from 'node:path';
 describe('Build Command', () => {
   const { driver } = testkit();
 
+  // ToDo: Add sanity test for a project ithw only one `tsx` page.
   it('should create minimal project', async () => {
     const { cwd } = await driver.project.setup();
     await driver.npm.install(cwd);

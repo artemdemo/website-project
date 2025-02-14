@@ -14,11 +14,11 @@ export const npmDriver = () => {
 };
 
 const install = async (projectFolder: string) => {
-  await execa({ cwd: projectFolder })`npm install`;
+  await execa('npm', ['install'], { cwd: projectFolder });
 };
 
 const build = async (projectFolder: string) => {
-  await execa({ cwd: projectFolder })`npm run build`;
+  await execa('npm', ['run', 'build'], { cwd: projectFolder });
 };
 
 // const install = async (projectFolder: string) => {
