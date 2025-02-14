@@ -90,8 +90,6 @@ describe('Build e2e', () => {
       },
     });
 
-    console.log('>> cwd', cwd);
-
     const componentDirPath = join(cwd, 'src', 'components', 'banner');
     await mkdir(componentDirPath, { recursive: true });
 
@@ -108,6 +106,8 @@ describe('Build e2e', () => {
       { encoding: 'utf-8' },
     );
 
+    const testBgJpg = 'test-bg.jpg';
+
     await writeFile(
       join(componentDirPath, 'Banner.css'),
       outdent`
@@ -115,15 +115,15 @@ describe('Build e2e', () => {
           width: 100%;
           height: 70px;
           color: rgba(255, 255, 255, 0.413);
-          background-image: url('./test-bg.jpg');
+          background-image: url('./${testBgJpg}');
         }
       `,
       { encoding: 'utf-8' },
     );
 
     await copyFile(
-      join('src', 'fixtures', 'test-bg.jpg'),
-      join(componentDirPath, 'test-bg.jpg'),
+      join('src', 'fixtures', testBgJpg),
+      join(componentDirPath, testBgJpg),
     );
 
     await driver.npm.install(cwd);
