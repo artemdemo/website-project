@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { testkit } from './infra/testkit';
+import { testkit } from '../infra/testkit';
 import { join } from 'node:path';
 
 describe('Build Command', () => {
