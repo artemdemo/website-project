@@ -1,7 +1,6 @@
 import _isFunction from 'lodash/isFunction';
 import { mkdir, rm } from 'node:fs/promises';
 import { join, sep } from 'node:path';
-import tsup from 'tsup';
 import { BUILD_ASSETS_DIR, BUILD_DIR, Page, TARGET_DIR } from 'definitions';
 import { createAppContext, getAppContext } from '../services/context';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
@@ -19,16 +18,9 @@ export const build = async () => {
   await rm(BUILD_DIR, { recursive: true, force: true });
   await rm(TARGET_DIR, { recursive: true, force: true });
 
-  await tsup.build({
-    entry: ['src/site.render.ts'],
-    format: ['esm'],
-    outDir: TARGET_DIR,
-    external: ['react', 'react-dom'],
-  });
+  const siteRender = await loadSiteRender(cwd);
 
   await mkdir(join('./', BUILD_ASSETS_DIR), { recursive: true });
-
-  const siteRender = await loadSiteRender(cwd);
 
   const plugins: IPlugin[] = [
     new MdImportsPlugin(),
