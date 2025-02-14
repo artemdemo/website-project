@@ -1,6 +1,5 @@
-import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
 import ejs from 'ejs';
+import pageTemplate from './templates/page';
 import { HtmlAsset } from './types';
 
 export interface PageData {
@@ -11,11 +10,5 @@ export interface PageData {
 }
 
 export const renderHtmlOfPage = async (data: PageData): Promise<string> => {
-  const template = await readFile(
-    join(import.meta.dirname, '../templates/page.ejs'),
-    {
-      encoding: 'utf8',
-    },
-  );
-  return ejs.render(template, data, { async: true });
+  return ejs.render(pageTemplate, data, { async: true });
 };
