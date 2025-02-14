@@ -28,6 +28,9 @@ const setup = async ({
     dependencies: {
       'site-builder': `file://${dirname(require.resolve('site-builder/package.json'))}`,
     },
+    scripts: {
+      build: 'site-builder build',
+    },
   };
 
   await writePkgJson(projectFolder, pkgJson);
