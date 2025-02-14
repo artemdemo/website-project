@@ -1,5 +1,5 @@
-import { cliDriver } from './cliDriver';
-import { npmDriver } from './npmDriver';
+import { cliDriver } from './cli';
+import { npmDriver } from './npm';
 import { projectDriver } from './project';
 
 export const createDriver = () => {
