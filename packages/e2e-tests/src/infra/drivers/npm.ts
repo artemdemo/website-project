@@ -18,7 +18,7 @@ const install = async (projectFolder: string) => {
     ...pkgJson.devDependencies,
   };
   const nodeModulesPath = join(projectFolder, 'node_modules');
-  await mkdir(nodeModulesPath);
+  await mkdir(nodeModulesPath, { recursive: true });
   await Promise.all(
     Object.entries(deps).map(async ([pkgName, pkgPath]) => {
       if (!pkgPath.startsWith('file://')) {

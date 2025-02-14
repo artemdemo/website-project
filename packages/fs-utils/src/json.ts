@@ -13,7 +13,7 @@ export const writeJson = async (
   opts?: { spaces: number },
 ) => {
   const strJson = toJsonString(data, opts);
-  await mkdir(dirname(filePath));
+  await mkdir(dirname(filePath), { recursive: true });
 
   await writeFile(filePath, strJson, 'utf-8');
 };

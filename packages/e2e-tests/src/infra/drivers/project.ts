@@ -23,7 +23,7 @@ const setup = async ({
   const projectFolder = temporaryDirectory();
   const pkgJson = {
     dependencies: {
-      'site-builder': `file:://${dirname(require.resolve('site-builder/package.json'))}`,
+      'site-builder': `file://${dirname(require.resolve('site-builder/package.json'))}`,
     },
   };
 
@@ -49,7 +49,7 @@ const renderPages = async (
   const pagesDirPath = join(projectFolder, 'src', 'pages');
   for (const [path, pageBuild] of Object.entries(pages)) {
     const currentPageDirPath = join(pagesDirPath, path);
-    await mkdir(currentPageDirPath);
+    await mkdir(currentPageDirPath, { recursive: true });
     const pageFileName = match(pageBuild.type, {
       md: () => 'index.md',
       tsx: () => 'index.tsx',
