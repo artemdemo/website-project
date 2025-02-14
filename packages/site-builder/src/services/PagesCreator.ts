@@ -43,26 +43,29 @@ export class PagesCreator {
   }
 
   async renderPagesToTarget() {
-    await tsup.build({
-      // entry: {
-      //  [path to output file]: "path to input file"
-      // },
-      entry: this._pagesQueue.reduce<Record<string, string>>((acc, item) => {
-        const templateFileNameExt = (
-          item.page.path.split(sep).at(-1) || item.page.path
-        )
-          .split('.')
-          .at(-1);
-        if (templateFileNameExt === 'tsx') {
-          acc[join('./', replaceExt(item.page.relativePath, ''))] =
-            item.page.path;
-        }
-        return acc;
-      }, {}),
-      format: ['esm'],
-      outDir: TARGET_PAGES_DIR,
-      external: ['react', 'react-dom'],
-    });
+    const entry = this._pagesQueue.reduce<Record<string, string>>((acc, item) => {
+      const templateFileNameExt = (
+        item.page.path.split(sep).at(-1) || item.page.path
+      )
+        .split('.')
+        .at(-1);
+      if (templateFileNameExt === 'tsx') {
+        acc[join('./', replaceExt(item.page.relativePath, ''))] =
+          item.page.path;
+      }
+      return acc;
+    }, {});
+    if (Object.keys(entry).length > 0) {
+      await tsup.build({
+        // entry: {
+        //  [path to output file]: "path to input file"
+        // },
+        entry,
+        format: ['esm'],
+        outDir: TARGET_PAGES_DIR,
+        external: ['react', 'react-dom'],
+      });
+    }
   }
 
   async evalAndCreatePages() {
