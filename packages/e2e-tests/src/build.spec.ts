@@ -28,7 +28,12 @@ describe('Build Command', () => {
   });
 
   beforeEach(async () => {
-    page = await browser.newPage();
+    page = await browser.newPage({
+      screen: {
+        width: 800,
+        height: 600,
+      },
+    });
   });
 
   afterEach(async () => {
