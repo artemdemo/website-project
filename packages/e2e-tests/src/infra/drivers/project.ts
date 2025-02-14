@@ -27,14 +27,14 @@ const setup = async ({
     },
   };
 
-  await writePkgJson(pkgJson, projectFolder);
+  await writePkgJson(projectFolder, pkgJson);
 
   await writeJson(
+    join(projectFolder, 'tsconfig.json'),
     {
       extends: 'site-builder/tsconfig.user.json',
       include: ['src'],
     },
-    join(projectFolder, 'tsconfig.json'),
   );
 
   await renderPages(projectFolder, pages);
@@ -55,8 +55,8 @@ const renderPages = async (
       tsx: () => 'index.tsx',
     });
     await writeFile(
-      pageBuild.content,
       join(currentPageDirPath, pageFileName),
+      pageBuild.content,
       'utf-8',
     );
     await writeJson(pageBuild.config, join(currentPageDirPath, 'index.json'));

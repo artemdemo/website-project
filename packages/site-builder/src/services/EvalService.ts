@@ -35,7 +35,7 @@ export class EvalService {
     });
 
     return renderToStaticMarkup(
-      this._siteRender
+      this._siteRender?.pageWrapper
         ? this._siteRender.pageWrapper({
             content: React.createElement(evaluated.default, props),
           })
@@ -52,7 +52,7 @@ export class EvalService {
     }
     const PageComponent = importedFile.default;
     return renderToStaticMarkup(
-      this._siteRender
+      this._siteRender?.pageWrapper
         ? this._siteRender.pageWrapper({
             content: React.createElement(PageComponent, props),
           })

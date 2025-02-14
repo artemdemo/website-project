@@ -9,10 +9,8 @@
   "scripts": {
     "types": "tsc --noEmit"
   },
-  "dependencies": {
-    "typescript": "^5.0.0"
-  },
   "devDependencies": {
-    "definitions": "workspace:*"
+    "definitions": "workspace:*",
+    "typescript": "^5.0.0"
   }
 }
