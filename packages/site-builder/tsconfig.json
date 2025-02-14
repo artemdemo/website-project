@@ -1,4 +1,4 @@
 {
   "extends": "../base-tsconfig/tsconfig.json",
-  "include": ["src"]
+  "include": ["src", "src/constants.ts"]
 }

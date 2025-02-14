@@ -1,10 +1,10 @@
 import type { Page } from 'definitions';
-import { BlogConfig, loadBlogConfig } from './loadBlogConfig';
+import { SiteConfig, loadBlogConfig } from './loadSiteConfig';
 import { loadPages } from './loadPages';
 
 export interface Model {
   pages: Array<Page>;
-  config: BlogConfig;
+  config: SiteConfig;
 }
 
 export const loadModel = async (cwd: string): Promise<Model> => {
