@@ -1,4 +1,12 @@
-import { describe, expect, it, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
+import {
+  describe,
+  expect,
+  it,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'vitest';
 import { chromium, Browser, Page } from 'playwright';
 // import { expect } from '@playwright/test';
 import { testkit } from './infra/testkit';
@@ -33,6 +41,7 @@ describe('Build Command', () => {
 
     await driver.npm.build(cwd);
 
+    // Preview is running on http://localhost:3000
     const previewProcess = driver.npm.preview(cwd);
 
     previewProcess.stdout.on('data', (chunk) => {
@@ -41,11 +50,12 @@ describe('Build Command', () => {
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-
     await page.goto('http://localhost:3000');
     expect(await page.title()).toBe('Mock title | Test Page');
     expect(await page.locator('#root h1').innerText()).toBe('Test Page');
-    expect(await page.locator('#root p').innerText()).toBe('Some test content.');
+    expect(await page.locator('#root p').innerText()).toBe(
+      'Some test content.',
+    );
 
     previewProcess.kill('SIGHUP');
   });
