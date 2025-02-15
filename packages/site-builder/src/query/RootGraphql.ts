@@ -1,8 +1,8 @@
-import type { PagesFn, QueryPageResult } from 'definitions/graphql';
+import type { PagesFn, QueryPageResult } from '@artemdemo/definitions/graphql';
 import _intersection from 'lodash/intersection';
-import { getAppContext } from '../services/context';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { getAppContext } from '../services/context';
 import { EvalService } from '../services/EvalService';
 
 export class RootGraphql {
