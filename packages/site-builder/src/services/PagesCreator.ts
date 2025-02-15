@@ -118,6 +118,15 @@ export class PagesCreator {
         }
       }
 
+      const siteRenderCssHref = this._siteRenderFactory.getAssetsCssHref();
+
+      if (siteRenderCssHref) {
+        postEvalResult.htmlAssets.push({
+          type: 'css',
+          linkHref: siteRenderCssHref,
+        });
+      }
+
       const siteRenderData = await this._siteRenderFactory.load();
 
       const htmlContent = await renderHtmlOfPage({

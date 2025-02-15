@@ -1,4 +1,5 @@
 import {
+  ASSETS_DIR,
   BUILD_ASSETS_DIR,
   CONTENT_DIR,
   SITE_RENDER_TS,
@@ -7,7 +8,7 @@ import {
 } from '@artemdemo/definitions';
 import { replaceExt } from '@artemdemo/fs-utils';
 import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import tsup from 'tsup';
 import { importJS } from './importJS';
 import { copyFile } from 'node:fs/promises';
@@ -71,9 +72,9 @@ export class SiteRenderFactory {
     }
   }
 
-  getAssetsCss(): string | undefined {
+  getAssetsCssHref(): string | undefined {
     if (existsSync(this._cssAssetsPath)) {
-      return this._cssAssetsPath;
+      return `/./${ASSETS_DIR}/${basename(this._cssAssetsPath)}`;
     }
   }
 }
