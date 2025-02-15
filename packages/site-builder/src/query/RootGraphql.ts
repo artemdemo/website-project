@@ -29,7 +29,7 @@ export class RootGraphql {
             const excerptContent = await readFile(join(cwd, page.excerptPath), {
               encoding: 'utf8',
             });
-            pageData.excerpt = await evalService.evalMd(excerptContent);
+            pageData.excerpt = await evalService.evalMd(page, excerptContent);
           }
           result.push(pageData);
           if (limit !== 0 && result.length >= limit) {

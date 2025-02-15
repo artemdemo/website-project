@@ -14,7 +14,7 @@ import { ProcessAssetsPlugin } from '../plugins/page-assets/ProcessAssetsPlugin'
 import { PageCssPlugin } from '../plugins/page-css/PageCssPlugin';
 import { queryPagesGQL } from '../query/queryPagesGQL';
 import { PagesCreator } from '../services/PagesCreator';
-import { loadSiteRender } from '../services/loadSiteRender';
+import { SiteRenderFactory } from '../services/SiteRenderFactory';
 
 export const build = async () => {
   await createAppContext();
@@ -23,7 +23,7 @@ export const build = async () => {
   await rm(BUILD_DIR, { recursive: true, force: true });
   await rm(TARGET_DIR, { recursive: true, force: true });
 
-  const siteRender = await loadSiteRender(cwd);
+  const siteRenderFactory = new SiteRenderFactory(cwd);
 
   await mkdir(join('./', BUILD_ASSETS_DIR), { recursive: true });
 
@@ -33,7 +33,7 @@ export const build = async () => {
     new PageCssPlugin(),
   ];
 
-  const pagesCreator = new PagesCreator({ cwd, siteRender });
+  const pagesCreator = new PagesCreator({ cwd, siteRenderFactory });
 
   pagesCreator.plugins = plugins;
 
@@ -45,10 +45,12 @@ export const build = async () => {
 
   await pagesCreator.evalAndCreatePages();
 
+  const siteRender = await siteRenderFactory.load();
+
   //
   // Rendering custom user pages.
   if (siteRender.renderPages) {
-    const pagesCreator = new PagesCreator({ cwd, siteRender });
+    const pagesCreator = new PagesCreator({ cwd, siteRenderFactory });
 
     pagesCreator.plugins = plugins;
 

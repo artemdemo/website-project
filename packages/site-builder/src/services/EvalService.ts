@@ -1,5 +1,5 @@
 import React from 'react';
-import { Page, PageProps, SiteRendererFn } from '@artemdemo/definitions';
+import { Page, PageProps } from '@artemdemo/definitions';
 import { match } from 'variant';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { join, basename } from 'node:path';
@@ -11,16 +11,14 @@ import { replaceExt } from '@artemdemo/fs-utils';
 import { queryPagesGQL } from '../query/queryPagesGQL';
 import { RawProcessData } from '../plugins/IPlugin';
 import { importJS } from './importJS';
+import { SiteRenderFactory } from './SiteRenderFactory';
 
 export class EvalService {
-  private _siteRender: ReturnType<SiteRendererFn> | undefined;
+  private _siteRenderFactory: SiteRenderFactory | undefined;
   private _cwd: string;
 
-  constructor(options: {
-    siteRender?: ReturnType<SiteRendererFn>;
-    cwd: string;
-  }) {
-    this._siteRender = options.siteRender;
+  constructor(options: { siteRenderFactory?: SiteRenderFactory; cwd: string }) {
+    this._siteRenderFactory = options.siteRenderFactory;
     this._cwd = options.cwd;
   }
 
@@ -36,9 +34,13 @@ export class EvalService {
       ...options,
     });
 
+    const siteRenderData = this._siteRenderFactory
+      ? await this._siteRenderFactory.load()
+      : undefined;
+
     return renderToStaticMarkup(
-      this._siteRender?.pageWrapper
-        ? this._siteRender.pageWrapper({
+      siteRenderData?.pageWrapper
+        ? siteRenderData.pageWrapper({
             pageConfig: page.config,
             content: React.createElement(evaluated.default, props),
           })
@@ -58,9 +60,12 @@ export class EvalService {
       );
     }
     const PageComponent = importedFile.default;
+    const siteRenderData = this._siteRenderFactory
+      ? await this._siteRenderFactory.load()
+      : undefined;
     return renderToStaticMarkup(
-      this._siteRender?.pageWrapper
-        ? this._siteRender.pageWrapper({
+      siteRenderData?.pageWrapper
+        ? siteRenderData.pageWrapper({
             pageConfig: page.config,
             content: React.createElement(PageComponent, props),
           })
