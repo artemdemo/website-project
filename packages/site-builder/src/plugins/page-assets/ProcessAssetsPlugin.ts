@@ -1,4 +1,4 @@
-import { Page } from 'definitions';
+import { Page } from '@artemdemo/definitions';
 import { copyFile } from 'node:fs/promises';
 import { dirname, join, sep } from 'node:path';
 import { IPlugin, PostEvalResult, RawProcessData } from '../IPlugin';

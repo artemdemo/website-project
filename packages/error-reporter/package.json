@@ -1,5 +1,5 @@
 {
-  "name": "error-reporter",
+  "name": "@artemdemo/error-reporter",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -10,7 +10,7 @@
     "types": "tsc --noEmit"
   },
   "devDependencies": {
-    "definitions": "workspace:*",
+    "@artemdemo/definitions": "workspace:*",
     "typescript": "^5.0.0"
   }
 }

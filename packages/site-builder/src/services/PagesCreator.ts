@@ -1,10 +1,15 @@
 import tsup from 'tsup';
 import { dirname, join, sep } from 'node:path';
-import { BUILD_DIR, Page, SiteRendererFn, TARGET_PAGES_DIR } from 'definitions';
-import { BuildError } from 'error-reporter';
+import {
+  BUILD_DIR,
+  Page,
+  SiteRendererFn,
+  TARGET_PAGES_DIR,
+} from '@artemdemo/definitions';
+import { BuildError } from '@artemdemo/error-reporter';
 import { EvalService } from './EvalService';
-import { renderHtmlOfPage } from 'html-generator';
-import { replaceExt } from 'fs-utils';
+import { renderHtmlOfPage } from '@artemdemo/html-generator';
+import { replaceExt } from '@artemdemo/fs-utils';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { getAppContext } from './context';
 import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';

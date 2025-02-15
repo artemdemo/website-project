@@ -4,4 +4,4 @@ export type {
   PageWrapperFn,
   PageComponent,
   PageQuery,
-} from 'definitions';
+} from '@artemdemo/definitions';

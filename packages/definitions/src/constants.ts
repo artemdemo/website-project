@@ -13,6 +13,8 @@ export const PAGES_DIR = join(CONTENT_DIR, 'pages');
 // ToDo: Every variable below has "file" in its name.
 // Update it.
 
+export const SITE_RENDER_TS = 'site.render.ts';
+
 export const SITE_CONFIG_FILE = 'site.config.json';
 
 export const PAGE_CONFIG_FILE = 'index.json';

@@ -1,15 +1,17 @@
 import React from 'react';
-import { Page, PageProps, SiteRendererFn } from 'definitions';
+import { Page, PageProps, SiteRendererFn } from '@artemdemo/definitions';
 import { match } from 'variant';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { join, basename } from 'node:path';
+import { existsSync } from 'node:fs';
 import _isFunction from 'lodash/isFunction';
 import * as mdx from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
-import { BuildError } from 'error-reporter';
-import { replaceExt } from 'fs-utils';
+import { BuildError } from '@artemdemo/error-reporter';
+import { replaceExt } from '@artemdemo/fs-utils';
 import { queryPagesGQL } from '../query/queryPagesGQL';
 import { RawProcessData } from '../plugins/IPlugin';
+import { importJS } from './importJS';
 
 export class EvalService {
   private _siteRender: ReturnType<SiteRendererFn> | undefined;
@@ -95,7 +97,8 @@ export class EvalService {
           targetPageDir,
           replaceExt(basename(page.relativePath), '.js'),
         );
-        const userPage = await import(`${this._cwd}/${transpiledPagePath}`);
+        const userPagePath = `${this._cwd}/${transpiledPagePath}`;
+        const userPage = await importJS(userPagePath);
         if (!userPage.default) {
           throw new BuildError(
             `Can't evaluate page that doesn't have "default" export. See "${page.path}"`,

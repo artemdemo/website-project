@@ -1,4 +1,4 @@
-import type { Page } from 'definitions';
+import type { Page } from '@artemdemo/definitions';
 import { readFile } from 'node:fs/promises';
 
 export const readFullPostContent = async (post: Page): Promise<string> => {

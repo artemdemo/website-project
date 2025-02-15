@@ -1,7 +1,7 @@
-import { ASSETS_DIR, BUILD_ASSETS_DIR, Page } from 'definitions';
+import { ASSETS_DIR, BUILD_ASSETS_DIR, Page } from '@artemdemo/definitions';
 import { basename, join } from 'node:path';
 import { copyFile, readFile, writeFile } from 'node:fs/promises';
-import { HtmlAsset } from 'html-generator';
+import { HtmlAsset } from '@artemdemo/html-generator';
 
 const bgUrlRegex = /url\("?(?!https?:)([^"'\s]+)"?\);/gm;
 

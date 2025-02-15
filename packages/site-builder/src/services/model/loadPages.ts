@@ -9,8 +9,8 @@ import {
   EXCERPT_FILE,
   THUMBNAIL_FILE_PATTERN,
   PAGES_DIR,
-} from 'definitions';
-import { BuildError } from 'error-reporter';
+} from '@artemdemo/definitions';
+import { BuildError } from '@artemdemo/error-reporter';
 
 const loadPageConfig = async (postPath: string) => {
   const configPath = join(dirname(postPath), PAGE_CONFIG_FILE);

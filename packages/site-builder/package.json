@@ -14,9 +14,9 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
+    "@artemdemo/html-generator": "workspace:*",
     "globby": "^14.0.2",
     "graphql": "^16.10.0",
-    "html-generator": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tsup": "^8.3.5",
@@ -24,17 +24,16 @@
     "variant": "3.0.0-dev.27"
   },
   "devDependencies": {
+    "@artemdemo/definitions": "workspace:*",
+    "@artemdemo/error-reporter": "workspace:*",
+    "@artemdemo/fs-utils": "workspace:*",
+    "@artemdemo/preview": "workspace:*",
     "@mdx-js/mdx": "^3.1.0",
     "@types/lodash": "^4.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "definitions": "workspace:*",
-    "error-reporter": "workspace:*",
-    "fs-utils": "workspace:*",
     "lodash": "^4.0.0",
     "nanostores": "^0.11.3",
-    "preview": "workspace:*",
-    "ui-components": "workspace:*",
     "zod": "^3.24.1"
   }
 }

@@ -5,6 +5,80 @@ __metadata:
   version: 8
   cacheKey: 10
 
+"@artemdemo/definitions@workspace:*, @artemdemo/definitions@workspace:packages/definitions":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/definitions@workspace:packages/definitions"
+  dependencies:
+    graphql: "npm:^16.10.0"
+    react: "npm:^19.0.0"
+    typescript: "npm:^5.0.0"
+    variant: "npm:3.0.0-dev.27"
+    zod: "npm:^3.24.1"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/e2e-tests@workspace:packages/e2e-tests":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/e2e-tests@workspace:packages/e2e-tests"
+  dependencies:
+    "@artemdemo/definitions": "workspace:*"
+    "@artemdemo/error-reporter": "workspace:*"
+    "@artemdemo/fs-utils": "workspace:*"
+    "@playwright/test": "npm:^1.50.1"
+    "@types/pixelmatch": "npm:^5.2.6"
+    "@types/pngjs": "npm:^6.0.5"
+    execa: "npm:^9.5.2"
+    jsdom: "npm:^26.0.0"
+    outdent: "npm:^0.8.0"
+    pixelmatch: "npm:^6.0.0"
+    playwright: "npm:^1.50.1"
+    pngjs: "npm:^7.0.0"
+    tempy: "npm:^3.1.0"
+    typescript: "npm:^5.0.0"
+    variant: "npm:3.0.0-dev.27"
+    vitest: "npm:^3.0.0"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/error-reporter@workspace:*, @artemdemo/error-reporter@workspace:packages/error-reporter":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/error-reporter@workspace:packages/error-reporter"
+  dependencies:
+    "@artemdemo/definitions": "workspace:*"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/fs-utils@workspace:*, @artemdemo/fs-utils@workspace:packages/fs-utils":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/fs-utils@workspace:packages/fs-utils"
+  dependencies:
+    typescript: "npm:^5.0.0"
+    zod: "npm:^3.24.1"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/html-generator@workspace:*, @artemdemo/html-generator@workspace:packages/html-generator":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/html-generator@workspace:packages/html-generator"
+  dependencies:
+    "@artemdemo/definitions": "workspace:*"
+    "@types/ejs": "npm:^3.1.5"
+    ejs: "npm:^3.1.10"
+    tsup: "npm:^8.3.5"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/preview@workspace:*, @artemdemo/preview@workspace:packages/preview":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/preview@workspace:packages/preview"
+  dependencies:
+    get-port: "npm:^7.1.0"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@asamuzakjp/css-color@npm:^2.8.2":
   version: 2.8.3
   resolution: "@asamuzakjp/css-color@npm:2.8.3"
@@ -421,6 +495,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@playwright/test@npm:^1.50.1":
+  version: 1.50.1
+  resolution: "@playwright/test@npm:1.50.1"
+  dependencies:
+    playwright: "npm:1.50.1"
+  bin:
+    playwright: cli.js
+  checksum: 10/0d8d2291d6554c492cb163b4d463e1e9cc6d3ae50680d790473f693f36a243c16c3620406849dd40115046c47a6ad5cc36a24511caec6d054dc1a1d9fffb4138
+  languageName: node
+  linkType: hard
+
 "@rollup/rollup-android-arm-eabi@npm:4.32.0":
   version: 4.32.0
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.32.0"
@@ -655,12 +740,39 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:*":
+  version: 22.13.4
+  resolution: "@types/node@npm:22.13.4"
+  dependencies:
+    undici-types: "npm:~6.20.0"
+  checksum: 10/716e05b1b84d9da3b2cbba9f642d7294549a89c85d27148b48815f321e0081d0546366e97d11c7710a3280160828512eb945f4e9361dda980f708473758ac0a7
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^20.0.0":
   version: 20.17.16
   resolution: "@types/node@npm:20.17.16"
   dependencies:
     undici-types: "npm:~6.19.2"
   checksum: 10/2a6f9f3d6e2640a6de5ae88ea690d8064eb421cca2989c84bc23eb1adf5e9f483c52e273722c05afba451054d3ca902df72bb8b6c33d1684404161bb410922f7
+  languageName: node
+  linkType: hard
+
+"@types/pixelmatch@npm:^5.2.6":
+  version: 5.2.6
+  resolution: "@types/pixelmatch@npm:5.2.6"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/8299207286913414bfd95ac980418342f58e7bc93dc78befbd48ccab110b0341b400712f89fea2b0f0a3a4ad0b1aed18e98e26100b529abe60d4bcc14e11d2e3
+  languageName: node
+  linkType: hard
+
+"@types/pngjs@npm:^6.0.5":
+  version: 6.0.5
+  resolution: "@types/pngjs@npm:6.0.5"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/132fce25817d47a784ed48aa678332521b0f7e6edbaa76f3fa4e9ca1228078788ae712f99ad4d1a324d9ba0b14829958677eabf3ebef1fb6e120816f433f0cd8
   languageName: node
   linkType: hard
 
@@ -1270,18 +1382,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"definitions@workspace:*, definitions@workspace:packages/definitions":
-  version: 0.0.0-use.local
-  resolution: "definitions@workspace:packages/definitions"
-  dependencies:
-    graphql: "npm:^16.10.0"
-    react: "npm:^19.0.0"
-    typescript: "npm:^5.0.0"
-    variant: "npm:3.0.0-dev.27"
-    zod: "npm:^3.24.1"
-  languageName: unknown
-  linkType: soft
-
 "delayed-stream@npm:~1.0.0":
   version: 1.0.0
   resolution: "delayed-stream@npm:1.0.0"
@@ -1304,23 +1404,6 @@ __metadata:
   checksum: 10/3cc5f903d02d279d6dc4aa71ab6ed9898b9f4d1f861cc5421ce7357893c21b9520de78afb203c92bd650a6977ad0ca98195453a0707a39958cf5fea3b0a8ddd8
   languageName: node
   linkType: hard
-
-"e2e-tests@workspace:packages/e2e-tests":
-  version: 0.0.0-use.local
-  resolution: "e2e-tests@workspace:packages/e2e-tests"
-  dependencies:
-    definitions: "workspace:*"
-    error-reporter: "workspace:*"
-    execa: "npm:^9.5.2"
-    fs-utils: "workspace:*"
-    jsdom: "npm:^26.0.0"
-    outdent: "npm:^0.8.0"
-    tempy: "npm:^3.1.0"
-    typescript: "npm:^5.0.0"
-    variant: "npm:3.0.0-dev.27"
-    vitest: "npm:^3.0.0"
-  languageName: unknown
-  linkType: soft
 
 "eastasianwidth@npm:^0.2.0":
   version: 0.2.0
@@ -1418,15 +1501,6 @@ __metadata:
   checksum: 10/d547740aa29c34e753fb6fed2c5de81802438529c12b3673bd37b6bb1fe49b9b7abdc3c11e6062fe625d8a296b3cf769a80f878865e25e685f787763eede3ffb
   languageName: node
   linkType: hard
-
-"error-reporter@workspace:*, error-reporter@workspace:packages/error-reporter":
-  version: 0.0.0-use.local
-  resolution: "error-reporter@workspace:packages/error-reporter"
-  dependencies:
-    definitions: "workspace:*"
-    typescript: "npm:^5.0.0"
-  languageName: unknown
-  linkType: soft
 
 "es-module-lexer@npm:^1.6.0":
   version: 1.6.0
@@ -1754,14 +1828,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-utils@workspace:*, fs-utils@workspace:packages/fs-utils":
-  version: 0.0.0-use.local
-  resolution: "fs-utils@workspace:packages/fs-utils"
+"fsevents@npm:2.3.2":
+  version: 2.3.2
+  resolution: "fsevents@npm:2.3.2"
   dependencies:
-    typescript: "npm:^5.0.0"
-    zod: "npm:^3.24.1"
-  languageName: unknown
-  linkType: soft
+    node-gyp: "npm:latest"
+  checksum: 10/6b5b6f5692372446ff81cf9501c76e3e0459a4852b3b5f1fc72c103198c125a6b8c72f5f166bdd76ffb2fca261e7f6ee5565daf80dca6e571e55bcc589cc1256
+  conditions: os=darwin
+  languageName: node
+  linkType: hard
 
 "fsevents@npm:~2.3.2, fsevents@npm:~2.3.3":
   version: 2.3.3
@@ -1769,6 +1844,15 @@ __metadata:
   dependencies:
     node-gyp: "npm:latest"
   checksum: 10/4c1ade961ded57cdbfbb5cac5106ec17bc8bccd62e16343c569a0ceeca83b9dfef87550b4dc5cbb89642da412b20c5071f304c8c464b80415446e8e155a038c0
+  conditions: os=darwin
+  languageName: node
+  linkType: hard
+
+"fsevents@patch:fsevents@npm%3A2.3.2#optional!builtin<compat/fsevents>":
+  version: 2.3.2
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#optional!builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
+  dependencies:
+    node-gyp: "npm:latest"
   conditions: os=darwin
   languageName: node
   linkType: hard
@@ -1939,18 +2023,6 @@ __metadata:
   checksum: 10/e86efd493293a5671b8239bd099d42128433bb3c7b0fdc7819282ef8e118a21f5dead0ad6f358e024a4e5c84f17ebb7a9b36075220fac0a6222b207248bede6f
   languageName: node
   linkType: hard
-
-"html-generator@workspace:*, html-generator@workspace:packages/html-generator":
-  version: 0.0.0-use.local
-  resolution: "html-generator@workspace:packages/html-generator"
-  dependencies:
-    "@types/ejs": "npm:^3.1.5"
-    definitions: "workspace:*"
-    ejs: "npm:^3.1.10"
-    tsup: "npm:^8.3.5"
-    typescript: "npm:^5.0.0"
-  languageName: unknown
-  linkType: soft
 
 "http-cache-semantics@npm:^4.1.1":
   version: 4.1.1
@@ -3302,6 +3374,48 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pixelmatch@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "pixelmatch@npm:6.0.0"
+  dependencies:
+    pngjs: "npm:^7.0.0"
+  bin:
+    pixelmatch: bin/pixelmatch
+  checksum: 10/53cce1c09696e2828c4ea92bc36d24ee55edcd9f98a7ea9706c68f13086b08b615139c7cb70984470ed4b32e3d82e903741d8c8c0a69b8969891d66b39d4b4bd
+  languageName: node
+  linkType: hard
+
+"playwright-core@npm:1.50.1":
+  version: 1.50.1
+  resolution: "playwright-core@npm:1.50.1"
+  bin:
+    playwright-core: cli.js
+  checksum: 10/9a310b8a66bf7fd926e620c1c8e27be29bdbdce91640e5f975b2fd4dc706d0307faec2bb0456cc8e7dedb1e71c0b5eb35c6a58acd5cedc7d8fd849a9067e637b
+  languageName: node
+  linkType: hard
+
+"playwright@npm:1.50.1, playwright@npm:^1.50.1":
+  version: 1.50.1
+  resolution: "playwright@npm:1.50.1"
+  dependencies:
+    fsevents: "npm:2.3.2"
+    playwright-core: "npm:1.50.1"
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    playwright: cli.js
+  checksum: 10/a3687614ac3238a81cbe3018e4f4a2ae92c71f3f65110cc6087068c020f6134f0628308da33177b9b08102644706e835d4053f6890beeb4a935f433bc4ac107a
+  languageName: node
+  linkType: hard
+
+"pngjs@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "pngjs@npm:7.0.0"
+  checksum: 10/e843ebbb0df092ee0f3a3e7dbd91ff87a239a4e4c4198fff202916bfb33b67622f4b83b3c29f3ccae94fcb97180c289df06068624554f61686fe6b9a4811f7db
+  languageName: node
+  linkType: hard
+
 "postcss-load-config@npm:^6.0.1":
   version: 6.0.1
   resolution: "postcss-load-config@npm:6.0.1"
@@ -3353,15 +3467,6 @@ __metadata:
   checksum: 10/a65a1d81560867f4f7128862fdbf0e1c2d3c5607bf75cae7758bf8111e2c4b744be46e084704125a38ba918bb43defa7a53aaff0f48c5c2d95367d3148c980d9
   languageName: node
   linkType: hard
-
-"preview@workspace:*, preview@workspace:packages/preview":
-  version: 0.0.0-use.local
-  resolution: "preview@workspace:packages/preview"
-  dependencies:
-    get-port: "npm:^7.1.0"
-    typescript: "npm:^5.0.0"
-  languageName: unknown
-  linkType: soft
 
 "proc-log@npm:^5.0.0":
   version: 5.0.0
@@ -3766,24 +3871,23 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "site-builder@workspace:packages/site-builder"
   dependencies:
+    "@artemdemo/definitions": "workspace:*"
+    "@artemdemo/error-reporter": "workspace:*"
+    "@artemdemo/fs-utils": "workspace:*"
+    "@artemdemo/html-generator": "workspace:*"
+    "@artemdemo/preview": "workspace:*"
     "@mdx-js/mdx": "npm:^3.1.0"
     "@types/lodash": "npm:^4.0.0"
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
-    definitions: "workspace:*"
-    error-reporter: "workspace:*"
-    fs-utils: "workspace:*"
     globby: "npm:^14.0.2"
     graphql: "npm:^16.10.0"
-    html-generator: "workspace:*"
     lodash: "npm:^4.0.0"
     nanostores: "npm:^0.11.3"
-    preview: "workspace:*"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
     tsup: "npm:^8.3.5"
     typescript: "npm:^5.0.0"
-    ui-components: "workspace:*"
     variant: "npm:3.0.0-dev.27"
     zod: "npm:^3.24.1"
   bin:
@@ -4408,23 +4512,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ui-components@workspace:*, ui-components@workspace:packages/ui-components":
-  version: 0.0.0-use.local
-  resolution: "ui-components@workspace:packages/ui-components"
-  dependencies:
-    "@types/react": "npm:^19.0.0"
-    "@types/react-dom": "npm:^19.0.0"
-    definitions: "workspace:*"
-    react: "npm:^19.0.0"
-    react-dom: "npm:^19.0.0"
-    typescript: "npm:^5.0.0"
-  languageName: unknown
-  linkType: soft
-
 "undici-types@npm:~6.19.2":
   version: 6.19.8
   resolution: "undici-types@npm:6.19.8"
   checksum: 10/cf0b48ed4fc99baf56584afa91aaffa5010c268b8842f62e02f752df209e3dea138b372a60a963b3b2576ed932f32329ce7ddb9cb5f27a6c83040d8cd74b7a70
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.20.0":
+  version: 6.20.0
+  resolution: "undici-types@npm:6.20.0"
+  checksum: 10/583ac7bbf4ff69931d3985f4762cde2690bb607844c16a5e2fbb92ed312fe4fa1b365e953032d469fa28ba8b224e88a595f0b10a449332f83fa77c695e567dbe
   languageName: node
   linkType: hard
 

@@ -1,5 +1,5 @@
 import { outdent } from 'outdent';
-import type { PageConfig } from 'definitions';
+import type { PageConfig } from '@artemdemo/definitions';
 
 export type PageBuild = {
   content: string;
