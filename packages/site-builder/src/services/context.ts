@@ -1,7 +1,7 @@
 import process from 'node:process';
 import { map } from 'nanostores';
 import { loadModel, Model } from './model/loadModel';
-import { BuildError } from 'error-reporter';
+import { BuildError } from '@artemdemo/error-reporter';
 
 interface AppContext {
   cwd: string;

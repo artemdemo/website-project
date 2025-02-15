@@ -1,11 +1,15 @@
 import { dirname, join } from 'node:path';
 import { temporaryDirectory } from 'tempy';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { writeJson, writePkgJson } from 'fs-utils';
+import { writeJson, writePkgJson } from '@artemdemo/fs-utils';
 import { match } from 'variant';
 import { outdent } from 'outdent';
 import { dashboardPage, PageBuild } from '../builders/page';
-import { SITE_CONFIG_FILE, SITE_RENDER_TS, SiteConfig } from 'definitions';
+import {
+  SITE_CONFIG_FILE,
+  SITE_RENDER_TS,
+  SiteConfig,
+} from '@artemdemo/definitions';
 
 export const projectDriver = () => {
   return {

@@ -1,6 +1,6 @@
 import { graphql } from 'graphql';
-import type { PageFields } from 'definitions';
-import { schema } from 'definitions/graphql';
+import type { PageFields } from '@artemdemo/definitions';
+import { schema } from '@artemdemo/definitions/graphql';
 import { RootGraphql } from './RootGraphql';
 
 export const queryPagesGQL = async (

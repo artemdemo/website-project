@@ -1,7 +1,12 @@
 import _isFunction from 'lodash/isFunction';
 import { mkdir, rm } from 'node:fs/promises';
 import { join, sep } from 'node:path';
-import { BUILD_ASSETS_DIR, BUILD_DIR, Page, TARGET_DIR } from 'definitions';
+import {
+  BUILD_ASSETS_DIR,
+  BUILD_DIR,
+  Page,
+  TARGET_DIR,
+} from '@artemdemo/definitions';
 import { createAppContext, getAppContext } from '../services/context';
 import { MdImportsPlugin } from '../plugins/md/MdImportsPlugin';
 import { IPlugin } from '../plugins/IPlugin';

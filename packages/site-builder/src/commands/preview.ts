@@ -1,5 +1,5 @@
-import { BUILD_DIR } from 'definitions';
-import { createServer } from 'preview';
+import { BUILD_DIR } from '@artemdemo/definitions';
+import { createServer } from '@artemdemo/preview';
 
 export const preview = async () => {
   createServer({

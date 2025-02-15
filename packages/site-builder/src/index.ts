@@ -1,4 +1,4 @@
-import { BuildError } from 'error-reporter';
+import { BuildError } from '@artemdemo/error-reporter';
 import { build } from './commands/build.js';
 import { preview } from './commands/preview.js';
 

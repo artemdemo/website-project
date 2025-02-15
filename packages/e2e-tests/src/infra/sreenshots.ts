@@ -1,4 +1,4 @@
-import { replaceExt } from 'fs-utils';
+import { replaceExt } from '@artemdemo/fs-utils';
 import { existsSync } from 'node:fs';
 import { readFile, unlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';

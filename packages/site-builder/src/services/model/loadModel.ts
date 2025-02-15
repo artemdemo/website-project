@@ -1,4 +1,4 @@
-import type { Page, SiteConfig } from 'definitions';
+import type { Page, SiteConfig } from '@artemdemo/definitions';
 import { loadBlogConfig } from './loadSiteConfig';
 import { loadPages } from './loadPages';
 

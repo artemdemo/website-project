@@ -3,8 +3,8 @@ import {
   SITE_RENDER_TS,
   SiteRendererFn,
   TARGET_DIR,
-} from 'definitions';
-import { replaceExt } from 'fs-utils';
+} from '@artemdemo/definitions';
+import { replaceExt } from '@artemdemo/fs-utils';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import tsup from 'tsup';

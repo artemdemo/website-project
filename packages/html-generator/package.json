@@ -1,5 +1,5 @@
 {
-  "name": "html-generator",
+  "name": "@artemdemo/html-generator",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -16,7 +16,7 @@
     "typescript": "^5.0.0"
   },
   "devDependencies": {
-    "@types/ejs": "^3.1.5",
-    "definitions": "workspace:*"
+    "@artemdemo/definitions": "workspace:*",
+    "@types/ejs": "^3.1.5"
   }
 }

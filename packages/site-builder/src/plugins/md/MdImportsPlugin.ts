@@ -1,10 +1,10 @@
-import { Page, TARGET_DIR } from 'definitions';
+import { Page, TARGET_DIR } from '@artemdemo/definitions';
 import tsup from 'tsup';
 import { join, basename } from 'node:path';
 import { IPlugin, RawProcessData } from '../IPlugin';
 import { isType } from 'variant';
 import { existsSync } from 'node:fs';
-import { replaceExt } from 'fs-utils';
+import { replaceExt } from '@artemdemo/fs-utils';
 import { CssProcessor } from '../../services/CssProcessor';
 
 type MdImport = {

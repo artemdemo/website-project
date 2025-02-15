@@ -1,5 +1,5 @@
-import { Page } from 'definitions';
-import { HtmlAsset } from 'html-generator';
+import { Page } from '@artemdemo/definitions';
+import { HtmlAsset } from '@artemdemo/html-generator';
 
 export type PostEvalResult = {
   htmlAssets: Array<HtmlAsset>;

@@ -5,6 +5,80 @@ __metadata:
   version: 8
   cacheKey: 10
 
+"@artemdemo/definitions@workspace:*, @artemdemo/definitions@workspace:packages/definitions":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/definitions@workspace:packages/definitions"
+  dependencies:
+    graphql: "npm:^16.10.0"
+    react: "npm:^19.0.0"
+    typescript: "npm:^5.0.0"
+    variant: "npm:3.0.0-dev.27"
+    zod: "npm:^3.24.1"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/e2e-tests@workspace:packages/e2e-tests":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/e2e-tests@workspace:packages/e2e-tests"
+  dependencies:
+    "@artemdemo/definitions": "workspace:*"
+    "@artemdemo/error-reporter": "workspace:*"
+    "@artemdemo/fs-utils": "workspace:*"
+    "@playwright/test": "npm:^1.50.1"
+    "@types/pixelmatch": "npm:^5.2.6"
+    "@types/pngjs": "npm:^6.0.5"
+    execa: "npm:^9.5.2"
+    jsdom: "npm:^26.0.0"
+    outdent: "npm:^0.8.0"
+    pixelmatch: "npm:^6.0.0"
+    playwright: "npm:^1.50.1"
+    pngjs: "npm:^7.0.0"
+    tempy: "npm:^3.1.0"
+    typescript: "npm:^5.0.0"
+    variant: "npm:3.0.0-dev.27"
+    vitest: "npm:^3.0.0"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/error-reporter@workspace:*, @artemdemo/error-reporter@workspace:packages/error-reporter":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/error-reporter@workspace:packages/error-reporter"
+  dependencies:
+    "@artemdemo/definitions": "workspace:*"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/fs-utils@workspace:*, @artemdemo/fs-utils@workspace:packages/fs-utils":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/fs-utils@workspace:packages/fs-utils"
+  dependencies:
+    typescript: "npm:^5.0.0"
+    zod: "npm:^3.24.1"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/html-generator@workspace:*, @artemdemo/html-generator@workspace:packages/html-generator":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/html-generator@workspace:packages/html-generator"
+  dependencies:
+    "@artemdemo/definitions": "workspace:*"
+    "@types/ejs": "npm:^3.1.5"
+    ejs: "npm:^3.1.10"
+    tsup: "npm:^8.3.5"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
+"@artemdemo/preview@workspace:*, @artemdemo/preview@workspace:packages/preview":
+  version: 0.0.0-use.local
+  resolution: "@artemdemo/preview@workspace:packages/preview"
+  dependencies:
+    get-port: "npm:^7.1.0"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@asamuzakjp/css-color@npm:^2.8.2":
   version: 2.8.3
   resolution: "@asamuzakjp/css-color@npm:2.8.3"
@@ -1308,18 +1382,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"definitions@workspace:*, definitions@workspace:packages/definitions":
-  version: 0.0.0-use.local
-  resolution: "definitions@workspace:packages/definitions"
-  dependencies:
-    graphql: "npm:^16.10.0"
-    react: "npm:^19.0.0"
-    typescript: "npm:^5.0.0"
-    variant: "npm:3.0.0-dev.27"
-    zod: "npm:^3.24.1"
-  languageName: unknown
-  linkType: soft
-
 "delayed-stream@npm:~1.0.0":
   version: 1.0.0
   resolution: "delayed-stream@npm:1.0.0"
@@ -1342,29 +1404,6 @@ __metadata:
   checksum: 10/3cc5f903d02d279d6dc4aa71ab6ed9898b9f4d1f861cc5421ce7357893c21b9520de78afb203c92bd650a6977ad0ca98195453a0707a39958cf5fea3b0a8ddd8
   languageName: node
   linkType: hard
-
-"e2e-tests@workspace:packages/e2e-tests":
-  version: 0.0.0-use.local
-  resolution: "e2e-tests@workspace:packages/e2e-tests"
-  dependencies:
-    "@playwright/test": "npm:^1.50.1"
-    "@types/pixelmatch": "npm:^5.2.6"
-    "@types/pngjs": "npm:^6.0.5"
-    definitions: "workspace:*"
-    error-reporter: "workspace:*"
-    execa: "npm:^9.5.2"
-    fs-utils: "workspace:*"
-    jsdom: "npm:^26.0.0"
-    outdent: "npm:^0.8.0"
-    pixelmatch: "npm:^6.0.0"
-    playwright: "npm:^1.50.1"
-    pngjs: "npm:^7.0.0"
-    tempy: "npm:^3.1.0"
-    typescript: "npm:^5.0.0"
-    variant: "npm:3.0.0-dev.27"
-    vitest: "npm:^3.0.0"
-  languageName: unknown
-  linkType: soft
 
 "eastasianwidth@npm:^0.2.0":
   version: 0.2.0
@@ -1462,15 +1501,6 @@ __metadata:
   checksum: 10/d547740aa29c34e753fb6fed2c5de81802438529c12b3673bd37b6bb1fe49b9b7abdc3c11e6062fe625d8a296b3cf769a80f878865e25e685f787763eede3ffb
   languageName: node
   linkType: hard
-
-"error-reporter@workspace:*, error-reporter@workspace:packages/error-reporter":
-  version: 0.0.0-use.local
-  resolution: "error-reporter@workspace:packages/error-reporter"
-  dependencies:
-    definitions: "workspace:*"
-    typescript: "npm:^5.0.0"
-  languageName: unknown
-  linkType: soft
 
 "es-module-lexer@npm:^1.6.0":
   version: 1.6.0
@@ -1798,15 +1828,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-utils@workspace:*, fs-utils@workspace:packages/fs-utils":
-  version: 0.0.0-use.local
-  resolution: "fs-utils@workspace:packages/fs-utils"
-  dependencies:
-    typescript: "npm:^5.0.0"
-    zod: "npm:^3.24.1"
-  languageName: unknown
-  linkType: soft
-
 "fsevents@npm:2.3.2":
   version: 2.3.2
   resolution: "fsevents@npm:2.3.2"
@@ -2002,18 +2023,6 @@ __metadata:
   checksum: 10/e86efd493293a5671b8239bd099d42128433bb3c7b0fdc7819282ef8e118a21f5dead0ad6f358e024a4e5c84f17ebb7a9b36075220fac0a6222b207248bede6f
   languageName: node
   linkType: hard
-
-"html-generator@workspace:*, html-generator@workspace:packages/html-generator":
-  version: 0.0.0-use.local
-  resolution: "html-generator@workspace:packages/html-generator"
-  dependencies:
-    "@types/ejs": "npm:^3.1.5"
-    definitions: "workspace:*"
-    ejs: "npm:^3.1.10"
-    tsup: "npm:^8.3.5"
-    typescript: "npm:^5.0.0"
-  languageName: unknown
-  linkType: soft
 
 "http-cache-semantics@npm:^4.1.1":
   version: 4.1.1
@@ -3459,15 +3468,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"preview@workspace:*, preview@workspace:packages/preview":
-  version: 0.0.0-use.local
-  resolution: "preview@workspace:packages/preview"
-  dependencies:
-    get-port: "npm:^7.1.0"
-    typescript: "npm:^5.0.0"
-  languageName: unknown
-  linkType: soft
-
 "proc-log@npm:^5.0.0":
   version: 5.0.0
   resolution: "proc-log@npm:5.0.0"
@@ -3871,19 +3871,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "site-builder@workspace:packages/site-builder"
   dependencies:
+    "@artemdemo/definitions": "workspace:*"
+    "@artemdemo/error-reporter": "workspace:*"
+    "@artemdemo/fs-utils": "workspace:*"
+    "@artemdemo/html-generator": "workspace:*"
+    "@artemdemo/preview": "workspace:*"
     "@mdx-js/mdx": "npm:^3.1.0"
     "@types/lodash": "npm:^4.0.0"
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
-    definitions: "workspace:*"
-    error-reporter: "workspace:*"
-    fs-utils: "workspace:*"
     globby: "npm:^14.0.2"
     graphql: "npm:^16.10.0"
-    html-generator: "workspace:*"
     lodash: "npm:^4.0.0"
     nanostores: "npm:^0.11.3"
-    preview: "workspace:*"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
     tsup: "npm:^8.3.5"
