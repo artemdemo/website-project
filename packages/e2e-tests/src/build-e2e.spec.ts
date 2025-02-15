@@ -53,7 +53,7 @@ describe('Build e2e', () => {
 
     await page.goto(previewUrl);
 
-    // ToDo: Thid not always works
+    // ToDo: This not always works
     //    Regrdless, killing of the preview should happen automatically
     //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
@@ -137,7 +137,7 @@ describe('Build e2e', () => {
 
     await page.goto(previewUrl);
 
-    // ToDo: Thid not always works
+    // ToDo: This not always works
     //    Regrdless, killing of the preview should happen automatically
     //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
@@ -213,7 +213,7 @@ describe('Build e2e', () => {
 
     await page.goto(previewUrl);
 
-    // ToDo: Thid not always works
+    // ToDo: This not always works
     //    Regrdless, killing of the preview should happen automatically
     //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
