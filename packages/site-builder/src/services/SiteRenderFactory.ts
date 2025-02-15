@@ -12,6 +12,8 @@ import { basename, join } from 'node:path';
 import tsup from 'tsup';
 import { importJS } from './importJS';
 import { copyFile } from 'node:fs/promises';
+import { CssProcessor } from './CssProcessor';
+import { HtmlAsset } from '@artemdemo/html-generator';
 
 // function isSiteRenderFn(data: unknown): data is { default: SiteRendererFn } {
 //   return (
@@ -31,12 +33,13 @@ const SITE_RENDER_CSS = replaceExt(SITE_RENDER_TS, '.css');
 
 export class SiteRenderFactory {
   private _cwd: string;
-  private _cssAssetsPath: string;
+  private _htmlAssets: Array<HtmlAsset> = [];
   private _siteRenderData: ReturnType<SiteRendererFn> | undefined;
+  private _cssProcessor: CssProcessor;
 
   constructor(cwd: string) {
     this._cwd = cwd;
-    this._cssAssetsPath = join(this._cwd, BUILD_ASSETS_DIR, SITE_RENDER_CSS);
+    this._cssProcessor = new CssProcessor();
   }
 
   async load(): Promise<ReturnType<SiteRendererFn>> {
@@ -57,7 +60,16 @@ export class SiteRenderFactory {
         join(this._cwd, TARGET_DIR, SITE_RENDER_JS),
       );
       this._siteRenderData = result.default() as ReturnType<SiteRendererFn>;
-      await this._processCss();
+      await this._cssProcessor.process(
+        SITE_RENDER_TS,
+        SITE_RENDER_CSS,
+        join(this._cwd, TARGET_DIR, SITE_RENDER_CSS),
+      );
+      const { htmlAssets } = await this._cssProcessor.postEval(
+        SITE_RENDER_TS,
+        join(this._cwd, BUILD_ASSETS_DIR)
+      );
+      this._htmlAssets = htmlAssets;
     } catch (e) {
       this._siteRenderData = {};
     }
@@ -65,16 +77,7 @@ export class SiteRenderFactory {
     return this._siteRenderData;
   }
 
-  private async _processCss() {
-    const cssTargetPath = join(this._cwd, TARGET_DIR, SITE_RENDER_CSS);
-    if (existsSync(cssTargetPath)) {
-      await copyFile(cssTargetPath, this._cssAssetsPath);
-    }
-  }
-
-  getAssetsCssHref(): string | undefined {
-    if (existsSync(this._cssAssetsPath)) {
-      return `/./${ASSETS_DIR}/${basename(this._cssAssetsPath)}`;
-    }
+  getHtmlAssets() {
+    return this._htmlAssets;
   }
 }

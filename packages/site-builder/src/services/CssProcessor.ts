@@ -1,4 +1,4 @@
-import { ASSETS_DIR, BUILD_ASSETS_DIR, Page } from '@artemdemo/definitions';
+import { ASSETS_DIR, BUILD_ASSETS_DIR } from '@artemdemo/definitions';
 import { basename, join } from 'node:path';
 import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import { HtmlAsset } from '@artemdemo/html-generator';
@@ -6,16 +6,22 @@ import { HtmlAsset } from '@artemdemo/html-generator';
 const bgUrlRegex = /url\("?(?!https?:)([^"'\s]+)"?\);/gm;
 
 export class CssProcessor {
-  private _cssMap: WeakMap<
-    Page,
+  private _cssMap: Map<
+    string,
     {
       fileName: string;
       targetPath: string;
       urlPathList: string[];
     }[]
-  > = new WeakMap();
+  > = new Map();
 
-  async process(page: Page, fileName: string, cssTargetPath: string) {
+  /**
+   *
+   * @param route - just unique identifier, can be any string
+   * @param fileName
+   * @param cssTargetPath
+   */
+  async process(route: string, fileName: string, cssTargetPath: string) {
     const cssContent = await readFile(cssTargetPath, {
       encoding: 'utf8',
     });
@@ -28,8 +34,8 @@ export class CssProcessor {
       urlList.push(match[1]);
       match = bgUrlRegex.exec(cssContent);
     }
-    this._cssMap.set(page, [
-      ...(this._cssMap.get(page) || []),
+    this._cssMap.set(route, [
+      ...(this._cssMap.get(route) || []),
       {
         fileName,
         targetPath: cssTargetPath,
@@ -55,9 +61,9 @@ export class CssProcessor {
     }
   }
 
-  async postEval(page: Page, buildPageDir: string) {
+  async postEval(route: string, buildPageDir: string) {
     const htmlAssets: Array<HtmlAsset> = [];
-    const cssDataList = this._cssMap.get(page) || [];
+    const cssDataList = this._cssMap.get(route) || [];
     for (const cssData of cssDataList) {
       if (cssData) {
         const cssBuildPath = join(buildPageDir, cssData.fileName);

@@ -62,7 +62,7 @@ export class MdImportsPlugin implements IPlugin {
         const cssPath = replaceExt(importItem.targetImportPath, '.css');
 
         if (existsSync(cssPath)) {
-          await this._cssProcessor.process(page, basename(cssPath), cssPath);
+          await this._cssProcessor.process(page.route, basename(cssPath), cssPath);
         }
       }
 
@@ -74,6 +74,6 @@ export class MdImportsPlugin implements IPlugin {
   }
 
   async postEval(page: Page, buildPageDir: string) {
-    return await this._cssProcessor.postEval(page, buildPageDir);
+    return await this._cssProcessor.postEval(page.route, buildPageDir);
   }
 }
