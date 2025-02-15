@@ -87,7 +87,7 @@ export class EvalService {
     const { rawProcessData, targetPageDir, props } = options;
 
     const pageProps: PageProps = {
-      queriedPages: [],
+      queriedResults: {},
     };
 
     return await match(page, {
@@ -122,7 +122,7 @@ export class EvalService {
               `"query" should be a function. See "${page.relativePath}"`,
             );
           }
-          pageProps.queriedPages = await queryPagesGQL(
+          pageProps.queriedResults = await queryPagesGQL(
             userPageComponent.query(),
           );
         }

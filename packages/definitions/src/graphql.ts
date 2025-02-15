@@ -23,6 +23,12 @@ export type PagesFn = (props: {
   filter: PageFilterInput;
 }) => Promise<QueryPageResult[]>;
 
+export interface QueryTagResult {
+  name: string;
+}
+
+export type TagsFn = () => Promise<QueryTagResult[]>;
+
 /**
  * There is a specific type in GraphQL for ids - `ID`.
  * The issue with it is that it makes it `string` in the end, which will fuck up all my current calculations.
@@ -32,10 +38,15 @@ export type PagesFn = (props: {
 export const schema = buildSchema(`
   type Query {
     pages(limit: Int, filter: PageFilterInput): [Page]!
+    tags: [Tag]!
   }
   input PageFilterInput {
     tags: [String!]
     categories: [String!]
+  }
+
+  type Tag {
+    name: String!
   }
 
   type Page {

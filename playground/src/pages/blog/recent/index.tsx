@@ -15,11 +15,11 @@ export const query: PageQuery = () => `{
   }
 }`;
 
-const Blog: PageComponent = ({ queriedPages }) => {
+const Blog: PageComponent = ({ queriedResults }) => {
   return (
     <>
       <h1>Recent Blog Posts</h1>
-      {queriedPages.map((page) => (
+      {queriedResults.pages?.map((page) => (
         <div key={page.route}>
           <h3>
             <a href={page.route + '/'}>{page.config?.title}</a>

@@ -67,7 +67,7 @@ export const build = async () => {
         });
         pagesCreator.queuePage(page, props);
       },
-      queryPages: async (query) => {
+      querySiteData: async (query) => {
         return queryPagesGQL(query);
       },
     });

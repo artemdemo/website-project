@@ -57,14 +57,19 @@ export class SiteRenderFactory {
         join(this._cwd, TARGET_DIR, SITE_RENDER_JS),
       );
       this._siteRenderData = result.default() as ReturnType<SiteRendererFn>;
-      const siteRenderCssInTarget = join(this._cwd, TARGET_DIR, SITE_RENDER_CSS);
+      const siteRenderCssInTarget = join(
+        this._cwd,
+        TARGET_DIR,
+        SITE_RENDER_CSS,
+      );
       if (existsSync(siteRenderCssInTarget)) {
         await this._cssProcessor.process(
           SITE_RENDER_TS,
           SITE_RENDER_CSS,
           join(this._cwd, TARGET_DIR, SITE_RENDER_CSS),
         );
-        const { htmlAssets } = await this._cssProcessor.postEval(SITE_RENDER_TS);
+        const { htmlAssets } =
+          await this._cssProcessor.postEval(SITE_RENDER_TS);
         this._htmlAssets = htmlAssets;
       }
     } catch (e) {

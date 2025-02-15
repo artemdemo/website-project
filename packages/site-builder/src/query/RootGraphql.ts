@@ -1,4 +1,8 @@
-import type { PagesFn, QueryPageResult } from '@artemdemo/definitions/graphql';
+import type {
+  PagesFn,
+  QueryPageResult,
+  TagsFn,
+} from '@artemdemo/definitions/graphql';
 import _intersection from 'lodash/intersection';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -6,6 +10,19 @@ import { getAppContext } from '../services/context';
 import { EvalService } from '../services/EvalService';
 
 export class RootGraphql {
+  tags: TagsFn = async () => {
+    const { model } = getAppContext();
+    const tagNames = new Set<string>();
+
+    for (const page of model.pages) {
+      const tags = page.config.tags || [];
+
+      tags.forEach((tagName) => tagNames.add(tagName));
+    }
+
+    return Array.from(tagNames).map((name) => ({ name }));
+  };
+
   pages: PagesFn = async ({ limit, filter }) => {
     const { cwd, model } = getAppContext();
     const result: QueryPageResult[] = [];

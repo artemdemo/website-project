@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Page } from './page';
-import { QueryPageResult } from './graphql';
+import { QueryPageResult, QueryTagResult } from './graphql';
 import { PageConfig } from './page-config';
 
 export type PageWrapperFn = (options: {
@@ -16,9 +16,14 @@ export interface CreatePageOptions {
   props?: Record<string, unknown>;
 }
 
+export type QuerySiteDataFn = (query: string) => Promise<{
+  pages: Partial<QueryPageResult>[];
+  tags: Partial<QueryTagResult>[];
+}>;
+
 export type RenderPagesFn = (options: {
   createPage: (options: CreatePageOptions) => void;
-  queryPages: (query: string) => Promise<Partial<QueryPageResult>[]>;
+  querySiteData: QuerySiteDataFn;
 }) => Promise<void>;
 
 export type SiteRendererFn = () => {
