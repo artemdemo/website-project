@@ -35,9 +35,9 @@ export class RootGraphql {
 
     if (filterByCategories && filterByTags) {
       // ToDo: I need to support filter by both categories and tags.
-      throw new Error(`Filter by both tags and categories is not allowed for now. Given:
-        cateroies: "${filter.categories}"
-        tags: "${filter.tags}"
+      throw new Error(`Filtering by both tags and categories is not supported.
+        Categories: "${filter.categories}"
+        Tags: "${filter.tags}"
       `);
     }
 

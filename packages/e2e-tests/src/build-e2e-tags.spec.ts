@@ -173,6 +173,6 @@ describe('Build e2e tags', () => {
     // ToDo: This not always works
     //    Regrdless, killing of the preview should happen automatically
     //    Maybe store PID of the process and then kill it?
-    // previewProcess.kill();
+    previewProcess.kill();
   });
 });
