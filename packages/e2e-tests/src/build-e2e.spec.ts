@@ -142,11 +142,7 @@ describe('Build e2e', () => {
     //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
 
-    const result = await compareScreenshots(page, 'css-bg-banner.png');
-
-    if (result !== 0) {
-      throw new Error('Screenshots do not match');
-    }
+    await compareScreenshots(page, 'css-bg-banner.png');
   });
 
   it('should render css with bg image in component from "site.render"', async () => {
@@ -218,9 +214,6 @@ describe('Build e2e', () => {
     //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
 
-    await compareScreenshots(
-      page,
-      'site-render-page-wrapper-bg-banner.png',
-    );
+    await compareScreenshots(page, 'site-render-page-wrapper-bg-banner.png');
   });
 });

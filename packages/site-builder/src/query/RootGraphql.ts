@@ -29,7 +29,8 @@ export class RootGraphql {
 
     const evalService = new EvalService({ cwd });
 
-    const filterByCategories = Array.isArray(filter.categories) && filter.categories.length > 0;
+    const filterByCategories =
+      Array.isArray(filter.categories) && filter.categories.length > 0;
     const filterByTags = Array.isArray(filter.tags) && filter.tags.length > 0;
 
     if (filterByCategories && filterByTags) {

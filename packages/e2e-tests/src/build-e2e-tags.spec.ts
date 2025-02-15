@@ -51,21 +51,21 @@ describe('Build e2e tags', () => {
           content: outdent`# Page One`,
           config: {
             title: 'Page One',
-            tags: ['foo']
+            tags: ['foo'],
           },
         }),
         '/two': builders.dashboardPage({
           content: outdent`# Page Two`,
           config: {
             title: 'Page Two',
-            tags: ['foo']
+            tags: ['foo'],
           },
         }),
         '/three': builders.dashboardPage({
           content: outdent`# Page Three`,
           config: {
             title: 'Page Three',
-            tags: ['boo']
+            tags: ['boo'],
           },
         }),
       },
@@ -159,23 +159,16 @@ describe('Build e2e tags', () => {
     await driver.npm.install(cwd);
     await driver.npm.build(cwd);
 
-
     const previewProcess = driver.npm.preview(cwd);
     const previewUrl = await previewProcess.previewUrl();
 
     await page.goto(`${previewUrl}/tag/foo`);
 
-    await compareScreenshots(
-      page,
-      'build-e2e-tags-foo.png',
-    );
+    await compareScreenshots(page, 'build-e2e-tags-foo.png');
 
     await page.goto(`${previewUrl}/tag/boo`);
 
-    await compareScreenshots(
-      page,
-      'build-e2e-tags-boo.png',
-    );
+    await compareScreenshots(page, 'build-e2e-tags-boo.png');
 
     // ToDo: This not always works
     //    Regrdless, killing of the preview should happen automatically
