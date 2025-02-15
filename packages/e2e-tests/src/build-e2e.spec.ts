@@ -53,6 +53,9 @@ describe('Build e2e', () => {
 
     await page.goto(previewUrl);
 
+    // ToDo: Thid not always works
+    //    Regrdless, killing of the preview should happen automatically
+    //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
 
     expect(await page.title()).toBe('Mock title | Test Page');
@@ -133,6 +136,10 @@ describe('Build e2e', () => {
     const previewUrl = await previewProcess.previewUrl();
 
     await page.goto(previewUrl);
+
+    // ToDo: Thid not always works
+    //    Regrdless, killing of the preview should happen automatically
+    //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
 
     const result = await compareScreenshots(page, 'css-bg-banner.png');
