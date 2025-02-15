@@ -62,14 +62,35 @@ const blogPages: RenderPagesFn = async ({ createPage, querySiteData }) => {
 };
 
 const tagPages: RenderPagesFn = async ({ createPage, querySiteData }) => {
-  const query = `{
+  const { tags } = await querySiteData(`{
     tags {
       name
     }
-  }`;
-  const { tags } = await querySiteData(query);
+  }`);
 
   for (const tag of tags) {
+    const query = `{
+      pages(limit: 0, filter: { tags: ["${tag.name}"] }) {
+        route
+        excerpt
+        thumbnail
+        config {
+          title
+          date
+          tags
+          categories
+        }
+      }
+    }`;
+    const { pages } = await querySiteData(query);
+    createPage({
+      templatePath: 'src/templates/tagPage.tsx',
+      route: `/blog/tag/${tag.name}`,
+      title: `Tag Page: "${tag.name}"`,
+      props: {
+        pages: pages,
+      },
+    });
   }
 };
 

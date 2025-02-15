@@ -169,8 +169,6 @@ describe('Build e2e', () => {
       },
     });
 
-    console.log('>> cwd', cwd);
-
     const componentDirPath = join(cwd, 'src', 'components', 'banner');
     await mkdir(componentDirPath, { recursive: true });
 
