@@ -19,6 +19,7 @@
 - Links to site pages should end with `/`, otherwise it will not work.
   - Maybe solve it by introducing `<Link />` component
 - [test] Add test for MD file that imports component with bg image
+- [test] Add test for MD file that uses image in the text
 - Page that displays some wasm project
 - `script.ts` to load arbitrary code in runtime
 - `preview` should command that `site-builder` exposes
