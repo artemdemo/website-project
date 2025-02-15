@@ -17,7 +17,7 @@ export class CssProcessor {
 
   /**
    *
-   * @param route - just unique identifier, can be any string
+   * @param route - just unique identifier to store css data between methods, can be any string
    * @param fileName
    * @param cssTargetPath
    */
@@ -61,15 +61,25 @@ export class CssProcessor {
     }
   }
 
-  async postEval(route: string, buildPageDir: string) {
+  /**
+   *
+   * @param route - just unique identifier, should be same as in `process()`
+   * @param buildDir - where CSS file should be copied to.
+   *                  If not provided, css will be copied to ASSETS_DIR
+   */
+  async postEval(route: string, buildDir?: string) {
     const htmlAssets: Array<HtmlAsset> = [];
     const cssDataList = this._cssMap.get(route) || [];
     for (const cssData of cssDataList) {
       if (cssData) {
-        const cssBuildPath = join(buildPageDir, cssData.fileName);
+        const cssBuildPath = buildDir
+          ? join(buildDir, cssData.fileName)
+          : join(BUILD_ASSETS_DIR, cssData.fileName);
+        // Copying css file
         await copyFile(cssData.targetPath, cssBuildPath);
 
         for (const urlPath of cssData.urlPathList) {
+          // Copying bg image
           // This copy could potentially overwrite file that was copied previously.
           // It should be ok, since I'm assuming that only same files will have same names.
           // It's possible since tsup will add content hash to file name.
@@ -78,7 +88,9 @@ export class CssProcessor {
 
         htmlAssets.push(
           HtmlAsset.css({
-            linkHref: cssData.fileName,
+            linkHref: buildDir
+              ? cssData.fileName
+              : `/./${ASSETS_DIR}/${cssData.fileName}`,
           }),
         );
       }

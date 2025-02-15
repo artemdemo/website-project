@@ -1,6 +1,4 @@
 import {
-  ASSETS_DIR,
-  BUILD_ASSETS_DIR,
   CONTENT_DIR,
   SITE_RENDER_TS,
   SiteRendererFn,
@@ -8,10 +6,9 @@ import {
 } from '@artemdemo/definitions';
 import { replaceExt } from '@artemdemo/fs-utils';
 import { existsSync } from 'node:fs';
-import { basename, join } from 'node:path';
+import { join } from 'node:path';
 import tsup from 'tsup';
 import { importJS } from './importJS';
-import { copyFile } from 'node:fs/promises';
 import { CssProcessor } from './CssProcessor';
 import { HtmlAsset } from '@artemdemo/html-generator';
 
@@ -65,10 +62,7 @@ export class SiteRenderFactory {
         SITE_RENDER_CSS,
         join(this._cwd, TARGET_DIR, SITE_RENDER_CSS),
       );
-      const { htmlAssets } = await this._cssProcessor.postEval(
-        SITE_RENDER_TS,
-        join(this._cwd, BUILD_ASSETS_DIR)
-      );
+      const { htmlAssets } = await this._cssProcessor.postEval(SITE_RENDER_TS);
       this._htmlAssets = htmlAssets;
     } catch (e) {
       this._siteRenderData = {};

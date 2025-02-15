@@ -62,7 +62,11 @@ export class MdImportsPlugin implements IPlugin {
         const cssPath = replaceExt(importItem.targetImportPath, '.css');
 
         if (existsSync(cssPath)) {
-          await this._cssProcessor.process(page.route, basename(cssPath), cssPath);
+          await this._cssProcessor.process(
+            page.route,
+            basename(cssPath),
+            cssPath,
+          );
         }
       }
 

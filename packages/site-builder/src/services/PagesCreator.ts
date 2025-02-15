@@ -118,7 +118,9 @@ export class PagesCreator {
         }
       }
 
-      postEvalResult.htmlAssets.push(...this._siteRenderFactory.getHtmlAssets());
+      postEvalResult.htmlAssets.push(
+        ...this._siteRenderFactory.getHtmlAssets(),
+      );
 
       const siteRenderData = await this._siteRenderFactory.load();
 

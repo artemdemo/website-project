@@ -149,8 +149,7 @@ describe('Build e2e', () => {
     }
   });
 
-  // ToDo: Unskip it when images can be rendered using `site.render`
-  it.skip('should render css with bg image in component from "site.render"', async () => {
+  it('should render css with bg image in component from "site.render"', async () => {
     const { cwd } = await driver.project.setup({
       siteRender: {
         pageWrapper: outdent`
@@ -221,7 +220,10 @@ describe('Build e2e', () => {
     //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
 
-    const result = await compareScreenshots(page, 'site-render-page-wrapper-bg-banner.png');
+    const result = await compareScreenshots(
+      page,
+      'site-render-page-wrapper-bg-banner.png',
+    );
 
     if (result !== 0) {
       throw new Error('Screenshots do not match');
