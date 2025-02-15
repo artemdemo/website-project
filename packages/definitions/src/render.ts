@@ -1,8 +1,12 @@
 import { ReactNode } from 'react';
 import { Page } from './page';
 import { QueryPageResult } from './graphql';
+import { PageConfig } from './page-config';
 
-export type PageWrapperFn = (options: { content: ReactNode }) => ReactNode;
+export type PageWrapperFn = (options: {
+  pageConfig: PageConfig;
+  content: ReactNode;
+}) => ReactNode;
 export type PageTitleRenderFn = (page: Page) => string;
 
 export interface CreatePageOptions {

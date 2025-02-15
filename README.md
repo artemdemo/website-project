@@ -20,6 +20,8 @@
   - Display tags on every page (or post).
   - Allow users to create a page that displays all content associated with a selected tag, similar to "Blog Posts Preview."
   - Maybe GraphQL will need to allow queriyng all the tags. Then user will be able to query pages by individual tag.
+- Links to site pages should end with `/`, otherwise it will not work.
+  - Maybe solve it by introducing `<Link />` component
 - Page that displays some wasm project
 - `script.ts` to load arbitrary code for the runtim
 - `preview` should command that `site-builder` exposes

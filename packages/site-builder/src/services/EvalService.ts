@@ -3,7 +3,6 @@ import { Page, PageProps, SiteRendererFn } from '@artemdemo/definitions';
 import { match } from 'variant';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { join, basename } from 'node:path';
-import { existsSync } from 'node:fs';
 import _isFunction from 'lodash/isFunction';
 import * as mdx from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
@@ -27,6 +26,7 @@ export class EvalService {
 
   // ToDo: Do I still need this method to be public?
   async evalMd(
+    page: Page,
     content: string,
     props?: PageProps,
     options?: { baseUrl?: string },
@@ -39,6 +39,7 @@ export class EvalService {
     return renderToStaticMarkup(
       this._siteRender?.pageWrapper
         ? this._siteRender.pageWrapper({
+            pageConfig: page.config,
             content: React.createElement(evaluated.default, props),
           })
         : React.createElement(evaluated.default, props),
@@ -46,7 +47,11 @@ export class EvalService {
   }
 
   // ToDo: Do I still need this method to be public?
-  private async _evalTS(importedFile: any, props?: Record<string, unknown>) {
+  private async _evalTS(
+    page: Page,
+    importedFile: any,
+    props?: Record<string, unknown>,
+  ) {
     if (!importedFile.default) {
       throw new BuildError(
         `Can't evaluate file that doesn't have "default" export`,
@@ -56,6 +61,7 @@ export class EvalService {
     return renderToStaticMarkup(
       this._siteRender?.pageWrapper
         ? this._siteRender.pageWrapper({
+            pageConfig: page.config,
             content: React.createElement(PageComponent, props),
           })
         : React.createElement(PageComponent, props),
@@ -82,6 +88,7 @@ export class EvalService {
     return await match(page, {
       md: async () => {
         return this.evalMd(
+          page,
           rawProcessData.content,
           {
             ...pageProps,
@@ -98,21 +105,23 @@ export class EvalService {
           replaceExt(basename(page.relativePath), '.js'),
         );
         const userPagePath = `${this._cwd}/${transpiledPagePath}`;
-        const userPage = await importJS(userPagePath);
-        if (!userPage.default) {
+        const userPageComponent = await importJS(userPagePath);
+        if (!userPageComponent.default) {
           throw new BuildError(
             `Can't evaluate page that doesn't have "default" export. See "${page.path}"`,
           );
         }
-        if (userPage.query) {
-          if (!_isFunction(userPage.query)) {
+        if (userPageComponent.query) {
+          if (!_isFunction(userPageComponent.query)) {
             throw new BuildError(
               `"query" should be a function. See "${page.relativePath}"`,
             );
           }
-          pageProps.queriedPages = await queryPagesGQL(userPage.query());
+          pageProps.queriedPages = await queryPagesGQL(
+            userPageComponent.query(),
+          );
         }
-        return this._evalTS(userPage, {
+        return this._evalTS(page, userPageComponent, {
           ...pageProps,
           ...(props || {}),
         });
