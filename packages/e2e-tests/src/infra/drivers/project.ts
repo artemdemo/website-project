@@ -3,8 +3,9 @@ import { temporaryDirectory } from 'tempy';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { writeJson, writePkgJson } from 'fs-utils';
 import { match } from 'variant';
+import { outdent } from 'outdent';
 import { dashboardPage, PageBuild } from '../builders/page';
-import { SITE_CONFIG_FILE, SiteConfig } from 'definitions';
+import { SITE_CONFIG_FILE, SITE_RENDER_TS, SiteConfig } from 'definitions';
 
 export const projectDriver = () => {
   return {
@@ -14,14 +15,22 @@ export const projectDriver = () => {
   };
 };
 
+type SiteRender = {
+  pageWrapper?: string;
+  pageTitleRender?: string;
+  renderPages?: string;
+};
+
 export type SetupOptions = {
   pages?: Record<string, PageBuild>;
   siteConfig?: Partial<SiteConfig>;
+  siteRender?: SiteRender;
 };
 
 const setup = async ({
   pages = { '/': dashboardPage() },
   siteConfig,
+  siteRender,
 }: SetupOptions = {}) => {
   const projectFolder = temporaryDirectory();
   const pkgJson = {
@@ -47,11 +56,46 @@ const setup = async ({
     { spaces: 2 },
   );
 
+  await mkdir(join(projectFolder, 'src'));
+
+  await renderSiteRender(projectFolder, siteRender);
+
   await renderSiteConfig(projectFolder, siteConfig);
 
   await renderPages(projectFolder, pages);
 
   return { cwd: projectFolder };
+};
+
+const renderSiteRender = async (
+  projectFolder: string,
+  siteRender?: Partial<SiteRender>,
+) => {
+  if (siteRender?.pageWrapper) {
+    await writeFile(
+      join(projectFolder, 'src', 'pageWrapper.tsx'),
+      siteRender.pageWrapper,
+      'utf-8',
+    );
+  }
+
+  if (siteRender) {
+    await writeFile(
+      join(projectFolder, 'src', SITE_RENDER_TS),
+      outdent`
+        import { SiteRendererFn } from 'site-builder/types';
+        ${siteRender.pageWrapper ? `import { pageWrapper } from './pageWrapper.js';` : ''}
+
+        const siteRenderer: SiteRendererFn = () => {
+          return {
+            ${siteRender.pageWrapper && 'pageWrapper,'}
+          };
+        };
+        export default siteRenderer;
+      `,
+      'utf-8',
+    );
+  }
 };
 
 const renderSiteConfig = async (

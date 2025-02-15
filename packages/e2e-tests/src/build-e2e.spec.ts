@@ -53,13 +53,13 @@ describe('Build e2e', () => {
 
     await page.goto(previewUrl);
 
+    previewProcess.kill();
+
     expect(await page.title()).toBe('Mock title | Test Page');
     expect(await page.locator('#root h1').innerText()).toBe('Test Page');
     expect(await page.locator('#root p').innerText()).toBe(
       'Some test content.',
     );
-
-    previewProcess.kill();
   });
 
   it('should render bg image in imported component', async () => {
@@ -133,8 +133,9 @@ describe('Build e2e', () => {
     const previewUrl = await previewProcess.previewUrl();
 
     await page.goto(previewUrl);
-    const result = await compareScreenshots(page, 'css-bg-banner.png');
     previewProcess.kill();
+
+    const result = await compareScreenshots(page, 'css-bg-banner.png');
 
     if (result !== 0) {
       throw new Error('Screenshots do not match');

@@ -11,6 +11,7 @@ import { BuildError } from 'error-reporter';
 import { replaceExt } from 'fs-utils';
 import { queryPagesGQL } from '../query/queryPagesGQL';
 import { RawProcessData } from '../plugins/IPlugin';
+import { importJS } from './importJS';
 
 export class EvalService {
   private _siteRender: ReturnType<SiteRendererFn> | undefined;
@@ -97,11 +98,7 @@ export class EvalService {
           replaceExt(basename(page.relativePath), '.js'),
         );
         const userPagePath = `${this._cwd}/${transpiledPagePath}`;
-        const userPage = await import(
-          existsSync(userPagePath)
-            ? userPagePath
-            : replaceExt(userPagePath, '.mjs')
-        );
+        const userPage = await importJS(userPagePath);
         if (!userPage.default) {
           throw new BuildError(
             `Can't evaluate page that doesn't have "default" export. See "${page.path}"`,

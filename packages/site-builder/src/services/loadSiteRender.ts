@@ -1,8 +1,14 @@
-import { CONTENT_DIR, SiteRendererFn, TARGET_DIR } from 'definitions';
+import {
+  CONTENT_DIR,
+  SITE_RENDER_TS,
+  SiteRendererFn,
+  TARGET_DIR,
+} from 'definitions';
 import { replaceExt } from 'fs-utils';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import tsup from 'tsup';
+import { importJS } from './importJS';
 
 // function isSiteRenderFn(data: unknown): data is { default: SiteRendererFn } {
 //   return (
@@ -16,7 +22,6 @@ import tsup from 'tsup';
 //   );
 // }
 
-const SITE_RENDER_TS = 'site.render.ts';
 const SITE_RENDER_TS_FULL_PATH = join(CONTENT_DIR, SITE_RENDER_TS);
 const SITE_RENDER_JS = replaceExt(SITE_RENDER_TS, '.js');
 
@@ -32,9 +37,9 @@ export const loadSiteRender = async (
     });
   }
   try {
-    const result = await import(join(cwd, TARGET_DIR, SITE_RENDER_JS));
+    const result = await importJS(join(cwd, TARGET_DIR, SITE_RENDER_JS));
 
-    return result.default() as ReturnType<SiteRendererFn>
+    return result.default() as ReturnType<SiteRendererFn>;
   } catch (e) {
     // nothing
   }
