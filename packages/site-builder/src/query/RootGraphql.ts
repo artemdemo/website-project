@@ -41,6 +41,26 @@ export class RootGraphql {
     }
 
     for (const page of model.pages) {
+      if (!filterByTags && !filterByCategories) {
+        // ToDo: This code is exactly the same as the one for tags & categories.
+        //   Optimise it.
+        const pageData: QueryPageResult = {
+          route: page.route,
+          thumbnail: page.thumbnailPath,
+          config: page.config,
+        };
+        if (page.excerptPath) {
+          const excerptContent = await readFile(join(cwd, page.excerptPath), {
+            encoding: 'utf8',
+          });
+          pageData.excerpt = await evalService.evalMd(page, excerptContent);
+        }
+        result.push(pageData);
+        if (limit !== 0 && result.length >= limit) {
+          break;
+        }
+      }
+
       if (filterByTags) {
         if (
           Array.isArray(page.config.tags) &&
