@@ -2,10 +2,7 @@ import { RenderPagesFn } from 'site-builder/types';
 
 const POSTS_PER_PAGE = 5;
 
-export const renderPages: RenderPagesFn = async ({
-  createPage,
-  queryPages,
-}) => {
+const blogPages: RenderPagesFn = async ({ createPage, querySiteData }) => {
   const query = `{
     pages(limit: 0, filter: { categories: ["blog"] }) {
       route
@@ -19,7 +16,7 @@ export const renderPages: RenderPagesFn = async ({
       }
     }
   }`;
-  const pages = await queryPages(query);
+  const { pages } = await querySiteData(query);
 
   const amountOfPaginatioPages = Math.ceil(pages.length / POSTS_PER_PAGE);
 
@@ -62,4 +59,42 @@ export const renderPages: RenderPagesFn = async ({
     //   if (pages[postIdx]) {}
     // }
   }
+};
+
+const tagPages: RenderPagesFn = async ({ createPage, querySiteData }) => {
+  const { tags } = await querySiteData(`{
+    tags {
+      name
+    }
+  }`);
+
+  for (const tag of tags) {
+    const query = `{
+      pages(limit: 0, filter: { tags: ["${tag.name}"] }) {
+        route
+        excerpt
+        thumbnail
+        config {
+          title
+          date
+          tags
+          categories
+        }
+      }
+    }`;
+    const { pages } = await querySiteData(query);
+    createPage({
+      templatePath: 'src/templates/tagPage.tsx',
+      route: `/blog/tag/${tag.name}`,
+      title: `Tag Page: "${tag.name}"`,
+      props: {
+        pages: pages,
+      },
+    });
+  }
+};
+
+export const renderPages: RenderPagesFn = async (options) => {
+  await blogPages(options);
+  await tagPages(options);
 };

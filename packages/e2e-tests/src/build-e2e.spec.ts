@@ -53,6 +53,9 @@ describe('Build e2e', () => {
 
     await page.goto(previewUrl);
 
+    // ToDo: This not always works
+    //    Regrdless, killing of the preview should happen automatically
+    //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
 
     expect(await page.title()).toBe('Mock title | Test Page');
@@ -133,12 +136,84 @@ describe('Build e2e', () => {
     const previewUrl = await previewProcess.previewUrl();
 
     await page.goto(previewUrl);
+
+    // ToDo: This not always works
+    //    Regardless, killing of the preview should happen automatically
+    //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
 
-    const result = await compareScreenshots(page, 'css-bg-banner.png');
+    await compareScreenshots(page, 'css-bg-banner.png');
+  });
 
-    if (result !== 0) {
-      throw new Error('Screenshots do not match');
-    }
+  it('should render css with bg image in component from "site.render"', async () => {
+    const { cwd } = await driver.project.setup({
+      siteRender: {
+        pageWrapper: outdent`
+          import React from 'react';
+          import { PageWrapperFn } from 'site-builder/types';
+          import { Banner } from './components/banner/Banner';
+
+          export const pageWrapper: PageWrapperFn = ({ content }) => {
+            return (
+              <div data-testid="page-wrapper">
+                <Banner />
+                {content}
+              </div>
+            );
+          };
+        `,
+      },
+    });
+
+    const componentDirPath = join(cwd, 'src', 'components', 'banner');
+    await mkdir(componentDirPath, { recursive: true });
+
+    await writeFile(
+      join(componentDirPath, 'Banner.tsx'),
+      outdent`
+        import React from 'react';
+        import './Banner.css';
+
+        export const Banner = () => {
+          return <p className="Banner">Banner</p>;
+        };
+      `,
+      { encoding: 'utf-8' },
+    );
+
+    const testBgJpg = 'test-bg.jpg';
+
+    await writeFile(
+      join(componentDirPath, 'Banner.css'),
+      outdent`
+        .Banner {
+          width: 100%;
+          height: 70px;
+          color: rgba(255, 255, 255, 0.413);
+          background-image: url('./${testBgJpg}');
+        }
+      `,
+      { encoding: 'utf-8' },
+    );
+
+    await copyFile(
+      join('src', 'fixtures', testBgJpg),
+      join(componentDirPath, testBgJpg),
+    );
+
+    await driver.npm.install(cwd);
+    await driver.npm.build(cwd);
+
+    const previewProcess = driver.npm.preview(cwd);
+    const previewUrl = await previewProcess.previewUrl();
+
+    await page.goto(previewUrl);
+
+    // ToDo: This not always works
+    //    Regrdless, killing of the preview should happen automatically
+    //    Maybe store PID of the process and then kill it?
+    previewProcess.kill();
+
+    await compareScreenshots(page, 'site-render-page-wrapper-bg-banner.png');
   });
 });

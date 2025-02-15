@@ -1,7 +1,7 @@
 import React from 'react';
 import { VariantOf, variant, fields } from 'variant';
 import { PageConfig } from './page-config';
-import { QueryPageResult } from './graphql';
+import { QuerySiteDataFn } from './render';
 
 export interface PageFields {
   route: string;
@@ -19,7 +19,7 @@ export const Page = variant({
 export type Page = VariantOf<typeof Page>;
 
 export type PageProps = {
-  queriedPages: Partial<QueryPageResult>[];
+  queriedResults: Partial<Awaited<ReturnType<QuerySiteDataFn>>>;
 };
 
 export type PageQuery = () => string;

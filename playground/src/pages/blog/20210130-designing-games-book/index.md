@@ -1,7 +1,3 @@
-import { Banner } from './components/banner/Banner.tsx';
-
-<Banner />
-
 ![Designing Games, by Tynan Sylvester](designing-games.jpg)
 
 Lately I finished the "Designing Games", by Tynan Sylvester, lead developer of Rimworld.

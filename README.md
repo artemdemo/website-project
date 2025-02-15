@@ -16,15 +16,12 @@
 
 ## ToDo
 
-- Tags
-  - Display tags on every page (or post).
-  - Allow users to create a page that displays all content associated with a selected tag, similar to "Blog Posts Preview."
-  - Maybe GraphQL will need to allow queriyng all the tags. Then user will be able to query pages by individual tag.
+- Links to site pages should end with `/`, otherwise it will not work.
+  - Maybe solve it by introducing `<Link />` component
+- [test] Add test for MD file that imports component with bg image
 - Page that displays some wasm project
-- `script.ts` to load arbitrary code for the runtim
+- `script.ts` to load arbitrary code in runtime
 - `preview` should command that `site-builder` exposes
-- Tests for the `site-builder`
-  - Site builder should be tested, at least sanity tests
 - Dynamic Content at Runtime
   - Enable React hydration for dynamic content.
   - Support updates through AJAX and animations.

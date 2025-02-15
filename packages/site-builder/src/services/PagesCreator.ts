@@ -1,11 +1,6 @@
 import tsup from 'tsup';
 import { dirname, join, sep } from 'node:path';
-import {
-  BUILD_DIR,
-  Page,
-  SiteRendererFn,
-  TARGET_PAGES_DIR,
-} from '@artemdemo/definitions';
+import { BUILD_DIR, Page, TARGET_PAGES_DIR } from '@artemdemo/definitions';
 import { BuildError } from '@artemdemo/error-reporter';
 import { EvalService } from './EvalService';
 import { renderHtmlOfPage } from '@artemdemo/html-generator';
@@ -14,21 +9,19 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { getAppContext } from './context';
 import { IPlugin, PostEvalResult, RawProcessData } from '../plugins/IPlugin';
 import { readFullPostContent } from './readPost';
+import { SiteRenderFactory } from './SiteRenderFactory';
 
 export class PagesCreator {
   private _pagesQueue: {
     page: Page;
     props?: Record<string, unknown>;
   }[] = [];
-  private _siteRender: ReturnType<SiteRendererFn> | undefined;
+  private _siteRenderFactory: SiteRenderFactory;
   private _evalService: EvalService;
   private _plugins: IPlugin[] = [];
 
-  constructor(options: {
-    siteRender?: ReturnType<SiteRendererFn>;
-    cwd: string;
-  }) {
-    this._siteRender = options.siteRender;
+  constructor(options: { siteRenderFactory: SiteRenderFactory; cwd: string }) {
+    this._siteRenderFactory = options.siteRenderFactory;
     this._evalService = new EvalService(options);
   }
 
@@ -125,9 +118,15 @@ export class PagesCreator {
         }
       }
 
+      postEvalResult.htmlAssets.push(
+        ...this._siteRenderFactory.getHtmlAssets(),
+      );
+
+      const siteRenderData = await this._siteRenderFactory.load();
+
       const htmlContent = await renderHtmlOfPage({
-        pageTitle: this._siteRender?.pageTitleRender
-          ? this._siteRender.pageTitleRender(page)
+        pageTitle: siteRenderData?.pageTitleRender
+          ? siteRenderData.pageTitleRender(page)
           : `${model.config.titlePrefix} | ${page.config.title}`,
         metaDescription: model.config.metaDescription,
         content: evaluatedContent,

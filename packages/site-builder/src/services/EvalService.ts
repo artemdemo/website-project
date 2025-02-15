@@ -1,9 +1,8 @@
 import React from 'react';
-import { Page, PageProps, SiteRendererFn } from '@artemdemo/definitions';
+import { Page, PageProps } from '@artemdemo/definitions';
 import { match } from 'variant';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { join, basename } from 'node:path';
-import { existsSync } from 'node:fs';
 import _isFunction from 'lodash/isFunction';
 import * as mdx from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
@@ -12,21 +11,20 @@ import { replaceExt } from '@artemdemo/fs-utils';
 import { queryPagesGQL } from '../query/queryPagesGQL';
 import { RawProcessData } from '../plugins/IPlugin';
 import { importJS } from './importJS';
+import { SiteRenderFactory } from './SiteRenderFactory';
 
 export class EvalService {
-  private _siteRender: ReturnType<SiteRendererFn> | undefined;
+  private _siteRenderFactory: SiteRenderFactory | undefined;
   private _cwd: string;
 
-  constructor(options: {
-    siteRender?: ReturnType<SiteRendererFn>;
-    cwd: string;
-  }) {
-    this._siteRender = options.siteRender;
+  constructor(options: { siteRenderFactory?: SiteRenderFactory; cwd: string }) {
+    this._siteRenderFactory = options.siteRenderFactory;
     this._cwd = options.cwd;
   }
 
   // ToDo: Do I still need this method to be public?
   async evalMd(
+    page: Page,
     content: string,
     props?: PageProps,
     options?: { baseUrl?: string },
@@ -36,9 +34,14 @@ export class EvalService {
       ...options,
     });
 
+    const siteRenderData = this._siteRenderFactory
+      ? await this._siteRenderFactory.load()
+      : undefined;
+
     return renderToStaticMarkup(
-      this._siteRender?.pageWrapper
-        ? this._siteRender.pageWrapper({
+      siteRenderData?.pageWrapper
+        ? siteRenderData.pageWrapper({
+            pageConfig: page.config,
             content: React.createElement(evaluated.default, props),
           })
         : React.createElement(evaluated.default, props),
@@ -46,16 +49,24 @@ export class EvalService {
   }
 
   // ToDo: Do I still need this method to be public?
-  private async _evalTS(importedFile: any, props?: Record<string, unknown>) {
+  private async _evalTS(
+    page: Page,
+    importedFile: any,
+    props?: Record<string, unknown>,
+  ) {
     if (!importedFile.default) {
       throw new BuildError(
         `Can't evaluate file that doesn't have "default" export`,
       );
     }
     const PageComponent = importedFile.default;
+    const siteRenderData = this._siteRenderFactory
+      ? await this._siteRenderFactory.load()
+      : undefined;
     return renderToStaticMarkup(
-      this._siteRender?.pageWrapper
-        ? this._siteRender.pageWrapper({
+      siteRenderData?.pageWrapper
+        ? siteRenderData.pageWrapper({
+            pageConfig: page.config,
             content: React.createElement(PageComponent, props),
           })
         : React.createElement(PageComponent, props),
@@ -76,12 +87,13 @@ export class EvalService {
     const { rawProcessData, targetPageDir, props } = options;
 
     const pageProps: PageProps = {
-      queriedPages: [],
+      queriedResults: {},
     };
 
     return await match(page, {
       md: async () => {
         return this.evalMd(
+          page,
           rawProcessData.content,
           {
             ...pageProps,
@@ -98,21 +110,23 @@ export class EvalService {
           replaceExt(basename(page.relativePath), '.js'),
         );
         const userPagePath = `${this._cwd}/${transpiledPagePath}`;
-        const userPage = await importJS(userPagePath);
-        if (!userPage.default) {
+        const userPageComponent = await importJS(userPagePath);
+        if (!userPageComponent.default) {
           throw new BuildError(
             `Can't evaluate page that doesn't have "default" export. See "${page.path}"`,
           );
         }
-        if (userPage.query) {
-          if (!_isFunction(userPage.query)) {
+        if (userPageComponent.query) {
+          if (!_isFunction(userPageComponent.query)) {
             throw new BuildError(
               `"query" should be a function. See "${page.relativePath}"`,
             );
           }
-          pageProps.queriedPages = await queryPagesGQL(userPage.query());
+          pageProps.queriedResults = await queryPagesGQL(
+            userPageComponent.query(),
+          );
         }
-        return this._evalTS(userPage, {
+        return this._evalTS(page, userPageComponent, {
           ...pageProps,
           ...(props || {}),
         });

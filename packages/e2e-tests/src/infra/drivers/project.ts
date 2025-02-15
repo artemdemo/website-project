@@ -6,6 +6,8 @@ import { match } from 'variant';
 import { outdent } from 'outdent';
 import { dashboardPage, PageBuild } from '../builders/page';
 import {
+  EXCERPT_FILE,
+  PAGE_CONFIG_FILE,
   SITE_CONFIG_FILE,
   SITE_RENDER_TS,
   SiteConfig,
@@ -40,8 +42,8 @@ const setup = async ({
   const pkgJson = {
     dependencies: {
       'site-builder': `file://${dirname(require.resolve('site-builder/package.json'))}`,
-      react: '^19.0.0',
-      'react-dom': '^19.0.0',
+      react: `file://${dirname(require.resolve('react/package.json'))}`,
+      'react-dom': `file://${dirname(require.resolve('react-dom/package.json'))}`,
     },
     scripts: {
       build: 'site-builder build',
@@ -83,16 +85,26 @@ const renderSiteRender = async (
     );
   }
 
+  if (siteRender?.renderPages) {
+    await writeFile(
+      join(projectFolder, 'src', 'renderPages.tsx'),
+      siteRender.renderPages,
+      'utf-8',
+    );
+  }
+
   if (siteRender) {
     await writeFile(
       join(projectFolder, 'src', SITE_RENDER_TS),
       outdent`
         import { SiteRendererFn } from 'site-builder/types';
         ${siteRender.pageWrapper ? `import { pageWrapper } from './pageWrapper.js';` : ''}
+        ${siteRender.renderPages ? `import { renderPages } from './renderPages.js';` : ''}
 
         const siteRenderer: SiteRendererFn = () => {
           return {
-            ${siteRender.pageWrapper && 'pageWrapper,'}
+            ${siteRender.pageWrapper ? 'pageWrapper,' : ''}
+            ${siteRender.renderPages ? 'renderPages,' : ''}
           };
         };
         export default siteRenderer;
@@ -134,6 +146,16 @@ const renderPages = async (
       pageBuild.content,
       'utf-8',
     );
-    await writeJson(join(currentPageDirPath, 'index.json'), pageBuild.config);
+    await writeJson(
+      join(currentPageDirPath, PAGE_CONFIG_FILE),
+      pageBuild.config,
+    );
+    if (pageBuild.excerpt) {
+      await writeFile(
+        join(currentPageDirPath, EXCERPT_FILE),
+        pageBuild.excerpt,
+        'utf-8',
+      );
+    }
   }
 };

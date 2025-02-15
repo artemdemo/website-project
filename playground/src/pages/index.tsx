@@ -1,11 +1,11 @@
 import React from 'react';
 import { PageComponent } from 'site-builder/types';
-import { Banner } from '../components/banner/Banner';
+// import { Banner } from '../components/banner/Banner';
 
 const Posts: PageComponent = () => {
   return (
     <>
-      <Banner />
+      {/* <Banner /> */}
       <h1>Home Page</h1>
     </>
   );

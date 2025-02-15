@@ -4,7 +4,7 @@ import { MenuLink } from './MenuLink';
 export const TopMenu: React.FC = () => {
   return (
     <div>
-      <h2>Top Menu</h2>
+      <h4>Top Menu</h4>
       <div>
         <MenuLink>
           <a href="/">Home</a>

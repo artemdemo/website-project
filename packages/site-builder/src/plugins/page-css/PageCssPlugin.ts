@@ -19,7 +19,7 @@ export class PageCssPlugin implements IPlugin {
       const cssTargetPath = join(targetPageDir, fileName);
 
       if (existsSync(cssTargetPath)) {
-        await this._cssProcessor.process(page, fileName, cssTargetPath);
+        await this._cssProcessor.process(page.route, fileName, cssTargetPath);
       }
     }
     return {};
@@ -29,6 +29,6 @@ export class PageCssPlugin implements IPlugin {
     page: Page,
     buildPageDir: string,
   ): Promise<Partial<PostEvalResult>> {
-    return await this._cssProcessor.postEval(page, buildPageDir);
+    return await this._cssProcessor.postEval(page.route, buildPageDir);
   }
 }

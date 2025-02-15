@@ -64,35 +64,87 @@ describe('Build in File System', () => {
     expect(html).toContain('<h1>Home Page</h1>');
   });
 
-  it('should wrap page with "pageWrapper" from site.render', async () => {
-    const { cwd } = await driver.project.setup({
-      siteRender: {
-        pageWrapper: outdent`
-          import React from 'react';
-          import { PageWrapperFn } from 'site-builder/types';
+  describe('"pageWrapper" from site.render', () => {
+    it('should wrap MD page', async () => {
+      const { cwd } = await driver.project.setup({
+        siteRender: {
+          pageWrapper: outdent`
+            import React from 'react';
+            import { PageWrapperFn } from 'site-builder/types';
 
-          export const pageWrapper: PageWrapperFn = ({ content }) => {
-            return (
-              <div data-testid="page-wrapper">
-                {content}
-              </div>
-            );
-          };
-        `,
-      },
+            export const pageWrapper: PageWrapperFn = ({ content }) => {
+              return (
+                <div data-testid="page-wrapper">
+                  {content}
+                </div>
+              );
+            };
+          `,
+        },
+      });
+
+      await driver.npm.install(cwd);
+      await driver.npm.build(cwd);
+
+      const htmlFilePath = join(cwd, 'build/index.html');
+
+      expect(existsSync(htmlFilePath)).toBe(true);
+
+      const html = await readFile(join(cwd, 'build/index.html'), {
+        encoding: 'utf-8',
+      });
+
+      expect(html).toContain('<div data-testid="page-wrapper">');
     });
 
-    await driver.npm.install(cwd);
-    await driver.npm.build(cwd);
+    it('should wrap TSX page', async () => {
+      const { cwd } = await driver.project.setup({
+        pages: {
+          '/': builders.dashboardPage({
+            content: outdent`
+              import React from 'react';
+              import { PageComponent } from 'site-builder/types';
 
-    const htmlFilePath = join(cwd, 'build/index.html');
+              const Page: PageComponent = () => {
+                return <h1>Home Page</h1>;
+              };
 
-    expect(existsSync(htmlFilePath)).toBe(true);
+              export default Page;
+            `,
+            type: 'tsx',
+            config: {
+              title: 'Home Page',
+            },
+          }),
+        },
+        siteRender: {
+          pageWrapper: outdent`
+            import React from 'react';
+            import { PageWrapperFn } from 'site-builder/types';
 
-    const html = await readFile(join(cwd, 'build/index.html'), {
-      encoding: 'utf-8',
+            export const pageWrapper: PageWrapperFn = ({ content }) => {
+              return (
+                <div data-testid="page-wrapper">
+                  {content}
+                </div>
+              );
+            };
+          `,
+        },
+      });
+      await driver.npm.install(cwd);
+
+      await driver.npm.build(cwd);
+
+      const htmlFilePath = join(cwd, 'build/index.html');
+
+      expect(existsSync(htmlFilePath)).toBe(true);
+
+      const html = await readFile(join(cwd, 'build/index.html'), {
+        encoding: 'utf-8',
+      });
+
+      expect(html).toContain('<div data-testid="page-wrapper">');
     });
-
-    expect(html).toContain('<div data-testid="page-wrapper">');
   });
 });

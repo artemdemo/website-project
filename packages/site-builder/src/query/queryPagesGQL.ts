@@ -1,11 +1,9 @@
 import { graphql } from 'graphql';
-import type { PageFields } from '@artemdemo/definitions';
-import { schema } from '@artemdemo/definitions/graphql';
+import type { PageFields, QuerySiteDataFn } from '@artemdemo/definitions';
+import { QueryTagResult, schema } from '@artemdemo/definitions/graphql';
 import { RootGraphql } from './RootGraphql';
 
-export const queryPagesGQL = async (
-  source: string,
-): Promise<Partial<PageFields>[]> => {
+export const queryPagesGQL: QuerySiteDataFn = async (source) => {
   const result = await graphql({
     schema,
     source,
@@ -16,8 +14,13 @@ export const queryPagesGQL = async (
     for (const err of result.errors) {
       console.log(err.stack);
       console.log(err.locations);
+      console.log('Source:');
+      console.log(source);
     }
   }
 
-  return (result.data?.pages as Partial<PageFields>[]) ?? [];
+  return {
+    pages: (result.data?.pages as Partial<PageFields>[]) ?? [],
+    tags: (result.data?.tags as Partial<QueryTagResult>[]) ?? [],
+  };
 };
