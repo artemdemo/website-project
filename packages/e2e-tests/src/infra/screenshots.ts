@@ -26,14 +26,15 @@ const getScreenshot = async (name: string) => {
 export const compareScreenshots = async (
   page: Page,
   screenshotName: string,
-): Promise<number> => {
+) => {
   const existingScreenshot = await getScreenshot(screenshotName);
 
   if (existingScreenshot == null) {
     await page.screenshot({
       path: join('src', SCREENSHOTS_DIR, screenshotName),
     });
-    return 0;
+    console.log(`Created new screenshot "${screenshotName}"`);
+    return;
   }
 
   const newScreenshotPath = join(
@@ -66,5 +67,7 @@ export const compareScreenshots = async (
     unlink(newScreenshotPath);
   }
 
-  return result;
+  if (result !== 0) {
+    throw new Error('Screenshots do not match');
+  }
 };

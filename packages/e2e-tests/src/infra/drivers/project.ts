@@ -83,16 +83,26 @@ const renderSiteRender = async (
     );
   }
 
+  if (siteRender?.renderPages) {
+    await writeFile(
+      join(projectFolder, 'src', 'renderPages.tsx'),
+      siteRender.renderPages,
+      'utf-8',
+    );
+  }
+
   if (siteRender) {
     await writeFile(
       join(projectFolder, 'src', SITE_RENDER_TS),
       outdent`
         import { SiteRendererFn } from 'site-builder/types';
         ${siteRender.pageWrapper ? `import { pageWrapper } from './pageWrapper.js';` : ''}
+        ${siteRender.renderPages ? `import { renderPages } from './renderPages.js';` : ''}
 
         const siteRenderer: SiteRendererFn = () => {
           return {
-            ${siteRender.pageWrapper && 'pageWrapper,'}
+            ${siteRender.pageWrapper ? 'pageWrapper,' : ''}
+            ${siteRender.renderPages ? 'renderPages,' : ''}
           };
         };
         export default siteRenderer;

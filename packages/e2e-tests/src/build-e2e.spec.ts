@@ -218,13 +218,9 @@ describe('Build e2e', () => {
     //    Maybe store PID of the process and then kill it?
     previewProcess.kill();
 
-    const result = await compareScreenshots(
+    await compareScreenshots(
       page,
       'site-render-page-wrapper-bg-banner.png',
     );
-
-    if (result !== 0) {
-      throw new Error('Screenshots do not match');
-    }
   });
 });
