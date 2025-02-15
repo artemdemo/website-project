@@ -3888,7 +3888,6 @@ __metadata:
     react-dom: "npm:^19.0.0"
     tsup: "npm:^8.3.5"
     typescript: "npm:^5.0.0"
-    ui-components: "workspace:*"
     variant: "npm:3.0.0-dev.27"
     zod: "npm:^3.24.1"
   bin:
@@ -4512,19 +4511,6 @@ __metadata:
   checksum: 10/dc58d777eb4c01973f7fbf1fd808aad49a0efdf545528dab9b07d94fdcb65b8751742804c3057e9619a4627f2d9cc85547fdd49d9f4326992ad0181b49e61d81
   languageName: node
   linkType: hard
-
-"ui-components@workspace:*, ui-components@workspace:packages/ui-components":
-  version: 0.0.0-use.local
-  resolution: "ui-components@workspace:packages/ui-components"
-  dependencies:
-    "@types/react": "npm:^19.0.0"
-    "@types/react-dom": "npm:^19.0.0"
-    definitions: "workspace:*"
-    react: "npm:^19.0.0"
-    react-dom: "npm:^19.0.0"
-    typescript: "npm:^5.0.0"
-  languageName: unknown
-  linkType: soft
 
 "undici-types@npm:~6.19.2":
   version: 6.19.8
