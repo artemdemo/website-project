@@ -40,8 +40,8 @@ const setup = async ({
   const pkgJson = {
     dependencies: {
       'site-builder': `file://${dirname(require.resolve('site-builder/package.json'))}`,
-      react: '^19.0.0',
-      'react-dom': '^19.0.0',
+      react: `file://${dirname(require.resolve('react/package.json'))}`,
+      'react-dom': `file://${dirname(require.resolve('react-dom/package.json'))}`,
     },
     scripts: {
       build: 'site-builder build',
