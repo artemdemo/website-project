@@ -5,6 +5,7 @@ export type PageBuild = {
   content: string;
   type: 'md' | 'tsx';
   config: PageConfig;
+  excerpt?: string;
 };
 
 export const dashboardPage = (options: Partial<PageBuild> = {}): PageBuild => {

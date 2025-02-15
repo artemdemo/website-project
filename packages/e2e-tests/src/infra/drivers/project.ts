@@ -6,6 +6,8 @@ import { match } from 'variant';
 import { outdent } from 'outdent';
 import { dashboardPage, PageBuild } from '../builders/page';
 import {
+  EXCERPT_FILE,
+  PAGE_CONFIG_FILE,
   SITE_CONFIG_FILE,
   SITE_RENDER_TS,
   SiteConfig,
@@ -144,6 +146,16 @@ const renderPages = async (
       pageBuild.content,
       'utf-8',
     );
-    await writeJson(join(currentPageDirPath, 'index.json'), pageBuild.config);
+    await writeJson(
+      join(currentPageDirPath, PAGE_CONFIG_FILE),
+      pageBuild.config,
+    );
+    if (pageBuild.excerpt) {
+      await writeFile(
+        join(currentPageDirPath, EXCERPT_FILE),
+        pageBuild.excerpt,
+        'utf-8',
+      );
+    }
   }
 };

@@ -49,6 +49,7 @@ describe('Build e2e tags', () => {
         '/': builders.dashboardPage(),
         '/one': builders.dashboardPage({
           content: outdent`# Page One`,
+          excerpt: 'Excerpt for Page One',
           config: {
             title: 'Page One',
             tags: ['foo'],
@@ -56,6 +57,7 @@ describe('Build e2e tags', () => {
         }),
         '/two': builders.dashboardPage({
           content: outdent`# Page Two`,
+          excerpt: 'Excerpt for Page Two',
           config: {
             title: 'Page Two',
             tags: ['foo'],
@@ -63,6 +65,7 @@ describe('Build e2e tags', () => {
         }),
         '/three': builders.dashboardPage({
           content: outdent`# Page Three`,
+          excerpt: 'Excerpt for Page Three',
           config: {
             title: 'Page Three',
             tags: ['boo'],

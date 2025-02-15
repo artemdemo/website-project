@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { PNG } from 'pngjs';
 import { Page } from 'playwright';
 import pixelmatch from 'pixelmatch';
+import { outdent } from 'outdent';
 
 const SCREENSHOTS_DIR = '__screenshots__';
 const WIDTH = 1280;
@@ -55,14 +56,19 @@ export const compareScreenshots = async (
   );
 
   if (result > 0) {
+    const diffFilePath = join(
+      'src',
+      SCREENSHOTS_DIR,
+      `${replaceExt(screenshotName, '')}_diff.png`,
+    )
     await writeFile(
-      join(
-        'src',
-        SCREENSHOTS_DIR,
-        `${replaceExt(screenshotName, '')}_diff.png`,
-      ),
+      diffFilePath,
       PNG.sync.write(diff),
     );
+    throw new Error(outdent`
+      Screenshots do not match.
+      See "${diffFilePath}"
+    `);
   } else {
     unlink(newScreenshotPath);
   }
