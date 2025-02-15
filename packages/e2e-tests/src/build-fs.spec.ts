@@ -8,7 +8,7 @@ import { testkit } from './infra/testkit';
 describe('Build in File System', () => {
   const { driver, builders } = testkit();
 
-  it('should create minimal project', async () => {
+  it('should create minimal project with MD page', async () => {
     const { cwd } = await driver.project.setup();
     await driver.npm.install(cwd);
 
@@ -27,7 +27,7 @@ describe('Build in File System', () => {
     expect(html).toContain('<p>Some test content.</p>');
   });
 
-  it('should create minimal project', async () => {
+  it('should create minimal project with TSX page', async () => {
     const { cwd } = await driver.project.setup({
       pages: {
         '/': builders.dashboardPage({

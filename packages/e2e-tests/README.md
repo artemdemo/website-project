@@ -1,5 +1,5 @@
 
-Find all node leftovers for testes:
+Find all node leftovers for tests:
 
 ```
 ps -e|grep node_modules/.b

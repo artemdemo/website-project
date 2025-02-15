@@ -13,7 +13,7 @@ const HEIGHT = 720;
 const getScreenshot = async (name: string) => {
   if (!name.endsWith('.png')) {
     throw new Error(
-      `Screenshot file is supported only for PNG files. Given: "${name}"`,
+      `Only PNG files are supported for screenshots. Given: "${name}"`,
     );
   }
   const screenshotPath = join('src', SCREENSHOTS_DIR, name);

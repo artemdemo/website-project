@@ -12,7 +12,7 @@ import { join } from 'node:path';
 import { copyFile, mkdir, writeFile } from 'node:fs/promises';
 import { outdent } from 'outdent';
 import { testkit } from './infra/testkit';
-import { compareScreenshots } from './infra/sreenshots';
+import { compareScreenshots } from './infra/screenshots';
 
 let browser: Browser;
 let page: Page;
