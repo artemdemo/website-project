@@ -60,11 +60,8 @@ export const compareScreenshots = async (
       'src',
       SCREENSHOTS_DIR,
       `${replaceExt(screenshotName, '')}_diff.png`,
-    )
-    await writeFile(
-      diffFilePath,
-      PNG.sync.write(diff),
     );
+    await writeFile(diffFilePath, PNG.sync.write(diff));
     throw new Error(outdent`
       Screenshots do not match.
       See "${diffFilePath}"
