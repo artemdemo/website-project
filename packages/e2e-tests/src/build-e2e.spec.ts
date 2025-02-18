@@ -65,7 +65,7 @@ describe('Build e2e', () => {
     );
   });
 
-  it('should render bg image in imported component', async () => {
+  it('should render bg image in imported component on TSX page', async () => {
     const { cwd } = await driver.project.setup({
       pages: {
         '/': builders.dashboardPage({
