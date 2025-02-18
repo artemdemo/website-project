@@ -6,6 +6,7 @@ import { isType } from 'variant';
 import { existsSync } from 'node:fs';
 import { replaceExt } from '@artemdemo/fs-utils';
 import { CssProcessor } from '../../services/CssProcessor';
+import { tryFixJsImportPath } from '../../services/importJS';
 
 type MdImport = {
   importPath: string;
@@ -57,7 +58,7 @@ export class MdImportsPlugin implements IPlugin {
       for (const importItem of imports) {
         content = content.replace(
           importItem.importPath,
-          `./${importItem.targetImportPath}`,
+          tryFixJsImportPath(importItem.targetImportPath),
         );
         const cssPath = replaceExt(importItem.targetImportPath, '.css');
 
